@@ -1,0 +1,52 @@
+D:\C# solution\CountSoft\Visitor.Library\Visitor\bin\Release\Visitor.dll
+D:\C# solution\CountSoft\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+D:\C# solution\CountSoft\Visitor.Library\Visitor\bin\Release\System.Data.SQLite.DLL
+D:\C# solution\CountSoft\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+D:\C# solution\CountSoft\Visitor.Library\Visitor\obj\Release\Visitor.dll
+D:\C# solution\CountSoft\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Release\System.Data.SQLite.DLL
+D:\C# solution\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+D:\C# solution\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+D:\C# solution\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.XML
+E:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+E:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+E:\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+E:\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+E:\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+E:\Visitor\Visitor.Library\Visitor\bin\Release\System.Data.SQLite.dll
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.XML
+H:\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+H:\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+H:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+H:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+H:\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+E:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.XML
+H:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.XML
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Release\System.Data.SQLite.dll
+D:\Visitor\Visitor.Library\Visitor\obj\Release\ResolveAssemblyReference.cache
+D:\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.pdb
+D:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.dll
+D:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.pdb
+D:\Visitor\Visitor.Library\Visitor\bin\Release\System.Data.SQLite.DLL
+D:\Visitor\Visitor.Library\Visitor\bin\Release\System.Data.SQLite.xml
+D:\Visitor\Visitor.Library\Visitor\obj\Release\Visitor.dll
+D:\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.XML
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Release\Visitor.XML

@@ -1,0 +1,11 @@
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Debug\System.Data.SQLite.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Debug\itextsharp.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Debug\itextsharp.xmlworker.dll
+D:\data\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Debug\ResolveAssemblyReference.cache
+D:\data\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Debug\PLTechnology.dll
+D:\data\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Debug\PLTechnology.pdb
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Debug\858project.com.xml
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Debug\858project.com.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Debug\858project.com.pdb
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Debug\858project.com.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Debug\858project.com.pdb

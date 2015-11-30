@@ -1,0 +1,57 @@
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Release\858project.com.xml
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Release\858project.com.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Release\858project.com.pdb
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Release\itextsharp.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Release\itextsharp.xmlworker.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\bin\Release\System.Data.SQLite.DLL
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Release\858project.com.dll
+D:\softvare_developer\C# solution\PLTechnology.Library\PLTechnology\obj\Release\858project.com.pdb
+H:\858project.Library\858project\bin\Release\858project.com.xml
+H:\858project.Library\858project\bin\Release\858project.com.dll
+H:\858project.Library\858project\bin\Release\858project.com.pdb
+H:\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache
+H:\858project.Library\858project\obj\Release\858project.com.dll
+H:\858project.Library\858project\obj\Release\858project.com.pdb
+D:\custom\858project.Library\858project\bin\Release\858project.com.xml
+D:\custom\858project.Library\858project\bin\Release\858project.com.dll
+D:\custom\858project.Library\858project\bin\Release\858project.com.pdb
+D:\custom\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache
+D:\custom\858project.Library\858project\obj\Release\858project.com.dll
+D:\custom\858project.Library\858project\obj\Release\858project.com.pdb
+I:\858project.Library\858project\bin\Release\858project.com.xml
+I:\858project.Library\858project\bin\Release\858project.com.dll
+I:\858project.Library\858project\bin\Release\858project.com.pdb
+I:\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache
+I:\858project.Library\858project\obj\Release\858project.com.dll
+I:\858project.Library\858project\obj\Release\858project.com.pdb
+J:\858project.Library\858project\bin\Release\858project.com.xml
+J:\858project.Library\858project\bin\Release\858project.com.dll
+J:\858project.Library\858project\bin\Release\858project.com.pdb
+J:\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache
+J:\858project.Library\858project\obj\Release\858project.com.dll
+J:\858project.Library\858project\obj\Release\858project.com.pdb
+D:\USB\858project.Library\858project\bin\Release\858project.com.xml
+D:\USB\858project.Library\858project\bin\Release\858project.com.dll
+D:\USB\858project.Library\858project\bin\Release\858project.com.pdb
+D:\USB\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache
+D:\USB\858project.Library\858project\obj\Release\858project.com.dll
+D:\USB\858project.Library\858project\obj\Release\858project.com.pdb
+E:\858project.Library\858project\bin\Release\858project.com.xml
+E:\858project.Library\858project\bin\Release\858project.com.dll
+E:\858project.Library\858project\bin\Release\858project.com.pdb
+E:\858project.Library\858project\obj\Release\858project.com.dll
+E:\858project.Library\858project\obj\Release\858project.com.pdb
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\858project.com.xml
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\858project.com.dll
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\858project.com.pdb
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\itextsharp.dll
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\itextsharp.xmlworker.dll
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\System.Data.SQLite.dll
+D:\softvare_developer\C# solution\858project.Library\858project\obj\Release\858project.com.dll
+D:\softvare_developer\C# solution\858project.Library\858project\obj\Release\858project.com.pdb
+E:\858project.Library\858project\bin\Release\Newtonsoft.Json.dll
+E:\858project.Library\858project\bin\Release\Newtonsoft.Json.xml
+E:\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\Newtonsoft.Json.dll
+D:\softvare_developer\C# solution\858project.Library\858project\bin\Release\Newtonsoft.Json.xml
+D:\softvare_developer\C# solution\858project.Library\858project\obj\Release\858project.csprojResolveAssemblyReference.cache

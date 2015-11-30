@@ -1,0 +1,46 @@
+D:\C# solution\CountSoft\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+D:\C# solution\CountSoft\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+D:\C# solution\CountSoft\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+D:\C# solution\CountSoft\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+D:\C# solution\CountSoft\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+D:\C# solution\CountSoft\Visitor.Library\Visitor\bin\Debug\System.Data.SQLite.dll
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Debug\System.Data.SQLite.DLL
+D:\C# solution\Visitor\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+D:\C# solution\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+D:\C# solution\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.XML
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\jojo2\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.XML
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+C:\Documents and Settings\Visitor\Desktop\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+H:\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+H:\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+H:\Visitor\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+H:\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+H:\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.XML
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+H:\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.XML
+C:\Documents and Settings\Zilina1\Desktop\Visitor\Visitor.Library\Visitor\bin\Debug\System.Data.SQLite.dll
+D:\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.dll
+D:\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.pdb
+D:\Visitor\Visitor.Library\Visitor\bin\Debug\System.Data.SQLite.DLL
+D:\Visitor\Visitor.Library\Visitor\bin\Debug\System.Data.SQLite.xml
+D:\Visitor\Visitor.Library\Visitor\obj\Debug\ResolveAssemblyReference.cache
+D:\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.dll
+D:\Visitor\Visitor.Library\Visitor\obj\Debug\Visitor.pdb
+D:\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.XML
+D:\C# solution\Visitor\Visitor.Library\Visitor\bin\Debug\Visitor.XML
