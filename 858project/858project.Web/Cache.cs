@@ -159,6 +159,33 @@ namespace Project858.Web
             }
             return default(T);
         }
+         /// <summary>
+        /// Vrati hodnotu z cache
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory ocakavame</typeparam>
+        /// <param name="key">Jedinecny identifikator objektu</param>
+        /// <param name="method">Metoda na nacitanie dat</param>
+        /// <returns>Object alebo jeho default</returns>
+        public T GetValue<T>(String key, Func<T> method)
+        {
+            if (this.ContainsKey(key))
+            {
+                CacheItem item = null;
+                if (base.TryGetValue(key, out item))
+                {
+                    if (item.Data.GetType() == typeof(T))
+                    {
+                        return (T)item.Data;
+                    }
+                }
+            }
+            T value = method();
+            if (value != null)
+            {
+                this.Add(key, value);
+            }
+            return value;
+        }
         #endregion
 
         #region - Private Methods -
