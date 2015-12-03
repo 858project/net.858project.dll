@@ -103,9 +103,31 @@ namespace Project858.Web
         {
             using (MemoryStream stream = new MemoryStream())
             {
+                //Encoder myEncoder = Encoder.Quality;
+                //EncoderParameters parameters = new EncoderParameters(1);
+                //EncoderParameter parameter = new EncoderParameter(myEncoder, 80L);
+                //parameters.Param[0] = parameter;
+                //image.Save(stream, this.InternalGetEncoder(this.ImageFormat), parameters);
                 image.Save(stream, this.ImageFormat);
                 return stream.ToArray();
             }
+        }
+        /// <summary>
+        /// Vrati code info pre encoder obrazku
+        /// </summary>
+        /// <param name="format">Format z ktreho chceme ziskat code info</param>
+        /// <returns>ImageCodecInfo alebo null</returns>
+        private ImageCodecInfo InternalGetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
         #endregion
     }
