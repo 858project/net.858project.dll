@@ -136,6 +136,8 @@ namespace Project858.Web
                 }
                 if (image != null)
                 {
+                    context.Response.Cache.SetCacheability(HttpCacheability.Public);
+                    context.Response.Cache.SetMaxAge(new TimeSpan(2, 0, 0, 0));
                     context.Response.ContentType = image.ContentType;
                     context.Response.BinaryWrite(image.ImageBlob);
                     return;
