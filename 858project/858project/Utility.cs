@@ -33,6 +33,7 @@ using System.Diagnostics;
 using System.Data;
 using System.Web.Script.Serialization;
 using System.Data.SqlClient;
+using Microsoft.Win32;
 
 namespace Project858
 {
@@ -85,16 +86,9 @@ namespace Project858
         /// <returns>Extension alebo null</returns>
         public static String GetFileExtensionFromMimeTypes(String type)
         {
-            switch (type) {
-		        case "image/png":
-			        return "png";
-		        case "image/jpeg":
-			        return "jpg";
-		        case "image/gif":
-			        return "gif";
-                default:
-                    return null;
-	        }
+            RegistryKey key = Registry.ClassesRoot.OpenSubKey(@"MIME\Database\Content Type\" + type, false);
+            Object value = key != null ? key.GetValue("Extension", null) : null;
+            return value != null ? value.ToString() : string.Empty;
         }
         /// <summary>
         /// Zaloguje sql parametre
