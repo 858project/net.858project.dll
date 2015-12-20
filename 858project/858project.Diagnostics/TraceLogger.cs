@@ -56,6 +56,81 @@ namespace Project858.Diagnostics
 
         #region - Public Method -
         /// <summary>
+        /// Zaloguje pozadovanu spravu ako ERROR spravu
+        /// </summary>
+        /// <param name="exception">Chyba ktoru chceme zalogovat</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Error(Exception exception)
+        {
+            return TraceLogger.Error(null, exception.ToString());
+        }
+        /// <summary>
+        /// Zaloguje pozadovanu spravu ako ERROR spravu
+        /// </summary>
+        /// <param name="message">Sprava ktoru chceme zalogovat</param>
+        /// <param name="args">Aegument pre spravu do String.Format()</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Error(String message, params Object[] args)
+        {
+            return TraceLogger.Error(null, String.Format(message, args));
+        }
+        /// <summary>
+        /// Zaloguje pozadovanu spravu ako ERROR spravu
+        /// </summary>
+        /// <param name="modulName">Meno modulu ktory spravu loguje</param>
+        /// <param name="message">Sprava ktoru chceme zalogovat</param>
+        /// <param name="args">Aegument pre spravu do String.Format()</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Error(String modulName, String message, params Object[] args)
+        {
+            return TraceLogger.Error(DateTime.Now, modulName, String.Format(message, args));
+        }
+        /// <summary>
+        /// Zaloguje pozadovanu spravu ako ERROR spravu
+        /// </summary>
+        /// <param name="date">Datum a cas vzniku spravy</param>
+        /// <param name="modulName">Meno modulu ktory spravu loguje</param>
+        /// <param name="message">Sprava ktoru chceme zalogovat</param>
+        /// <param name="args">Aegument pre spravu do String.Format()</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Error(DateTime date, String modulName, String message, params Object[] args)
+        {
+            return TraceLogger.Trace(date, TraceTypes.Error, modulName, String.Format(message, args));
+        }
+        /// <summary>
+        /// Zaloguje pozadovanu spravu ako INFO spravu
+        /// </summary>
+        /// <param name="message">Sprava ktoru chceme zalogovat</param>
+        /// <param name="args">Aegument pre spravu do String.Format()</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Info(String message, params Object[] args)
+        {
+            return TraceLogger.Info(null, String.Format(message, args));
+        }
+        /// <summary>
+        /// Zaloguje pozadovanu spravu ako INFO spravu
+        /// </summary>
+        /// <param name="modulName">Meno modulu ktory spravu loguje</param>
+        /// <param name="message">Sprava ktoru chceme zalogovat</param>
+        /// <param name="args">Aegument pre spravu do String.Format()</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Info(String modulName, String message, params Object[] args)
+        {
+            return TraceLogger.Info(DateTime.Now, modulName, String.Format(message, args));
+        }
+        /// <summary>
+        /// Zaloguje pozadovanu spravu ako INFO spravu
+        /// </summary>
+        /// <param name="date">Datum a cas vzniku spravy</param>
+        /// <param name="modulName">Meno modulu ktory spravu loguje</param>
+        /// <param name="message">Sprava ktoru chceme zalogovat</param>
+        /// <param name="args">Aegument pre spravu do String.Format()</param>
+        /// <returns>True = logovanie bolo uspesne inak false</returns>
+        public static bool Info(DateTime date, String modulName, String message, params Object[] args)
+        {
+            return TraceLogger.Trace(date, TraceTypes.Info, modulName, String.Format(message, args));
+        }
+        /// <summary>
         /// Zaloguje spravu do SQLite databazy
         /// </summary>
         /// <exception cref="ObjectDisposedException">
@@ -148,8 +223,11 @@ namespace Project858.Diagnostics
                     //inicializacia
                     textWriter = TextWriter.Synchronized(File.AppendText(fileName));
 
+                    //meno modulu
+                    modulName = String.IsNullOrWhiteSpace(modulName) ? String.Empty : String.Format(" [{0}] ", modulName);
+
                     // Create string recipients write
-                    message = String.Format("{0} [{1}] {2} -> {3}", date.ToString("yyyy-MM-dd HH:mm:ss.fff"), traceType, modulName, message);
+                    message = String.Format("{0}{1}{2} -> {3}", date.ToString("yyyy-MM-dd HH:mm:ss.fff"), traceType, modulName, message);
 
                     //zapiseme na konzolu
                     ConsoleLogger.WriteLine(message);
