@@ -150,8 +150,8 @@ namespace Project858.Diagnostics
         public static bool Trace(DateTime date, TraceTypes traceType, String modulName, String message)
         {
             //overime vstupne data
-            if (String.IsNullOrEmpty(modulName))
-                throw new ArgumentNullException("modulName");
+            //if (String.IsNullOrEmpty(modulName))
+            //    throw new ArgumentNullException("modulName");
             if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
 
@@ -177,8 +177,8 @@ namespace Project858.Diagnostics
         public static void TraceAsync(DateTime date, TraceTypes traceType, String modulName, String message)
         {
             //overime vstupne data
-            if (String.IsNullOrEmpty(modulName))
-                throw new ArgumentNullException("modulName");
+            //if (String.IsNullOrEmpty(modulName))
+            //    throw new ArgumentNullException("modulName");
             if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
 
@@ -224,13 +224,16 @@ namespace Project858.Diagnostics
                     textWriter = TextWriter.Synchronized(File.AppendText(fileName));
 
                     //meno modulu
-                    modulName = String.IsNullOrWhiteSpace(modulName) ? String.Empty : String.Format(" [{0}] ", modulName);
+                    modulName = String.IsNullOrWhiteSpace(modulName) ? String.Empty : String.Format(" [{0}]", modulName);
 
                     // Create string recipients write
-                    message = String.Format("{0}{1}{2} -> {3}", date.ToString("yyyy-MM-dd HH:mm:ss.fff"), traceType, modulName, message);
+                    message = String.Format("{0}{1} -> {2}", traceType, modulName, message);
 
                     //zapiseme na konzolu
                     ConsoleLogger.WriteLine(message);
+
+                    // Create string recipients write
+                    message = String.Format("{0} {1}", date.ToString("yyyy-MM-dd HH:mm:ss.fff"), message);
 
                     // Write string and close file
                     textWriter.WriteLine(message);
