@@ -30,11 +30,15 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Windows.Threading;
@@ -182,6 +186,84 @@ namespace Project858.Web
                 }
             }
             return true;
+        }
+        /// <summary>
+        /// Odosle emailovu spravu cez definovany smtp server
+        /// </summary>
+        public static Boolean SendMailMessage(String content, String subject, String copyAddress, String senderAddress, String replyAddress, List<String> addressCollection)
+        {
+            //initialize
+            MailMessage message = new MailMessage();
+            senderAddress = Utility.ValidateMailAddress(senderAddress) ? senderAddress : WebConfigurationManager.AppSettings["SmtpSenderAddress"];
+            message.From = new MailAddress(senderAddress, WebConfigurationManager.AppSettings["SmtpSenderName"]);
+            message.Subject = subject;
+            foreach (var address in addressCollection)
+            {
+                message.To.Add(new MailAddress(address));
+            }
+
+            //copy address
+            if (Utility.ValidateMailAddress(copyAddress))
+            {
+                message.Bcc.Add(copyAddress);
+            }
+
+            //copy address
+            if (Utility.ValidateMailAddress(replyAddress))
+            {
+                message.ReplyToList.Add(replyAddress);
+            }
+
+            //vytvorime plain view
+            AlternateView plainView = AlternateView.CreateAlternateViewFromString(content, Encoding.UTF8, MediaTypeNames.Text.Html);
+            message.AlternateViews.Add(plainView);
+
+            //odoslame spravu
+            return WebApplication.SendMailMessage(message);
+        }
+        /// <summary>
+        /// SendMailMessage
+        /// </summary>
+        public static Boolean SendMailMessage(MailMessage message)
+        {
+            //ziskame konfiguraciu smtp servera
+            String smtpServer = WebConfigurationManager.AppSettings["SmtpServer"];
+            int smtpPort = int.Parse(WebConfigurationManager.AppSettings["SmtpPort"]);
+            String smtpLogin = WebConfigurationManager.AppSettings["SmtpLogin"];
+            String smtpPassword = WebConfigurationManager.AppSettings["SmtpPassword"];
+            Boolean smtpSslEnable = Boolean.Parse(WebConfigurationManager.AppSettings["SmtpSslEnable"]);
+
+            //odosleme spravu
+            return WebApplication.SendMailMessage(message, smtpServer, smtpPort, smtpLogin, smtpPassword, smtpSslEnable);
+        }
+        /// <summary>
+        /// SendMailMessage
+        /// </summary>
+        public static Boolean SendMailMessage(MailMessage message, String smtpServer, int smtpPort, String smtpLogin, String smtpPassword, Boolean smtpSslEnable)
+        {
+            try
+            {
+                //zalogujeme
+                Project858.Web.WebUtility.Trace("Odosielanie e-mailu: '{0}'", String.Join(",", message.To));
+
+                SmtpClient client = new SmtpClient(smtpServer, smtpPort);
+                client.Credentials = new NetworkCredential(smtpLogin, smtpPassword);
+                client.EnableSsl = smtpSslEnable;
+                client.Send(message);
+
+                //zalogujeme
+                Project858.Web.WebUtility.Trace("Odoslanie e-mailu bolo uspesne");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //zalogujeme
+                Project858.Web.WebUtility.Trace("Odoslanie e-mailu zlyhalo. {0}", ex);
+
+                WebApplication.OnException(ex);
+                return false;
+            }
         }
         #endregion
 

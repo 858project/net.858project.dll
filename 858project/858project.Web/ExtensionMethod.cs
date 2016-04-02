@@ -58,6 +58,9 @@ namespace Project858.Web
                 //lowercase
                 value = value.ToLower().Trim();
 
+                //remove and char
+                value = Regex.Replace(value, "[&]", "and");
+ 
                 //remove all char
                 value = Regex.Replace(value, "[:.-]", "");
 
