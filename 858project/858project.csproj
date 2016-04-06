@@ -181,6 +181,7 @@
     <Compile Include="858project.Web\OAuthBase.cs" />
     <Compile Include="858project.Web\SitemapChangeFrequencyTypes.cs" />
     <Compile Include="858project.Web\SitemapGenerator.cs" />
+    <Compile Include="858project.Web\SitemapImage.cs" />
     <Compile Include="858project.Web\SitemapItem.cs" />
     <Compile Include="858project.Web\SitemapResult.cs" />
     <Compile Include="858project.Web\WebControllerBase.cs" />

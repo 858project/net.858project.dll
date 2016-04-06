@@ -16,6 +16,7 @@ namespace Project858.Web
         #region - Constants -
         private static readonly XNamespace xmlns = "http://www.sitemaps.org/schemas/sitemap/0.9";
         private static readonly XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
+        private static readonly XNamespace nsImage = "http://www.google.com/schemas/sitemap-image/1.1";
         #endregion
 
         #region - Public Methods -
@@ -34,9 +35,10 @@ namespace Project858.Web
                     new XElement(xmlns + "urlset",
                       new XAttribute("xmlns", xmlns),
                       new XAttribute(XNamespace.Xmlns + "xsi", xsi),
+                      new XAttribute(XNamespace.Xmlns + "image", nsImage.NamespaceName),
                       new XAttribute(xsi + "schemaLocation", "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"),
                       from item in items
-                      select InternalCreateItemElement(item)
+                        select InternalCreateItemElement(item)
                       )
                  );
 
@@ -64,6 +66,24 @@ namespace Project858.Web
 
             if (item.Priority.HasValue)
                 itemElement.Add(new XElement(xmlns + "priority", item.Priority.Value.ToString("F1", CultureInfo.InvariantCulture)));
+
+            if (item.Images != null && item.Images.Count > 0)
+            {
+                foreach (var image in item.Images) 
+                {
+                    var element = new XElement(nsImage + "image",
+                                    new XElement(nsImage + "loc", image.Url));
+                    if (!String.IsNullOrWhiteSpace(image.Title)) 
+                    {
+                        element.Add(new XElement(nsImage + "title", image.Title));
+                    }
+                    if (!String.IsNullOrWhiteSpace(image.Caption)) 
+                    {
+                        element.Add(new XElement(nsImage + "caption", image.Caption));
+                    }
+                    itemElement.Add(element);
+                }
+            }
 
             return itemElement;
         }

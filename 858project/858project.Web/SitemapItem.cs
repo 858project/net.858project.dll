@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -18,8 +19,9 @@ namespace Project858.Web
         /// <param name="lastModified">The date of last modification of the file. Optional.</param>
         /// <param name="changeFrequency">How frequently the page is likely to change. Optional.</param>
         /// <param name="priority">The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. Optional.</param>
+        /// <param name="images"></param>
         /// <exception cref="System.ArgumentNullException">If the <paramref name="url"/> is null or empty.</exception>
-        public SitemapItem(String url, DateTime? lastModified = null, Nullable<SitemapChangeFrequencyTypes> changeFrequency = null, Nullable<Double> priority = null)
+        public SitemapItem(String url, DateTime? lastModified = null, Nullable<SitemapChangeFrequencyTypes> changeFrequency = null, Nullable<Double> priority = null, List<SitemapImage> images = null)
         {
             if (url == null)
                 throw new ArgumentNullException("url");
@@ -28,6 +30,7 @@ namespace Project858.Web
             this.LastModified = lastModified;
             this.ChangeFrequency = changeFrequency;
             this.Priority = priority;
+            this.Images = images == null ? null : images.AsReadOnly();
         }
         #endregion
 
@@ -35,7 +38,7 @@ namespace Project858.Web
         /// <summary>
         /// URL of the page.
         /// </summary>
-        public string Url { get; protected set; }
+        public String Url { get; protected set; }
         /// <summary>
         /// The date of last modification of the file.
         /// </summary>
@@ -48,6 +51,10 @@ namespace Project858.Web
         /// The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0.
         /// </summary>
         public Nullable<Double> Priority { get; protected set; }
+        /// <summary>
+        /// Images collection
+        /// </summary>
+        public ReadOnlyCollection<SitemapImage> Images { get; protected set; }
         #endregion
     }
 }
