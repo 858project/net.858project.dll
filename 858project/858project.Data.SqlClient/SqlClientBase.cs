@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Linq;
 using System.Data.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Project858.Data.SqlClient
 {
@@ -844,7 +845,10 @@ namespace Project858.Data.SqlClient
                 //inicializujeme spojenie
                 this.m_connection = new SqlConnection();
                 this.m_connection.ConnectionString = this.GetConnectionString();
-
+                this.m_connection.InfoMessage += (sender, e) =>
+                {
+                    this.InternalTrace(TraceTypes.Info, e.Message);
+                };
                 //otvorime spojenie
                 this.m_connection.Open();
                 this.m_connection.StatisticsEnabled = false;
@@ -866,6 +870,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         private void InternalCloseConnection()
         {
+            Console.WriteLine("InternalCloseConnection");
             //ukoncime pripojenie
             if (this.m_connection != null)
                 if (this.m_connection.State != System.Data.ConnectionState.Closed)

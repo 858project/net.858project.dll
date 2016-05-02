@@ -253,7 +253,6 @@ namespace Project858.Web
             key = null;
             width = null;
             height = null;
-            //small/0ac068e9ae704ffd8c58088714784ffd.jpg
             //vyparsujeme data
             Match match = WebImageHandler.m_regex.Match(value);
             if (match.Success)
