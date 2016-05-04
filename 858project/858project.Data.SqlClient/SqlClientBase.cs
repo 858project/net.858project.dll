@@ -46,8 +46,16 @@ namespace Project858.Data.SqlClient
         public SqlClientBase(String sqlServer, String sqlDatabase, String sqlLogin, String sqlPassword)
             : base()
         {
+            //builder na vytvorenie connection stringu
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = sqlServer;
+            builder.InitialCatalog = sqlDatabase;
+            builder.IntegratedSecurity = true;
+            builder.UserID = sqlLogin;           
+            builder.Password = sqlPassword;
+
             //nastavime pozadovane hodnoty
-            this.InternalChange(sqlServer, sqlDatabase, sqlLogin, sqlPassword);
+            this.InternalChange(builder);
             this.m_lockObj = new Object();
         }
         #endregion
@@ -189,67 +197,19 @@ namespace Project858.Data.SqlClient
             }
         }
         /// <summary>
-        /// (Get) Meno SQL servera na pristup k datam
+        /// (Get) String builder na vytvoreie connection stringu
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>
-        public string Server
+        public SqlConnectionStringBuilder ConnectionStringBuilder
         {
             get {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
                 
-                return this.m_server;
-            }
-        }
-        /// <summary>
-        /// (Get) Databaza do ktorej pristupujeme
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">
-        /// Ak je object v stave _disposed
-        /// </exception>
-        public string Database
-        {
-            get {
-                //je objekt _disposed ?
-                if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
-                return this.m_database;
-            }
-        }
-        /// <summary>
-        /// (Get) Login k SQL serveru
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">
-        /// Ak je object v stave _disposed
-        /// </exception>
-        public string Login
-        {
-            get {
-                //je objekt _disposed ?
-                if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
-                return this.m_login;
-            }
-        }
-        /// <summary>
-        /// (Get) Heslo k SQL serveru
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">
-        /// Ak je object v stave _disposed
-        /// </exception>
-        public string Password
-        {
-            get {
-                //je objekt _disposed ?
-                if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
-                return this.m_password;
+                return this.m_connectionStringBuilder;
             }
         }
         /// <summary>
@@ -304,21 +264,9 @@ namespace Project858.Data.SqlClient
         /// </summary>
         private SqlConnection m_connection = null;
         /// <summary>
-        /// Meno SQL servera na pristup k datam
+        /// String builder na vytvorenie SQL connection stringu
         /// </summary>
-        private String m_server = String.Empty;
-        /// <summary>
-        /// Databaza do ktorej pristupujeme
-        /// </summary>
-        private String m_database = String.Empty;
-        /// <summary>
-        /// Login k SQL serveru
-        /// </summary>
-        private String m_login = String.Empty;
-        /// <summary>
-        /// Heslo k SQL serveru
-        /// </summary>
-        private String m_password = String.Empty;
+        private SqlConnectionStringBuilder m_connectionStringBuilder = null;
         #endregion
 
         #region - Public Method -
@@ -709,29 +657,14 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Initialize this class
         /// </summary>
-        /// <param name="server">Server na ktory sa pripajame</param>
-        /// <param name="database">Databaza ku ktorej sa pripajame</param>
-        /// <param name="login">Prihlasovacie meno k serveru</param>
-        /// <param name="password">Prihlasovacie heslo k serveru</param>
-        private void InternalChange(String server, String database, String login, String password)
+        /// <param name="builder">Builder na vytvorenie SQL connection stringu</param>
+        private void InternalChange(SqlConnectionStringBuilder builder)
         {
             //regex na overenie
-            Regex regex = new Regex(Constants.REGEX_LENGTH.Replace("LENGTH", "2"));
+            if (builder == null)
+                throw new ArgumentNullException("builder");
 
-            //overime vstupnedata
-            if (!regex.IsMatch(server))
-                throw new ArgumentException("Server is not valid !");
-            if (!regex.IsMatch(database))
-                throw new ArgumentException("Database is not valid !");
-            if (!regex.IsMatch(login))
-                throw new ArgumentException("Login is not valid !");
-            if (!regex.IsMatch(password))
-                throw new ArgumentException("Password is not valid !");
-
-            this.m_server = server;
-            this.m_database = database;
-            this.m_login = login;
-            this.m_password = password;
+            this.m_connectionStringBuilder = builder;
         }
         /// <summary>
         /// Overi stav klienta a komunikaciu pri volani public metody
@@ -881,8 +814,7 @@ namespace Project858.Data.SqlClient
         /// <returns>ConnectionString</returns>
         private String GetConnectionString()
         {
-            return String.Format("data source={0}; initial catalog={1}; user id={2}; password={3};",
-                                  this.m_server, this.m_database, this.m_login, this.m_password);
+            return this.m_connectionStringBuilder.ToString();
         }
         #endregion
 

@@ -25,15 +25,6 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Initialize this class
         /// </summary>
-        /// <param name="builder">Strng builder na vytvorenie SQL connection stringu</param>
-        public SqlClient(SqlConnectionStringBuilder builder)
-            : this(builder.DataSource, builder.InitialCatalog, builder.UserID, builder.Password)
-        {
-
-        }
-        /// <summary>
-        /// Initialize this class
-        /// </summary>
         /// <exception cref="ArgumentNullException">
         /// Vstupny argument nie je inicializovany
         /// </exception>

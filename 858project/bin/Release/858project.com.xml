@@ -1567,24 +1567,9 @@
             Sql pripojenie k serveru
             </summary>
         </member>
-        <member name="F:Project858.Data.SqlClient.SqlClientBase.m_server">
+        <member name="F:Project858.Data.SqlClient.SqlClientBase.m_connectionStringBuilder">
             <summary>
-            Meno SQL servera na pristup k datam
-            </summary>
-        </member>
-        <member name="F:Project858.Data.SqlClient.SqlClientBase.m_database">
-            <summary>
-            Databaza do ktorej pristupujeme
-            </summary>
-        </member>
-        <member name="F:Project858.Data.SqlClient.SqlClientBase.m_login">
-            <summary>
-            Login k SQL serveru
-            </summary>
-        </member>
-        <member name="F:Project858.Data.SqlClient.SqlClientBase.m_password">
-            <summary>
-            Heslo k SQL serveru
+            String builder na vytvorenie SQL connection stringu
             </summary>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClientBase.BeginTransaction(System.Data.IsolationLevel)">
@@ -1749,14 +1734,11 @@
             Vykona pred ukoncenim klienta
             </summary>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClientBase.InternalChange(System.String,System.String,System.String,System.String)">
+        <member name="M:Project858.Data.SqlClient.SqlClientBase.InternalChange(System.Data.SqlClient.SqlConnectionStringBuilder)">
             <summary>
             Initialize this class
             </summary>
-            <param name="server">Server na ktory sa pripajame</param>
-            <param name="database">Databaza ku ktorej sa pripajame</param>
-            <param name="login">Prihlasovacie meno k serveru</param>
-            <param name="password">Prihlasovacie heslo k serveru</param>
+            <param name="builder">Builder na vytvorenie SQL connection stringu</param>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClientBase.InternalCheckClientState">
             <summary>
@@ -1850,33 +1832,9 @@
             Ak je object v stave _disposed
             </exception>
         </member>
-        <member name="P:Project858.Data.SqlClient.SqlClientBase.Server">
+        <member name="P:Project858.Data.SqlClient.SqlClientBase.ConnectionStringBuilder">
             <summary>
-            (Get) Meno SQL servera na pristup k datam
-            </summary>
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-        </member>
-        <member name="P:Project858.Data.SqlClient.SqlClientBase.Database">
-            <summary>
-            (Get) Databaza do ktorej pristupujeme
-            </summary>
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-        </member>
-        <member name="P:Project858.Data.SqlClient.SqlClientBase.Login">
-            <summary>
-            (Get) Login k SQL serveru
-            </summary>
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-        </member>
-        <member name="P:Project858.Data.SqlClient.SqlClientBase.Password">
-            <summary>
-            (Get) Heslo k SQL serveru
+            (Get) String builder na vytvoreie connection stringu
             </summary>
             <exception cref="T:System.ObjectDisposedException">
             Ak je object v stave _disposed
@@ -2683,6 +2641,15 @@
             <param name="key">Jedinecny identifikator objektu</param>
             <returns>Object alebo jeho default</returns>
         </member>
+        <member name="M:Project858.Web.Cache.GetValue``1(System.String,System.Func{``0})">
+            <summary>
+            Vrati hodnotu z cache
+            </summary>
+            <typeparam name="T">Typ objektu ktory ocakavame</typeparam>
+            <param name="key">Jedinecny identifikator objektu</param>
+            <param name="method">Metoda na nacitanie dat</param>
+            <returns>Object alebo jeho default</returns>
+        </member>
         <member name="M:Project858.Web.Cache.InternalClearOldItem">
             <summary>
             Vymaze data ktorym vyprsal interval platnosti dat
@@ -3319,6 +3286,11 @@
             The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0.
             </summary>
         </member>
+        <member name="P:Project858.Web.ISitemapItem.Images">
+            <summary>
+            Images collection
+            </summary>
+        </member>
         <member name="T:Project858.Web.DropDownListAttribute">
             <summary>
             Atribut pre nacitanie select-u
@@ -3447,12 +3419,41 @@
             <param name="item">Kolekcia poloziek</param>
             <returns>XML element do sitemap</returns>
         </member>
+        <member name="T:Project858.Web.SitemapImage">
+            <summary>
+            Sitemap image item
+            </summary>
+        </member>
+        <member name="M:Project858.Web.SitemapImage.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="url">The URL of the image.</param>
+            <param name="title">The title of the image.</param>
+            <param name="caption">The caption of the image.</param>
+            <exception cref="T:System.ArgumentNullException">If the <paramref name="url"/> is null or empty.</exception>
+        </member>
+        <member name="P:Project858.Web.SitemapImage.Url">
+            <summary>
+            The URL of the image.
+            </summary>
+        </member>
+        <member name="P:Project858.Web.SitemapImage.Caption">
+            <summary>
+            The caption of the image.
+            </summary>
+        </member>
+        <member name="P:Project858.Web.SitemapImage.Title">
+            <summary>
+            The title of the image.
+            </summary>
+        </member>
         <member name="T:Project858.Web.SitemapItem">
             <summary>
             Represents a sitemap item.
             </summary>
         </member>
-        <member name="M:Project858.Web.SitemapItem.#ctor(System.String,System.Nullable{System.DateTime},System.Nullable{Project858.Web.SitemapChangeFrequencyTypes},System.Nullable{System.Double})">
+        <member name="M:Project858.Web.SitemapItem.#ctor(System.String,System.Nullable{System.DateTime},System.Nullable{Project858.Web.SitemapChangeFrequencyTypes},System.Nullable{System.Double},System.Collections.Generic.List{Project858.Web.SitemapImage})">
             <summary>
             Creates a new instance of <see cref="T:Project858.Web.SitemapItem"/>
             </summary>
@@ -3460,6 +3461,7 @@
             <param name="lastModified">The date of last modification of the file. Optional.</param>
             <param name="changeFrequency">How frequently the page is likely to change. Optional.</param>
             <param name="priority">The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. Optional.</param>
+            <param name="images"></param>
             <exception cref="T:System.ArgumentNullException">If the <paramref name="url"/> is null or empty.</exception>
         </member>
         <member name="P:Project858.Web.SitemapItem.Url">
@@ -3480,6 +3482,11 @@
         <member name="P:Project858.Web.SitemapItem.Priority">
             <summary>
             The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0.
+            </summary>
+        </member>
+        <member name="P:Project858.Web.SitemapItem.Images">
+            <summary>
+            Images collection
             </summary>
         </member>
         <member name="M:Project858.Web.SitemapResult.#ctor(System.Collections.Generic.IEnumerable{Project858.Web.ISitemapItem})">
@@ -3510,6 +3517,26 @@
             Spracuje result pre HTTP odpoved
             </summary>
             <param name="context">ControllerContext</param>
+        </member>
+        <member name="T:Project858.Web.WebControllerBase">
+            <summary>
+            Bese controller with implementation
+            </summary>
+        </member>
+        <member name="M:Project858.Web.WebControllerBase.SendEmail(System.String,System.String,System.Object,System.String,System.String,System.String,System.String,System.String[])">
+            <summary>
+            InternalSendEmail
+            </summary>
+        </member>
+        <member name="M:Project858.Web.WebControllerBase.InternalSendEmail(System.String,System.String,System.Object,System.String,System.String,System.String,System.String,System.String[])">
+            <summary>
+            InternalSendEmail
+            </summary>
+        </member>
+        <member name="M:Project858.Web.WebControllerBase.InternalSendEmail(System.String,System.String,System.String,System.String,System.String,System.String[])">
+            <summary>
+            InternalSendEmail
+            </summary>
         </member>
         <member name="T:Project858.Web.WebFileHandler">
             <summary>
@@ -3737,104 +3764,6 @@
             <param name="viewPath">Povodna cesta k suboru</param>
             <returns>Cesta k suboru</returns>
         </member>
-        <member name="T:Project858.Web.PdfHeaderAndFooterPrinter">
-            <summary>
-            Vykresli hlavicku a patu PDF dokumentu
-            </summary>
-        </member>
-        <member name="F:Project858.Web.PdfHeaderAndFooterPrinter.m_pdfContent">
-            <summary>
-            Content pdf dokumentu
-            </summary>
-        </member>
-        <member name="F:Project858.Web.PdfHeaderAndFooterPrinter.m_pageNumberTemplate">
-            <summary>
-            Template strany
-            </summary>
-        </member>
-        <member name="F:Project858.Web.PdfHeaderAndFooterPrinter.m_baseFont">
-            <summary>
-            Font na vykreslovanie
-            </summary>
-        </member>
-        <member name="F:Project858.Web.PdfHeaderAndFooterPrinter.m_printTime">
-            <summary>
-            Cas a datum vykreslenia dokumentu
-            </summary>
-        </member>
-        <member name="M:Project858.Web.PdfHeaderAndFooterPrinter.OnOpenDocument(iTextSharp.text.pdf.PdfWriter,iTextSharp.text.Document)">
-            <summary>
-            Otvori dokument
-            </summary>
-            <param name="writer">Writer na zapis dat</param>
-            <param name="document">Dokument do ktoreho chceme data vykreslit</param>
-        </member>
-        <member name="M:Project858.Web.PdfHeaderAndFooterPrinter.OnStartPage(iTextSharp.text.pdf.PdfWriter,iTextSharp.text.Document)">
-            <summary>
-            Prva strana dokumentu
-            </summary>
-            <param name="writer">Writer na zapis dat</param>
-            <param name="document">Dokument do ktoreho chceme data vykreslit</param>
-        </member>
-        <member name="M:Project858.Web.PdfHeaderAndFooterPrinter.OnEndPage(iTextSharp.text.pdf.PdfWriter,iTextSharp.text.Document)">
-            <summary>
-            Posledna strana dokumentu
-            </summary>
-            <param name="writer">Writer na zapis dat</param>
-            <param name="document">Dokument do ktoreho chceme data vykreslit</param>
-        </member>
-        <member name="M:Project858.Web.PdfHeaderAndFooterPrinter.OnCloseDocument(iTextSharp.text.pdf.PdfWriter,iTextSharp.text.Document)">
-            <summary>
-            Zatvori dokument
-            </summary>
-            <param name="writer">Writer na zapis dat</param>
-            <param name="document">Dokument do ktoreho chceme data vykreslit</param>
-        </member>
-        <member name="P:Project858.Web.PdfHeaderAndFooterPrinter.Title">
-            <summary>
-            Nazov dokumentu
-            </summary>
-        </member>
-        <member name="T:Project858.Web.PdfViewController">
-            <summary>
-            Controller na spracovanie a vykreslenie PDF dokumentu
-            </summary>
-        </member>
-        <member name="M:Project858.Web.PdfViewController.#ctor">
-            <summary>
-            Initialize this class
-            </summary>
-        </member>
-        <member name="F:Project858.Web.PdfViewController.m_htmlViewRenderer">
-            <summary>
-            Renderer na vykreslenie html obsahu
-            </summary>
-        </member>
-        <member name="F:Project858.Web.PdfViewController.m_standardPdfRenderer">
-            <summary>
-            Renderer na vykreslenie pdf dokumentu
-            </summary>
-        </member>
-        <member name="M:Project858.Web.PdfViewController.ViewPdf(System.String,System.String,System.Object)">
-            <summary>
-            Spracuje a vytvori PDF dokument z pozadovaneho view
-            </summary>
-            <param name="title">Nazov dokumentu</param>
-            <param name="viewName">Meno view ktore chceme vykreslit</param>
-            <param name="model">Model dat na vykreslenie view</param>
-            <param name="pageSize">Velkost stranky</param>
-            <returns>ActionResult</returns>
-        </member>
-        <member name="M:Project858.Web.PdfViewController.ViewPdf(System.String,System.String,System.Object,iTextSharp.text.Rectangle)">
-            <summary>
-            Spracuje a vytvori PDF dokument z pozadovaneho view
-            </summary>
-            <param name="title">Nazov dokumentu</param>
-            <param name="viewName">Meno view ktore chceme vykreslit</param>
-            <param name="model">Model dat na vykreslenie view</param>
-            <param name="pageSize">Velkost stranky</param>
-            <returns>ActionResult</returns>
-        </member>
         <member name="T:Project858.Web.ResponseTypes">
             <summary>
             Definuje navratove hodnoty servera
@@ -3890,30 +3819,6 @@
             <param name="binder">SetMemberBinder</param>
             <param name="value">Value</param>
             <returns>True = operacia bola uspesna, inak false</returns>
-        </member>
-        <member name="T:Project858.Web.StandardPdfRenderer">
-            <summary>
-            Renderer na vykreslenie PDF
-            </summary>
-        </member>
-        <member name="F:Project858.Web.StandardPdfRenderer.HORIZONTAL_MARGIN">
-            <summary>
-            Definuje horizontalny okraj
-            </summary>
-        </member>
-        <member name="F:Project858.Web.StandardPdfRenderer.VERTICAL_MARGIN">
-            <summary>
-            Defninuje vertikalny okraj
-            </summary>
-        </member>
-        <member name="M:Project858.Web.StandardPdfRenderer.Render(System.String,System.String,iTextSharp.text.Rectangle)">
-            <summary>
-            Vykresli data
-            </summary>
-            <param name="htmlText">Html text na vykreslenie</param>
-            <param name="pageTitle">Nazov strany</param>
-            <param name="pageSize">Velkost stranky</param>
-            <returns>Vykreslenie v bytoch</returns>
         </member>
         <member name="T:Project858.Web.UserAuthorizeAttribute">
             <summary>
@@ -4234,6 +4139,21 @@
             <param name="date">Datum ktory chceme overit</param>
             <returns>True = zaznam je ok, inak false</returns>
         </member>
+        <member name="M:Project858.Web.WebApplication.SendMailMessage(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Odosle emailovu spravu cez definovany smtp server
+            </summary>
+        </member>
+        <member name="M:Project858.Web.WebApplication.SendMailMessage(System.Net.Mail.MailMessage)">
+            <summary>
+            SendMailMessage
+            </summary>
+        </member>
+        <member name="M:Project858.Web.WebApplication.SendMailMessage(System.Net.Mail.MailMessage,System.String,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            SendMailMessage
+            </summary>
+        </member>
         <member name="M:Project858.Web.WebApplication.UserBaseValidateToken(System.String,System.String)">
             <summary>
             Overi spravnost tokenu a to ci je uzivatel stale prihlaseny
@@ -4407,6 +4327,13 @@
             </summary>
             <param name="image">Obrazok ktory chceme konvertovat</param>
             <returns>Pole dat</returns>
+        </member>
+        <member name="M:Project858.Web.WebImage.InternalGetEncoder(System.Drawing.Imaging.ImageFormat)">
+            <summary>
+            Vrati code info pre encoder obrazku
+            </summary>
+            <param name="format">Format z ktreho chceme ziskat code info</param>
+            <returns>ImageCodecInfo alebo null</returns>
         </member>
         <member name="P:Project858.Web.WebImage.Image">
             <summary>
@@ -7409,12 +7336,6 @@
             Klient zabezpecujuci vykonavanie prikazov do SQL databazy 
             </summary>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.#ctor(System.Data.SqlClient.SqlConnectionStringBuilder)">
-            <summary>
-            Initialize this class
-            </summary>
-            <param name="builder">Strng builder na vytvorenie SQL connection stringu</param>
-        </member>
         <member name="M:Project858.Data.SqlClient.SqlClient.#ctor(System.String,System.String,System.String,System.String)">
             <summary>
             Initialize this class
@@ -7929,6 +7850,67 @@
             <summary>
             Pomocny synchronizacny objekt na pristup k databaze
             </summary>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Error(System.Exception)">
+            <summary>
+            Zaloguje pozadovanu spravu ako ERROR spravu
+            </summary>
+            <param name="exception">Chyba ktoru chceme zalogovat</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Error(System.String,System.Object[])">
+            <summary>
+            Zaloguje pozadovanu spravu ako ERROR spravu
+            </summary>
+            <param name="message">Sprava ktoru chceme zalogovat</param>
+            <param name="args">Aegument pre spravu do String.Format()</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Error(System.String,System.String,System.Object[])">
+            <summary>
+            Zaloguje pozadovanu spravu ako ERROR spravu
+            </summary>
+            <param name="modulName">Meno modulu ktory spravu loguje</param>
+            <param name="message">Sprava ktoru chceme zalogovat</param>
+            <param name="args">Aegument pre spravu do String.Format()</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Error(System.DateTime,System.String,System.String,System.Object[])">
+            <summary>
+            Zaloguje pozadovanu spravu ako ERROR spravu
+            </summary>
+            <param name="date">Datum a cas vzniku spravy</param>
+            <param name="modulName">Meno modulu ktory spravu loguje</param>
+            <param name="message">Sprava ktoru chceme zalogovat</param>
+            <param name="args">Aegument pre spravu do String.Format()</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Info(System.String,System.Object[])">
+            <summary>
+            Zaloguje pozadovanu spravu ako INFO spravu
+            </summary>
+            <param name="message">Sprava ktoru chceme zalogovat</param>
+            <param name="args">Aegument pre spravu do String.Format()</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Info(System.String,System.String,System.Object[])">
+            <summary>
+            Zaloguje pozadovanu spravu ako INFO spravu
+            </summary>
+            <param name="modulName">Meno modulu ktory spravu loguje</param>
+            <param name="message">Sprava ktoru chceme zalogovat</param>
+            <param name="args">Aegument pre spravu do String.Format()</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Info(System.DateTime,System.String,System.String,System.Object[])">
+            <summary>
+            Zaloguje pozadovanu spravu ako INFO spravu
+            </summary>
+            <param name="date">Datum a cas vzniku spravy</param>
+            <param name="modulName">Meno modulu ktory spravu loguje</param>
+            <param name="message">Sprava ktoru chceme zalogovat</param>
+            <param name="args">Aegument pre spravu do String.Format()</param>
+            <returns>True = logovanie bolo uspesne inak false</returns>
         </member>
         <member name="M:Project858.Diagnostics.TraceLogger.Trace(System.DateTime,Project858.Diagnostics.TraceTypes,System.String,System.String)">
             <summary>
