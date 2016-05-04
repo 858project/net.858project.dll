@@ -276,7 +276,6 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Aktualizuje pozadovany objekt v SQL
         /// </summary>
-        /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
         public void UpdateObject(Object item) 
         {
