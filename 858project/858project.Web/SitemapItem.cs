@@ -38,23 +38,23 @@ namespace Project858.Web
         /// <summary>
         /// URL of the page.
         /// </summary>
-        public String Url { get; protected set; }
+        public String Url { get; private set; }
         /// <summary>
         /// The date of last modification of the file.
         /// </summary>
-        public DateTime? LastModified { get; protected set; }
+        public DateTime? LastModified { get; private set; }
         /// <summary>
         /// How frequently the page is likely to change.
         /// </summary>
-        public Nullable<SitemapChangeFrequencyTypes> ChangeFrequency { get; protected set; }
+        public Nullable<SitemapChangeFrequencyTypes> ChangeFrequency { get; private set; }
         /// <summary>
         /// The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0.
         /// </summary>
-        public Nullable<Double> Priority { get; protected set; }
+        public Nullable<Double> Priority { get; private set; }
         /// <summary>
         /// Images collection
         /// </summary>
-        public ReadOnlyCollection<SitemapImage> Images { get; protected set; }
+        public ReadOnlyCollection<SitemapImage> Images { get; private set; }
         #endregion
     }
 }

@@ -376,7 +376,7 @@ namespace Project858.Data.SqlClient
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>
-        /// <exception cref="SqlException">
+        /// <exception cref="SQLiteException">
         /// Chyba tykajuca sa SQL servera alebo commandu
         /// </exception>
         /// <exception cref="Exception">

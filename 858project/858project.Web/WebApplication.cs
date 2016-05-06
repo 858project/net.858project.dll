@@ -368,7 +368,7 @@ namespace Project858.Web
         /// <summary>
         /// Vrati uzivatela na zaklade id prihlasenia a IP adresy z ktorej uzivatel prichadza
         /// </summary>
-        /// <param name="token">Id prihlasenia uzivatela</param>
+        /// <param name="id">Id prihlasenia uzivatela</param>
         /// <param name="hostAddress">IP adresa z ktorej uzivatel prichadza</param>
         /// <returns>User alebo null</returns>
         public abstract UserBase UserBaseGetUserFromUserLoginId(Guid id, String hostAddress);

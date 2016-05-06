@@ -18,7 +18,7 @@ namespace Project858.Web
         /// Spracuje bindig na model
         /// </summary>
         /// <param name="controllerContext">ControllerContext</param>
-        /// <param name="bindingContext"ModelBindingContext></param>
+        /// <param name="bindingContext">ModelBindingContext</param>
         /// <returns>Vyparsovany objekt alebo null</returns>
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {

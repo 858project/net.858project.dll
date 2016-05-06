@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Linq;
 using System.Data.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Project858.Data.SqlClient
 {
@@ -408,7 +409,7 @@ namespace Project858.Data.SqlClient
         /// <param name="command">Prikaz ktory chceme vykonat</param>
         /// <returns>The number of rows affected.</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public int ExecuteNonQuery(SqlCommand command)
+        public Task<int> ExecuteNonQuery(SqlCommand command)
         {
             //overime stav klienta
             this.InternalCheckClientState();
@@ -432,7 +433,10 @@ namespace Project858.Data.SqlClient
                 }
 
                 //vykoname pozadovany prikaz
-                return command.ExecuteNonQuery();
+                return Task<int>.Factory.StartNew(() =>
+                {
+                    return command.ExecuteNonQuery();
+                });
             }
             catch (SqlException ex)
             {
