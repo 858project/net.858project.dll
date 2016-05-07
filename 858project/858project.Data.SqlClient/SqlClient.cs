@@ -30,7 +30,8 @@ namespace Project858.Data.SqlClient
         public SqlClient(SqlConnectionStringBuilder builder)
             : base(builder)
         {
-
+            this.m_lockObj = new Object();
+            this.m_reflectionPropertyCollection = new ReflectionObjectItemCollection();
         }
         /// <summary>
         /// Initialize this class
@@ -287,7 +288,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="query">Query prikaz</param>
         /// <returns>Pocet ovplyvnenych riadkov</returns>
-        public Task<int> ExecuteNonQuery(String query)
+        public int ExecuteNonQuery(String query)
         {
             return this.InternalExecuteNonQuery(query);
         }
@@ -296,7 +297,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme vymazat</param>
         /// <returns>True = objekt bol vymazany, inak false</returns>
-        public Task<int> DeleteObject(Object item)
+        public int DeleteObject(Object item)
         {
             try
             {
@@ -380,28 +381,25 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">objekt ktorych chceme vlozit</param>
         /// <returns>True = objekt bol uspesne vlozeny</returns>
-        public Task<Boolean> TryInsertObject(Object item)
+        public Boolean TryInsertObject(Object item)
         {
-            return Task<Boolean>.Factory.StartNew(() =>
+            try
             {
-                try
-                {
-                    var task = this.InternalInsertObject(item);
-                    return task.Result == 1;
-                }
-                catch (Exception ex)
-                {
-                    this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL. {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
-                    this.InternalException(ex);
-                    return false;
-                }
-            });
+                var result = this.InternalInsertObject(item);
+                return result == 1;
+            }
+            catch (Exception ex)
+            {
+                this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL. {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
+                this.InternalException(ex);
+                return false;
+            }
         }
         /// <summary>
         /// Vlozi pozadovany objekt do SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme vlozit</param>
-        public Task<int> InsertObject(Object item)
+        public int InsertObject(Object item)
         {
             try
             {
@@ -419,29 +417,26 @@ namespace Project858.Data.SqlClient
         /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
         /// <returns>True = objekt bol uspesne aktualizovany</returns>
-        public Task<Boolean> TryUpdateObject(Object item)
+        public Boolean TryUpdateObject(Object item)
         {
-            return Task<Boolean>.Factory.StartNew(() =>
+            try
             {
-                try
-                {
-                    var task = this.InternalUpdateObject(item);
-                    return task.Result == 1;
-                }
-                catch (Exception ex)
-                {
-                    this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1}: {2}]", ex.Message, item.GetType(), item.ToJsonString());
-                    this.InternalException(ex);
-                    return false;
-                }
-            });
+                var result = this.InternalUpdateObject(item);
+                return result == 1;
+            }
+            catch (Exception ex)
+            {
+                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1}: {2}]", ex.Message, item.GetType(), item.ToJsonString());
+                this.InternalException(ex);
+                return false;
+            }
         }
         /// <summary>
         /// Aktualizuje pozadovany objekt v SQL
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        public Task<int> UpdateObject(Object item)
+        public int UpdateObject(Object item)
         {
             try
             {
@@ -683,7 +678,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="query">Query prikaz</param>
         /// <returns>Pocet ovplyvnenych riadkov</returns>
-        public Task<int> InternalExecuteNonQuery(String query)
+        public int InternalExecuteNonQuery(String query)
         {
             //spracujeme dommand do SQL
             using (SqlCommand command = new SqlCommand())
@@ -708,7 +703,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme vymazat</param>
         /// <returns>True = objekt bol vymazany, inak false</returns>
-        private Task<int> InternalDeleteObject(Object item)
+        private int InternalDeleteObject(Object item)
         {
             //najdeme informacie o datovom type
             ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
@@ -1289,7 +1284,7 @@ namespace Project858.Data.SqlClient
         /// Vlozi pozadovany objekt do SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme vlozit</param>
-        private Task<int> InternalInsertObject(Object item)
+        private int InternalInsertObject(Object item)
         {
             //objekt musi byt zadany
             if (item == null)
@@ -1348,7 +1343,7 @@ namespace Project858.Data.SqlClient
         /// Aktualizuje pozadovany objekt v SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        private Task<int> InternalUpdateObject(Object item)
+        private int InternalUpdateObject(Object item)
         {
             //objekt musi byt zadany
             if (item == null)

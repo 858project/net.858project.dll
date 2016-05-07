@@ -409,7 +409,7 @@ namespace Project858.Data.SqlClient
         /// <param name="command">Prikaz ktory chceme vykonat</param>
         /// <returns>The number of rows affected.</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public Task<int> ExecuteNonQuery(SqlCommand command)
+        public int ExecuteNonQuery(SqlCommand command)
         {
             //overime stav klienta
             this.InternalCheckClientState();
@@ -433,10 +433,7 @@ namespace Project858.Data.SqlClient
                 }
 
                 //vykoname pozadovany prikaz
-                return Task<int>.Factory.StartNew(() =>
-                {
-                    return command.ExecuteNonQuery();
-                });
+                return command.ExecuteNonQuery();
             }
             catch (SqlException ex)
             {
@@ -786,6 +783,9 @@ namespace Project858.Data.SqlClient
                 this.m_connection = new SqlConnection();
                 this.m_connection.ConnectionString = this.GetConnectionString();
 
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, this.m_connection.ConnectionString);
+
                 //otvorime spojenie
                 this.m_connection.Open();
                 this.m_connection.StatisticsEnabled = false;
@@ -822,7 +822,11 @@ namespace Project858.Data.SqlClient
         /// <returns>ConnectionString</returns>
         private String GetConnectionString()
         {
-            return this.m_connectionStringBuilder.ToString();
+            return String.Format("data source={0}; initial catalog={1}; user id={2}; password={3};",
+                this.m_connectionStringBuilder.DataSource, 
+                this.m_connectionStringBuilder.InitialCatalog, 
+                this.m_connectionStringBuilder.UserID, 
+                this.m_connectionStringBuilder.Password);
         }
         #endregion
 
