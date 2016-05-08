@@ -19,12 +19,24 @@ namespace Project858.Web
         /// <param name="filterContext">ActionExecutingContext</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var modelState = filterContext.Controller.ViewData;
+            var viewData = filterContext.Controller.ViewData;
             var model = filterContext.ActionParameters["model"];
-            if (!modelState.ModelState.IsValid || (model != null && model is IModel && !(model as IModel).Validate()))
+            if (!viewData.ModelState.IsValid || (model != null && model is IModel && !(model as IModel).Validate()))
             {
                 filterContext.Controller.PrintModelStateError();
-                filterContext.Result = WebUtility.GetJsonResult(ResponseTypes.ModelIsNotValidError);
+
+                //vytvorime zoznam chyb
+                List<String> errors = new List<String>();
+                foreach (ModelState modelState in viewData.ModelState.Values)
+                {
+                    foreach (ModelError error in modelState.Errors)
+                    {
+                        errors.Add(error.ErrorMessage);
+                    }
+                }
+
+                //vratime result aj s popisom chyb
+                filterContext.Result = WebUtility.GetJsonResult(ResponseTypes.ModelIsNotValidError, null, null, errors, JsonRequestBehavior.AllowGet);
             }
             base.OnActionExecuting(filterContext);
         }

@@ -13,7 +13,15 @@ namespace Project858.Web
     /// </summary>
     public abstract class WebControllerBase : Controller
     {
-        #region - Private Methods -
+        #region - Protected Methods -
+        /// <summary>
+        /// Return current host address
+        /// </summary>
+        /// <returns>IP Address</returns>
+        protected String GetHostAddress()
+        {
+            return this.Request.UserHostAddress;
+        }
         /// <summary>
         /// InternalSendEmail
         /// </summary>
