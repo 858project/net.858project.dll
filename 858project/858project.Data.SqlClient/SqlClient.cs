@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Reflection;
 using System.Dynamic;
+using System.Threading.Tasks;
 
 namespace Project858.Data.SqlClient
 {
@@ -22,6 +23,16 @@ namespace Project858.Data.SqlClient
     public class SqlClient : SqlClientBase
     {
         #region - Constructor -
+        /// <summary>
+        /// Initialize this class
+        /// </summary>
+        /// <param name="builder">Strng builder na vytvorenie SQL connection stringu</param>
+        public SqlClient(SqlConnectionStringBuilder builder)
+            : base(builder)
+        {
+            this.m_lockObj = new Object();
+            this.m_reflectionPropertyCollection = new ReflectionObjectItemCollection();
+        }
         /// <summary>
         /// Initialize this class
         /// </summary>
@@ -286,7 +297,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme vymazat</param>
         /// <returns>True = objekt bol vymazany, inak false</returns>
-        public Boolean DeleteObject(Object item)
+        public int DeleteObject(Object item)
         {
             try
             {
@@ -309,7 +320,7 @@ namespace Project858.Data.SqlClient
         /// <returns>Kolekcia nacitanych dat</returns>
         public List<T> Select<T>(String whereClause = null, String orderClause = null, Nullable<UInt32> limit = null, Nullable<UInt32> page = null)
         {
-            if (limit != null && limit.Value < 1) 
+            if (limit != null && limit.Value < 1)
             {
                 throw new ArgumentException("Value 'limit' cannot be less than the minimum value 1");
             }
@@ -374,8 +385,8 @@ namespace Project858.Data.SqlClient
         {
             try
             {
-                this.InternalInsertObject(item);
-                return true;
+                var result = this.InternalInsertObject(item);
+                return result == 1;
             }
             catch (Exception ex)
             {
@@ -388,17 +399,27 @@ namespace Project858.Data.SqlClient
         /// Vlozi pozadovany objekt do SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme vlozit</param>
-        public void InsertObject(Object item)
+        public int InsertObject(Object item)
         {
             try
             {
-                this.InternalInsertObject(item);
+                return this.InternalInsertObject(item);
             }
             catch (Exception ex)
             {
                 this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 throw;
             }
+        }
+        /// <summary>
+        /// Insertne kolekciu dat do DB
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme insertnut</typeparam>
+        /// <param name="collection">Kolekcia dat</param>
+        /// <returns>Pocet riadkov ovplyvnenych insertom</returns>
+        public int InsertCollection<T>(List<T> collection)
+        {
+            return this.InternalInsertCollection<T>(collection);
         }
         /// <summary>
         /// Aktualizuje pozadovany objekt v SQL
@@ -410,8 +431,8 @@ namespace Project858.Data.SqlClient
         {
             try
             {
-                this.InternalUpdateObject(item);
-                return true;
+                var result = this.InternalUpdateObject(item);
+                return result == 1;
             }
             catch (Exception ex)
             {
@@ -425,11 +446,11 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        public void UpdateObject(Object item) 
+        public int UpdateObject(Object item)
         {
             try
             {
-               this.InternalUpdateObject(item);
+                return this.InternalUpdateObject(item);
             }
             catch (Exception ex)
             {
@@ -549,7 +570,7 @@ namespace Project858.Data.SqlClient
                     }
                 }
             }
-            
+
             //vratime default
             return default(T);
         }
@@ -692,7 +713,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme vymazat</param>
         /// <returns>True = objekt bol vymazany, inak false</returns>
-        private Boolean InternalDeleteObject(Object item)
+        private int InternalDeleteObject(Object item)
         {
             //najdeme informacie o datovom type
             ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
@@ -724,8 +745,7 @@ namespace Project858.Data.SqlClient
                 command.Parameters.Add(primaryKeyParameter);
 
                 //vykoname priklad do DB
-                int count = this.ExecuteNonQuery(command);
-                return count == 1;
+                return this.ExecuteNonQuery(command);
             }
         }
         /// <summary>
@@ -782,7 +802,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme aktualizovat</param>
         /// <returns>Aktualizovany objekt</returns>
-        private Object InternalReloadObject(Object item) 
+        private Object InternalReloadObject(Object item)
         {
             //najdeme informacie o datovom type
             ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
@@ -944,7 +964,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="value">Hodnota ktoru chceme aktualizovat</param>
         /// <returns>Aktualizovana hodnota alebo povodna hodnota</returns>
-        private Object InternalUpdateValue(Object value) 
+        private Object InternalUpdateValue(Object value)
         {
             if (value != null)
             {
@@ -1274,7 +1294,7 @@ namespace Project858.Data.SqlClient
         /// Vlozi pozadovany objekt do SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme vlozit</param>
-        private void InternalInsertObject(Object item)
+        private int InternalInsertObject(Object item)
         {
             //objekt musi byt zadany
             if (item == null)
@@ -1290,7 +1310,7 @@ namespace Project858.Data.SqlClient
             {
                 throw new Exception("Missing attribute TableAttribute");
             }
-            
+
             //najdeme vsetky property
             if (properties == null || properties.Count == 0)
             {
@@ -1326,14 +1346,88 @@ namespace Project858.Data.SqlClient
             {
                 command.CommandText = builder.ToString();
                 command.Parameters.AddRange(parameterCollection.ToArray());
-                this.ExecuteNonQuery(command);
+                return this.ExecuteNonQuery(command);
+            }
+        }
+        /// <summary>
+        /// Insertne kolekciu dat do DB
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme insertnut</typeparam>
+        /// <param name="collection">Kolekcia dat</param>
+        /// <returns>Pocet riadkov ovplyvnenych insertom</returns>
+        private int InternalInsertCollection<T>(List<T> collection)
+        {
+            //objekt musi byt zadany
+            if (collection == null)
+                throw new ArgumentNullException("collection");
+            if (collection.Count == 0)
+                throw new ArgumentException("Collection is empty!");
+
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
+
+            //objekt musi obsahovat definiciu tabulky
+            if (properties.TableAttribute == null)
+                throw new Exception("Missing attribute TableAttribute");
+
+            //najdeme vsetky property
+            if (properties == null || properties.Count == 0)
+                throw new Exception("Missing attribute ColumnAttribute");
+
+            //vytvorime command
+            List<SqlParameter> parameterCollection = new List<SqlParameter>();
+            StringBuilder builder = new StringBuilder();
+            var count = collection.Count;
+            for (int i = 0; i < count; i++)
+			{
+                //ziskame polozku
+			    T item = collection[i];
+     
+                //vytvorime command pre aktualny objekt
+                StringBuilder values = new StringBuilder();
+                builder.AppendFormat("INSERT INTO [{0}] (", properties.TableAttribute.Name);
+                foreach (var value in properties.Values)
+                {
+                    if (value.ColumnAttribute != null)
+                    {
+                        ColumnAttribute attribude = value.ColumnAttribute;
+                        if (!attribude.IsDbGenerated && attribude.IsRequiredWhenInserting)
+                        {
+                            //ziskame propertyName
+                            var propertyName = value.Property.Name;
+
+                            //vytvorime zaznam
+                            builder.AppendFormat("[{0}], ", propertyName);
+
+                            //upravime meno
+                            propertyName = String.Format("{0}{1}", value.Property.Name, i);
+
+                            //vytvorime parameter
+                            values.AppendFormat("@{0}, ", propertyName);
+                            SqlParameter parameter = new SqlParameter(propertyName, attribude.Type);
+                            parameter.Value = this.InternalPrepareValue(value.Property.GetValue(item, null), attribude);
+                            parameterCollection.Add(parameter);
+                        }
+                    }
+                }
+                builder.Remove(builder.Length - 2, 2);
+                values.Remove(values.Length - 2, 2);
+                builder.AppendFormat(") VALUES ({0});", values.ToString());
+            }
+
+            //spracujeme dommand do SQL
+            using (SqlCommand command = new SqlCommand())
+            {
+                command.CommandText = builder.ToString();
+                command.Parameters.AddRange(parameterCollection.ToArray());
+                return this.ExecuteNonQuery(command);
             }
         }
         /// <summary>
         /// Aktualizuje pozadovany objekt v SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        private void InternalUpdateObject(Object item)
+        private int InternalUpdateObject(Object item)
         {
             //objekt musi byt zadany
             if (item == null)
@@ -1345,7 +1439,7 @@ namespace Project858.Data.SqlClient
             ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
 
             //objekt musi obsahovat definiciu tabulky
-            if (properties.TableAttribute == null) 
+            if (properties.TableAttribute == null)
             {
                 throw new Exception("Missing attribute TableAttribute");
             }
@@ -1354,7 +1448,7 @@ namespace Project858.Data.SqlClient
             {
                 throw new Exception("Missing attribute ColumnAttribute");
             }
-            if (properties.Count == 1) 
+            if (properties.Count == 1)
             {
                 throw new Exception("Too little attribute ColumnAttribute");
             }
@@ -1406,7 +1500,7 @@ namespace Project858.Data.SqlClient
             {
                 command.CommandText = builder.ToString();
                 command.Parameters.AddRange(parameterCollection.ToArray());
-                this.ExecuteNonQuery(command);
+                return this.ExecuteNonQuery(command);
             }
         }
         /// <summary>
@@ -1462,7 +1556,7 @@ namespace Project858.Data.SqlClient
         private PropertyInfo[] InternalFindPropertiesWithColumnAttribute(PropertyInfo[] propertyInfo)
         {
             List<PropertyInfo> collection = new List<PropertyInfo>();
-            for (int i = 0; i < propertyInfo.Length; i++) 
+            for (int i = 0; i < propertyInfo.Length; i++)
             {
                 PropertyInfo info = propertyInfo[i];
                 if (info.GetCustomAttributes(typeof(ColumnAttribute), true).Length == 1)

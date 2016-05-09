@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Linq;
 using System.Data.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Project858.Data.SqlClient
 {
@@ -39,10 +40,10 @@ namespace Project858.Data.SqlClient
         /// <exception cref="ArgumentNullException">
         /// Vstupny argument nie je inicializovany
         /// </exception>
-        /// <param name="_sqlServer">Meno SQL servera na pristup k datam</param>
-        /// <param name="_sqlDatabase">Databaza do ktorej pristupujeme</param>
-        /// <param name="_sqlLogin">Login k SQL serveru</param>
-        /// <param name="_sqlPassword">Heslo k SQL serveru</param>
+        /// <param name="sqlServer">Meno SQL servera na pristup k datam</param>
+        /// <param name="sqlDatabase">Databaza do ktorej pristupujeme</param>
+        /// <param name="sqlLogin">Login k SQL serveru</param>
+        /// <param name="sqlPassword">Heslo k SQL serveru</param>
         public SqlClientBase(String sqlServer, String sqlDatabase, String sqlLogin, String sqlPassword)
             : base()
         {
@@ -51,7 +52,7 @@ namespace Project858.Data.SqlClient
             builder.DataSource = sqlServer;
             builder.InitialCatalog = sqlDatabase;
             builder.IntegratedSecurity = true;
-            builder.UserID = sqlLogin;           
+            builder.UserID = sqlLogin;
             builder.Password = sqlPassword;
 
             //nastavime pozadovane hodnoty
@@ -98,20 +99,22 @@ namespace Project858.Data.SqlClient
         /// </summary>
         public event EventHandler ConnectionStateChangeEvent
         {
-            add {
+            add
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock) 
+                lock (this._eventLock)
                     this._connectionStateChangeEvent += value;
             }
-            remove {
+            remove
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock) 
+                lock (this._eventLock)
                     this._connectionStateChangeEvent -= value;
             }
         }
@@ -204,11 +207,12 @@ namespace Project858.Data.SqlClient
         /// </exception>
         public SqlConnectionStringBuilder ConnectionStringBuilder
         {
-            get {
+            get
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
+
                 return this.m_connectionStringBuilder;
             }
         }
@@ -220,7 +224,8 @@ namespace Project858.Data.SqlClient
         /// </exception>
         public ConnectionStates ConnectionState
         {
-            get {
+            get
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
@@ -279,7 +284,7 @@ namespace Project858.Data.SqlClient
         /// </exception>
         public void BeginTransaction(IsolationLevel level)
         {
-            if (this.m_connection == null || this.m_connection.State != System.Data.ConnectionState.Open) 
+            if (this.m_connection == null || this.m_connection.State != System.Data.ConnectionState.Open)
             {
                 throw new InvalidOperationException("Connection is not valid!");
             }
@@ -403,7 +408,7 @@ namespace Project858.Data.SqlClient
         /// </exception>
         /// <param name="command">Prikaz ktory chceme vykonat</param>
         /// <returns>The number of rows affected.</returns>
-        [MethodImpl(MethodImplOptions.Synchronized)] 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int ExecuteNonQuery(SqlCommand command)
         {
             //overime stav klienta
@@ -778,6 +783,9 @@ namespace Project858.Data.SqlClient
                 this.m_connection = new SqlConnection();
                 this.m_connection.ConnectionString = this.GetConnectionString();
 
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, this.m_connection.ConnectionString);
+
                 //otvorime spojenie
                 this.m_connection.Open();
                 this.m_connection.StatisticsEnabled = false;
@@ -814,7 +822,11 @@ namespace Project858.Data.SqlClient
         /// <returns>ConnectionString</returns>
         private String GetConnectionString()
         {
-            return this.m_connectionStringBuilder.ToString();
+            return String.Format("data source={0}; initial catalog={1}; user id={2}; password={3};",
+                this.m_connectionStringBuilder.DataSource, 
+                this.m_connectionStringBuilder.InitialCatalog, 
+                this.m_connectionStringBuilder.UserID, 
+                this.m_connectionStringBuilder.Password);
         }
         #endregion
 
