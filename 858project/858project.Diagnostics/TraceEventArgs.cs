@@ -18,7 +18,7 @@ namespace Project858.Diagnostics
         /// </exception>
         /// <param name="time">Cas a datum vzniku logovacej spravy</param>
         /// <param name="modul">Meno modulu ktory spravu vytvorill</param>
-        /// <param name="_traceType">Typ logovacej spravy</param>
+        /// <param name="traceType">Typ logovacej spravy</param>
         /// <param name="message">Sprava s informaciou</param>
         public TraceEventArgs(DateTime time, String modul, TraceTypes traceType, String message)
         {

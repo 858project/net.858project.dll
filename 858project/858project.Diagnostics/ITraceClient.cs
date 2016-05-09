@@ -15,7 +15,7 @@ namespace Project858.Diagnostics
         /// Zaloguje pozadovane data
         /// </summary>
         /// <param name="time">Cas logovacej spravy</param>
-        /// <param name="_traceType">Typ logovania</param>
+        /// <param name="traceType">Typ logovania</param>
         /// <param name="modulName">Nazov modulu ktory spravu vytvoril</param>
         /// <param name="message">Sprava s informaciou</param>
         /// <returns>True = logovanie bolo uspesne</returns>
@@ -24,7 +24,7 @@ namespace Project858.Diagnostics
         /// Zaloguje pozadovane data
         /// </summary>
         /// <param name="time">Cas logovacej spravy</param>
-        /// <param name="_traceType">Typ logovania</param>
+        /// <param name="traceType">Typ logovania</param>
         /// <param name="modulName">Nazov modulu ktory spravu vytvoril</param>
         /// <param name="message">Sprava s informaciou</param>
         void TraceAsync(DateTime time, TraceTypes traceType, String modulName, String message);
