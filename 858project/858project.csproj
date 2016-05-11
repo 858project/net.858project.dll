@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="858project.ComponentModel\DoubleAttribute.cs" />
+    <Compile Include="858project.ComponentModel\TimeSpanAttribute.cs" />
     <Compile Include="858project.ComponentModel\UnsignedIntegerrAttribute.cs" />
     <Compile Include="858project.ComponentModel\LongAttribute.cs" />
     <Compile Include="858project.ComponentModel\ConfigurationTypes.cs" />
