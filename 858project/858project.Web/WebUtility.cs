@@ -415,7 +415,7 @@ namespace Project858.Web
         /// <returns>JsonResult</returns>
         private static JsonResult Json(Object data, JsonRequestBehavior behavior)
         {
-            JsonResult result = new JsonResult();
+            JsonNetResult result = new JsonNetResult();
             result.Data = data;
             result.ContentType = null;
             result.ContentEncoding = null;

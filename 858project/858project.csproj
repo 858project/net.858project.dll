@@ -177,6 +177,7 @@
     <Compile Include="858project.Web\DecimalBinder.cs" />
     <Compile Include="858project.Web\ExtensionMethod.cs" />
     <Compile Include="858project.Web\FormAttribute.cs" />
+    <Compile Include="858project.Web\GuidJsonConverter.cs" />
     <Compile Include="858project.Web\HtmlViewRenderer.cs" />
     <Compile Include="858project.ComponentModel\StringAttribute.cs" />
     <Compile Include="858project.Web\HttpBasicUnauthorizedResult.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="858project.Web\ISitemapGenerator.cs" />
     <Compile Include="858project.Web\ISitemapItem.cs" />
     <Compile Include="858project.Web\DropDownListAttribute.cs" />
+    <Compile Include="858project.Web\JsonNetResult.cs" />
     <Compile Include="858project.Web\OAuthBase.cs" />
     <Compile Include="858project.Web\SitemapChangeFrequencyTypes.cs" />
     <Compile Include="858project.Web\SitemapGenerator.cs" />

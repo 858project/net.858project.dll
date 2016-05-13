@@ -18,15 +18,11 @@ namespace Project858.ComponentModel
         /// <summary>
         /// Datum vytvorenia zaznamu
         /// </summary>
-        [JsonIgnore]
-        [ScriptIgnore]
         [ColumnAttribute(Type = SqlDbType.DateTimeOffset)]
         public DateTimeOffset CreateDate { get; set; }
         /// <summary>
         /// Datum poslednej aktualizacie zaznamu
         /// </summary>
-        [JsonIgnore]
-        [ScriptIgnore]
         [ColumnAttribute(Type = SqlDbType.DateTimeOffset, IsRequiredWhenUpdating = true)]
         public DateTimeOffset UpdateDate { get; set; }
         #endregion

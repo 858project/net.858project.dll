@@ -22,9 +22,12 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+using Newtonsoft.Json;
 using Project858.ComponentModel;
+using Project858.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -101,18 +104,18 @@ namespace Project858.Web
         #endregion
 
         #region - Public Properties -
+
         /// <summary>
         /// Definuje ci je aktualny uzivatel blokovany alebo nie
         /// </summary>
+        [JsonIgnore]
         [ScriptIgnore]
-        public Boolean Blocked
-        {
-            get { return false; }
-            set { throw new NotSupportedException(); }
-        }
+        [ColumnAttribute(Type = SqlDbType.Bit, IsRequiredWhenInserting = true)]
+        public Boolean Blocked { get; set; }
         /// <summary>
         /// Jedinecne Id uzivatela
         /// </summary>
+        [JsonIgnore]
         [ScriptIgnore]
         public Guid Id
         {

@@ -33,7 +33,7 @@ namespace Project858.Web
 
         #region - Public Methods -
         /// <summary>
-        /// Vyparsuje dateTime vo formate ISO 8601
+        /// Vyparsuje guid bez pomlcok
         /// </summary>
         /// <param name="value">Hodnota ktoru chceme parsovat</param>
         /// <returns>DateTime alebo null</returns>
