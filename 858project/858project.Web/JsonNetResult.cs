@@ -22,7 +22,8 @@ namespace Project858.Web
             //inicializacia
             Settings = new JsonSerializerSettings
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Error
+                ReferenceLoopHandling = ReferenceLoopHandling.Error,
+                Formatting = Formatting.Indented
             };
 
             //pridame konvertory
