@@ -426,12 +426,13 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
+        /// <param name="whereClause">Podmienka na aktualizaciu objektu</param>
         /// <returns>True = objekt bol uspesne aktualizovany</returns>
-        public Boolean TryUpdateObject(Object item)
+        public Boolean TryUpdateObject(Object item, String whereClause = null)
         {
             try
             {
-                var result = this.InternalUpdateObject(item);
+                var result = this.InternalUpdateObject(item, whereClause);
                 return result == 1;
             }
             catch (Exception ex)
@@ -446,11 +447,12 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        public int UpdateObject(Object item)
+        /// <param name="whereClause">Podmienka na aktualizaciu objektu</param>
+        public int UpdateObject(Object item, String whereClause = null)
         {
             try
             {
-                return this.InternalUpdateObject(item);
+                return this.InternalUpdateObject(item, whereClause);
             }
             catch (Exception ex)
             {
@@ -1427,7 +1429,8 @@ namespace Project858.Data.SqlClient
         /// Aktualizuje pozadovany objekt v SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        private int InternalUpdateObject(Object item)
+        /// <param name="whereClause">Podmienka na aktualizaciu objektu</param>
+        private int InternalUpdateObject(Object item, String whereClause = null)
         {
             //objekt musi byt zadany
             if (item == null)
@@ -1488,9 +1491,13 @@ namespace Project858.Data.SqlClient
             {
                 throw new Exception("Too little attribute ColumnAttribute with update ");
             }
-
             builder.Remove(builder.Length - 2, 2);
             builder.AppendFormat(" WHERE [{0}] = @{0}", primaryKeyPropertyInfo[0].Property.Name);
+            //ak je zadana podmienka
+            if (!String.IsNullOrWhiteSpace(whereClause))
+            {
+                builder.AppendFormat(" AND {0}", whereClause);
+            }
             SqlParameter primaryKeyParameter = new SqlParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
             primaryKeyParameter.Value = primaryKeyPropertyInfo[0].Property.GetValue(item, null);
             parameterCollection.Add(primaryKeyParameter);
