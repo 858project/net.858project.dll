@@ -42,6 +42,82 @@
             Definuje maximalnu dlzku textu ktoru musi hodnota splnat
             </summary>
         </member>
+        <member name="T:Project858.ComponentModel.TimeSpanAttribute">
+            <summary>
+            Validacia textu
+            </summary>
+        </member>
+        <member name="M:Project858.ComponentModel.TimeSpanAttribute.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.ComponentModel.TimeSpanAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Overi platnost hodnoty podla nastavenych kriterii
+            </summary>
+            <param name="value">Hodnota ktoru validujeme</param>
+            <param name="validationContext">ValidationContext</param>
+            <returns>ValidationResult</returns>
+        </member>
+        <member name="P:Project858.ComponentModel.TimeSpanAttribute.ClientValidationHandler">
+            <summary>
+            Nazov metody ktora ma validovat uvedenu polozku
+            </summary>
+        </member>
+        <member name="P:Project858.ComponentModel.TimeSpanAttribute.Required">
+            <summary>
+            Definuje ci je hodnota vyzadovana alebo nie
+            </summary>
+        </member>
+        <member name="P:Project858.ComponentModel.TimeSpanAttribute.MinValue">
+            <summary>
+            Definuje minimalnu hdonotu
+            </summary>
+        </member>
+        <member name="P:Project858.ComponentModel.TimeSpanAttribute.MaxValue">
+            <summary>
+            Definuje maximalnu hodnotu
+            </summary>
+        </member>
+        <member name="T:Project858.ComponentModel.UnsignedIntegerrAttribute">
+            <summary>
+            Validacia textu
+            </summary>
+        </member>
+        <member name="M:Project858.ComponentModel.UnsignedIntegerrAttribute.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.ComponentModel.UnsignedIntegerrAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Overi platnost hodnoty podla nastavenych kriterii
+            </summary>
+            <param name="value">Hodnota ktoru validujeme</param>
+            <param name="validationContext">ValidationContext</param>
+            <returns>ValidationResult</returns>
+        </member>
+        <member name="P:Project858.ComponentModel.UnsignedIntegerrAttribute.ClientValidationHandler">
+            <summary>
+            Nazov metody ktora ma validovat uvedenu polozku
+            </summary>
+        </member>
+        <member name="P:Project858.ComponentModel.UnsignedIntegerrAttribute.Required">
+            <summary>
+            Definuje ci je hodnota vyzadovana alebo nie
+            </summary>
+        </member>
+        <member name="P:Project858.ComponentModel.UnsignedIntegerrAttribute.MinValue">
+            <summary>
+            Definuje minimalnu dlzku textu ktoru musi hodnota splnat
+            </summary>
+        </member>
+        <member name="P:Project858.ComponentModel.UnsignedIntegerrAttribute.MaxValue">
+            <summary>
+            Definuje maximalnu dlzku textu ktoru musi hodnota splnat
+            </summary>
+        </member>
         <member name="T:Project858.ComponentModel.LongAttribute">
             <summary>
             Validacia longu
@@ -510,7 +586,7 @@
             Track if dispose has been called
             </summary>
         </member>
-        <member name="F:Project858.ComponentModel.Client.ClientBase._eventLock">
+        <member name="F:Project858.ComponentModel.Client.ClientBase.m_eventLock">
             <summary>
             Pomocny objekt na synchronizaciu pristupu k eventom
             </summary>
@@ -1010,7 +1086,7 @@
             <exception cref="T:System.ObjectDisposedException">
             Ak je object v stave _disposed
             </exception>
-            <exception cref="!:SqlException">
+            <exception cref="T:System.Data.SQLite.SQLiteException">
             Chyba tykajuca sa SQL servera alebo commandu
             </exception>
             <exception cref="T:System.Exception">
@@ -1299,7 +1375,6 @@
             <summary>
             Aktualizuje pozadovany objekt v SQL
             </summary>
-            <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
             <param name="item">objekt ktorych chceme aktualizovat</param>
         </member>
         <member name="M:Project858.Data.SqlClient.SQLiteClient.UpdateAndReloadObject(System.Object)">
@@ -1522,10 +1597,10 @@
             <exception cref="T:System.ArgumentNullException">
             Vstupny argument nie je inicializovany
             </exception>
-            <param name="_sqlServer">Meno SQL servera na pristup k datam</param>
-            <param name="_sqlDatabase">Databaza do ktorej pristupujeme</param>
-            <param name="_sqlLogin">Login k SQL serveru</param>
-            <param name="_sqlPassword">Heslo k SQL serveru</param>
+            <param name="sqlServer">Meno SQL servera na pristup k datam</param>
+            <param name="sqlDatabase">Databaza do ktorej pristupujeme</param>
+            <param name="sqlLogin">Login k SQL serveru</param>
+            <param name="sqlPassword">Heslo k SQL serveru</param>
         </member>
         <member name="F:Project858.Data.SqlClient.SqlClientBase.m_transaction">
             <summary>
@@ -1895,7 +1970,7 @@
             </exception>
             <param name="time">Cas a datum vzniku logovacej spravy</param>
             <param name="modul">Meno modulu ktory spravu vytvorill</param>
-            <param name="_traceType">Typ logovacej spravy</param>
+            <param name="traceType">Typ logovacej spravy</param>
             <param name="message">Sprava s informaciou</param>
         </member>
         <member name="F:Project858.Diagnostics.TraceEventArgs.time">
@@ -2250,6 +2325,13 @@
             Kolekcia udalosti patriacich medzi medzinarodne dni
             </summary>
         </member>
+        <member name="T:Project858.Net.DataEventHandler">
+            <summary>
+            Delegat na oznamenie vykonania operacie s datami
+            </summary>
+            <param name="sender">Odosielatel udalosti</param>
+            <param name="e">DataEventArgs</param>
+        </member>
         <member name="T:Project858.Management.ExitTheWin">
             <summary>
             Implements methods to exit Windows.
@@ -2387,6 +2469,1022 @@
         <member name="T:Project858.Management.Volume.Windows7.PropertyStore">
             <summary>
             Property Store class, only supports reading properties at the moment.
+            </summary>
+        </member>
+        <member name="T:Project858.Net.DataEventArgs">
+            <summary>
+            EventArgs pre event na prichod dat
+            </summary>
+        </member>
+        <member name="M:Project858.Net.DataEventArgs.#ctor(System.Byte[],System.Net.IPEndPoint)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="data">Prijate data</param>
+            <param name="remoteEndPoint">EndPoint odosielatela dat</param>
+        </member>
+        <member name="F:Project858.Net.DataEventArgs.m_data">
+            <summary>
+            prijate data
+            </summary>
+        </member>
+        <member name="F:Project858.Net.DataEventArgs.m_remoteEndPoint">
+            <summary>
+            EndPoint odosielatela dat
+            </summary>
+        </member>
+        <member name="P:Project858.Net.DataEventArgs.Data">
+            <summary>
+            (Get) Prijate _data
+            </summary>
+        </member>
+        <member name="P:Project858.Net.DataEventArgs.RemoteEndPoint">
+            <summary>
+            (Get) End point z ktoreho boli data prijate
+            </summary>
+        </member>
+        <member name="T:Project858.Net.IpEndPointCollection">
+            <summary>
+            Kolekia IpEndPointov ku ktorym sa chceme pripojit
+            </summary>
+        </member>
+        <member name="M:Project858.Net.IpEndPointCollection.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.Net.IpEndPointCollection.#ctor(System.Net.IPEndPoint)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="ipEndPoint">IpEndPoint ktory chceme pridat do kolekcie</param>
+        </member>
+        <member name="M:Project858.Net.IpEndPointCollection.Add(System.Net.IPEndPoint)">
+            <summary>
+            Prida element do kolekcie. Ak uz v kolekcii nieco existuje overi ci su typy zhodne. 
+            Kolekcia moze obsahovat len elementy zhoddeho typu
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            neinicializovany vstupny argument
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            Nespravna struktura dat
+            </exception>
+            <param name="ipEndPoint">Element ktory chceme pridat</param>
+        </member>
+        <member name="M:Project858.Net.IpEndPointCollection.AddRange(System.Collections.Generic.IEnumerable{System.Net.IPEndPoint})">
+            <summary>
+            Prida ipEndPoints do kolekcie. Ak uz v kolekcii nieco existuje overi ci su typy zhodne. 
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            neinicializovany vstupny argument
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            Nespravna struktura dat
+            </exception>
+            <param name="ipEndPoints">Kolekcia ipEndPoints ktore chceme pridat</param>
+        </member>
+        <member name="T:Project858.Net.ITransportClient">
+            <summary>
+            Interface ako predpis pre transportnu komunikacnu vrstvu
+            </summary>
+        </member>
+        <member name="M:Project858.Net.ITransportClient.Write(System.Byte[])">
+            <summary>
+            Zapise _data na komunikacnu linku
+            </summary>
+            <returns>True = _data boli uspesne zapisane, False = chyba pri zapise dat</returns>
+        </member>
+        <member name="P:Project858.Net.ITransportClient.IsConnected">
+            <summary>
+            (Get) Detekcia pripojenia
+            </summary>
+        </member>
+        <member name="E:Project858.Net.ITransportClient.ConnectedEvent">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.Net.ITransportClient.DisconnectedEvent">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.Net.ITransportClient.ReceivedDataEvent">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+        </member>
+        <member name="T:Project858.Net.TcpClientEventArgs">
+            <summary>
+            EventArgs ako sucast eventu oznamujceho prijatie klienta
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpClientEventArgs.#ctor(System.Net.Sockets.TcpClient)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="client">Client ktory bol prijaty serverom</param>
+        </member>
+        <member name="F:Project858.Net.TcpClientEventArgs._client">
+            <summary>
+            Klient ktory bol serverom akceptovany
+            </summary>
+        </member>
+        <member name="P:Project858.Net.TcpClientEventArgs.Client">
+            <summary>
+            Klient ktory bol serverom akceptovany
+            </summary>
+        </member>
+        <member name="T:Project858.Net.TcpClientEventHandler">
+            <summary>
+            Delegat ako predpis pre event oznamujuci uspesne akceptovanie klienta serverom
+            </summary>
+            <param name="sender">Odosielatel udalosti</param>
+            <param name="e">TcpClientEventArgs</param>
+        </member>
+        <member name="T:Project858.Net.TcpContractServer">
+            <summary>
+            Nadstavba TCP servera s rozsirenim
+            </summary>
+        </member>
+        <member name="T:Project858.Net.TcpServer">
+            <summary>
+            Tcp server zabezpecujuci akceptovanie klientov na zvolenej adrese a porte
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpServer.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpServer.#ctor(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovany argument
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Rozsah portu mimo povolene hranice
+            </exception>
+            <param name="ipAddress">Ip adresa servera</param>
+            <param name="ipPort">Ip port servera</param>
+        </member>
+        <member name="F:Project858.Net.TcpServer.m_isListened">
+            <summary>
+            Definuje ci server pocuva na uvedenom porte alebo nie
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpServer.m_processThread">
+            <summary>
+            Pracovne vlakno zabezpecujuce akceptovanie klientov
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpServer.m_listener">
+            <summary>
+            Listener zabezpecujuci akceptovanie klientov
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpServer.m_ipAddress">
+            <summary>
+            Ip adresa na ktorej pocuva server
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpServer.m_ipPort">
+            <summary>
+            Ip port na akom pocuva server
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpServer.Change(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Umozni zenu ip adresy a ip portu. Zmena sa prejavi az po opatovnom spusteni
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovany argument
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Rozsah portu mimo povolene hranice
+            </exception>
+            <param name="ipAddress">Ip adresa servera</param>
+            <param name="ipPort">Ip port servera</param>
+        </member>
+        <member name="M:Project858.Net.TcpServer.InternalStart">
+            <summary>
+            Inicializuje server na pzoadovanej adrese a porte
+            </summary>
+            <returns>True = start klienta bol uspesny</returns>
+        </member>
+        <member name="M:Project858.Net.TcpServer.InternalStop">
+            <summary>
+            Ukonci server a akceptovanie klientov
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpServer.InternalListenerProcess">
+            <summary>
+            Obsluha pracovneho vlakna
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpServer.InternalListen">
+            <summary>
+            Metoda zabezpecujuca akceptovanie klientov
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpServer.OnTcpClientReceived(Project858.Net.TcpClientEventArgs)">
+            <summary>
+            Vygeneruje event oznamujuci prijatie xml dokumentu
+            </summary>
+            <param name="e">XmlDocumentEventArgs</param>
+        </member>
+        <member name="E:Project858.Net.TcpServer.m_tcpClientReceivedEvent">
+            <summary>
+            Event oznamujuci akceptovanie klienta serverom
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpServer.TcpClientReceivedEvent">
+            <summary>
+            Event oznamujuci akceptovanie klienta serverom
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpServer.IsListened">
+            <summary>
+            (Get / Set) Definuje ci server pocuva na uvedenom porte alebo nie
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.#ctor(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="ipAddress">Ip adresa servera</param>
+            <param name="ipPort">Ip port servera</param>
+        </member>
+        <member name="F:Project858.Net.TcpContractServer.m_maxConnection">
+            <summary>
+            Maximalny pocet pripojenych klientov
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpContractServer.m_contracts">
+            <summary>
+            Kolekcia aktualne pripojenych klientov a ich obsluh
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalStart">
+            <summary>
+            Inicializuje server na pzoadovanej adrese a porte
+            </summary>
+            <returns>True = start klienta bol uspesny</returns>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalStop">
+            <summary>
+            Ukonci server a akceptovanie klientov
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalCreateContract(System.Net.Sockets.TcpClient)">
+            <summary>
+            Inicializuje, spusti a vrati contract na obsluhu akceptovaneho klienta
+            </summary>
+            <param name="client">Client ktory bol akceptovany</param>
+            <returns>Contract na obsluhu akceptovaneho klienta</returns>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalRemoveContract(Project858.Net.ITransportClient)">
+            <summary>
+            Odoberie contract klienta ktory sa odpojil. Prepis metody by mal zabezpecit volanie base.InternalRemoveContract(ITransportClient contrat);
+            </summary>
+            <param name="contrat">Contract ktory vykonaval obsluhu klienta ktory zrusil spojenie</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalStopAllContract">
+            <summary>
+            Ukonci vsetky contracty pred ukoncim celeho servera
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalStopContract(Project858.Net.ITransportClient)">
+            <summary>
+            Ukonci contract pred ukoncenim celeho servera
+            </summary>
+            <param name="contract">Contract ktory chceme ukoncit</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.OnTcpClientReceived(Project858.Net.TcpClientEventArgs)">
+            <summary>
+            Prepis a rozsirenie prijatia / akceptovania klienta
+            </summary>
+            <param name="e">TcpClientEventArgs</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.contract_DisconnectedEvent(System.Object,System.EventArgs)">
+            <summary>
+            Reaguje na ukoncenie klienta. Odoberie contract z kolekcie
+            </summary>
+            <param name="sender">Odosielatel udalosti</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalCreateContract(Project858.Net.ITransportClient)">
+            <summary>
+            Prida instanciu ktora obsluhuje prijateho / akceptovaneho klienta
+            </summary>
+            <param name="contract">Contract obsluhujuci akceptovaneho klienta</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalRemoveSpecifiedContract(Project858.Net.ITransportClient)">
+            <summary>
+            Odoberie instanciu ktora obsluhovala prijateho / akceptovaneho klienta ktory ukoncil spojenie
+            </summary>
+            <param name="contract">Contract obsluhujuci akceptovaneho klienta</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.InternalCheckContracts">
+            <summary>
+            Overi maximalny pocet moznych klientov a vykona start alebo stop listenera
+            </summary>
+            <returns>True = je mozne aktivovat dalsieho klient</returns>
+        </member>
+        <member name="P:Project858.Net.TcpContractServer.Contracts">
+            <summary>
+            (Get) Kolekcia aktualne pripojenych klientov a ich obsluh
+            </summary>
+        </member>
+        <member name="P:Project858.Net.TcpContractServer.IsConnected">
+            <summary>
+            (Get / Set) Maximalny pocet pripojenych klientov. Povoleny rozsah je od 1 do 100
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Mimo povoleneho rozsahu. Povoleny rozsah je od 1 do 100
+            </exception>
+        </member>
+        <member name="T:Project858.Net.TcpTransportClient">
+            <summary>
+            Zakladna komunikacna vrstva, pracujuca na linkovej urovni TCP
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.#ctor(System.Net.IPEndPoint)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument / rozsah IP portu
+            </exception>
+            <param name="ipEndPoint">IpPoint ku ktoremu sa chceme pripojit</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.#ctor(Project858.Net.IpEndPointCollection)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument / rozsah IP portu
+            </exception>
+            <param name="ipEndPoints">Kolekcia IpEndPointov ku ktory sa bude klient striedavo pripajat pri autoreconnecte</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.#ctor(System.Net.IPEndPoint,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov, alebo IP portu
+            </exception>
+            <param name="ipEndPoint">IpPoint ku ktoremu sa chceme pripojit</param>
+            <param name="tcpReadTimeout">TcpClient Read Timeout</param>
+            <param name="tcpWriteTimeout">TcpClient Write Timeout</param>
+            <param name="nsReadTimeout">NetworkStream Read Timeout</param>
+            <param name="nsWriteTimeout">NetworkStream Write Timeout</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.#ctor(Project858.Net.IpEndPointCollection,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov, alebo IP portu
+            </exception>
+            <param name="ipEndPoints">Kolekcia IpEndPointov ku ktory sa bude klient striedavo pripajat pri autoreconnecte</param>
+            <param name="tcpReadTimeout">TcpClient Read Timeout</param>
+            <param name="tcpWriteTimeout">TcpClient Write Timeout</param>
+            <param name="nsReadTimeout">NetworkStream Read Timeout</param>
+            <param name="nsWriteTimeout">NetworkStream Write Timeout</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.#ctor(System.Net.Sockets.TcpClient)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovany TcpClient
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je RemoteEndPoint v tcpClientovi Disposed
+            </exception>
+            <param name="tcpClient">Client zabezpecujuci tcp komunikaciu</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.#ctor(System.Net.Sockets.TcpClient,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovany TcpClient
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je RemoteEndPoint v tcpClientovi Disposed
+            </exception>
+            <param name="tcpClient">Client zabezpecujuci tcp komunikaciu</param>
+            <param name="tcpReadTimeout">TcpClient Read Timeout</param>
+            <param name="tcpWriteTimeout">TcpClient Write Timeout</param>
+            <param name="nsReadTimeout">NetworkStream Read Timeout</param>
+            <param name="nsWriteTimeout">NetworkStream Write Timeout</param>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_lastIpEndPointIndex">
+            <summary>
+            Index posledneho IpEndPointu na ktory sa pokusilo pripojit
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_canAutoReconnect">
+            <summary>
+            Definuje ci je mozne vyuzit auto recconect spojenia
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_networkStream">
+            <summary>
+            Stream na komunikaciu
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_tcpReadTimeout">
+            <summary>
+            TcpClient Read Timeout
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_tcpWriteTimeout">
+            <summary>
+            TcpClient Write Timeout
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_nsReadTimeout">
+            <summary>
+            NetworkStream Read Timeout
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_nsWriteTimeout">
+            <summary>
+            NetworkStream Write Timeout
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_isConnectied">
+            <summary>
+            detekcia pripojenia
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_tcpClient">
+            <summary>
+            Client na pripojenie cez TCP/IP
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_ipEndPoints">
+            <summary>
+            pristupovy bod cez ktory sme pripojeny
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_autoReconnectTimer">
+            <summary>
+            Pomocny timer na vykonavanie automatikeho reconnectu v pripade padu spojenia
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_autoReconnectTimeout">
+            <summary>
+            Timeout v akom sa pravidelne vykonava pokus o pripojenie
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_autoReconnect">
+            <summary>
+            Definuje ci je zapnute automaticke pripajanie klienta
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_connectionState">
+            <summary>
+            Stav v akom sa nachadza komunikacia / komunikacny kanal
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.m_actualIpEndPoint">
+            <summary>
+            Aktualny ip end point na ktory sa pripajame alebo na ktorom sme pripojeny
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.ToString">
+            <summary>
+            Vrati meno, popis klienta
+            </summary>
+            <returns>Popis klienta</returns>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.Write(System.Byte[])">
+            <summary>
+            Zapise _data na komunikacnu linku
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            Vynimka v pripade ze sa snazime zapisat _data, ale spojenie nie je.
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+            <returns>True = _data boli uspesne zapisane, False = chyba pri zapise dat</returns>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.InternalStart">
+            <summary>
+            Podla inicializacie otvori TCP spojenie na pripojeneho clienta
+            </summary>
+            <returns>True = uspesne otvorene spojenie, False = chyba pri otvarani spojenia</returns>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.InternalStop">
+            <summary>
+            Zatvori spojenie
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+            <returns>True = uspesne zatvorene spojenie, False = chyba pri zatvarani spojenia</returns>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.GetIpEndPoint">
+            <summary>
+            Vrati ipEndPoint ku ktoremu sa nasledne klient pokusi pripojit
+            </summary>
+            <returns>IpPoint ku ktoremu sa pokusime pripojit</returns>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.InternalConnect(System.Boolean)">
+            <summary>
+            Vykona interny pokus o pripojenie k vzdialenemu bodu
+            </summary>
+            <param name="starting">Definuje ci ide o pripajanie pri starte alebo reconnecte</param>
+            <returns>True = spojenie bolo uspesne vytvorene</returns>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.InternalOnConnect">
+            <summary>
+            Interna snaha o pripojenie
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.InternalDisconnect(System.Boolean)">
+            <summary>
+            Interny disconnect
+            </summary>
+            <param name="closing">Definuje ci doslo u ukonceniu alebo len preruseniu spojenia</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.ValidateConnection">
+            <summary>
+            Overi nastavenia triedy. Vykona start automatickehor reconnectu alebo ukonci klienta
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.InternalOnDisconnect">
+            <summary>
+            Interny disconnect
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.tcp_DataReceived(System.IAsyncResult)">
+            <summary>
+            Calback / prichod dat an streame
+            </summary>
+            <param name="ar">IAsyncResult</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.DataReceived(System.IAsyncResult)">
+            <summary>
+            Calback / prichod dat an streame
+            </summary>
+            <param name="ar">IAsyncResult</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.StartReconnect">
+            <summary>
+            Spusti timer na automatiky reconnect
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.StopReconnect">
+            <summary>
+            Ukonci timer na automaticky reconnect
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.TimerTick(System.Object)">
+            <summary>
+            Obsluha pre timer vykonavajuci automatiky recconnect
+            </summary>
+            <param name="obj">Object</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.ReconnectProcessing">
+            <summary>
+            Vykona automaticky reconnect
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.OnReceivedData(Project858.Net.DataEventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho prijatie dat
+            </summary>
+            <param name="e">EventArgs obsahujuci data</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.OnConnected(System.EventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho pripojenie
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.OnDisconnected(System.EventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho pad spojenia
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.OnChangeConnectionState(System.EventArgs)">
+            <summary>
+            Vygeneruje event oznamujui zmenu stavu pripojenia
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient._connectedEvent">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient.ConnectedEvent">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient.disconnectedEvent">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient.DisconnectedEvent">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient.m_receivedDataEvent">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient.ReceivedDataEvent">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient._changeConnectionStateEvent">
+            <summary>
+            Event oznamujuci zmenu stavu pripojenia
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpTransportClient.ChangeConnectionStateEvent">
+            <summary>
+            Event oznamujuci zmenu stavu pripojenia
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+            Ak nie je autoreconnect povoleny
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.AutoReconnect">
+            <summary>
+            (Get / Set) Definuje ci je zapnute automaticke pripajanie klienta
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave isDisposed
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+            Ak nie je autoreconnect povoleny
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.ConnectionState">
+            <summary>
+            (Get / Set) Stav v akom sa nachadza komunikacia / komunikacny kanal
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.ReconnectTimeout">
+            <summary>
+            (Get / Set) Timeout v akom sa pravidelne vykonava pokus o pripojenie. Minute = 2000, Max = 60000.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Nepovoleny rozsah timeotu
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+            Ak nie je autoreconnect povoleny
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.IpEndPoints">
+            <summary>
+            Kolekcia IPEndPointov ku ktorym sa klient pri reconnecte pripaja
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.IsConnected">
+            <summary>
+            (Get) Detekcia pripojenia
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.CanAutoReconnect">
+            <summary>
+            Definuje ci je mozne vyuzit auto recconect spojenia
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.ActualIpEndPoint">
+            <summary>
+            Aktualny ip end point na ktory sa pripajame alebo na ktorom sme pripojeny
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="T:Project858.Net.TcpTransportClient.SocketState">
+            <summary>
+            pomocna trieda na event na streame
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpTransportClient.SocketState.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.SocketState._data">
+            <summary>
+            Buffer na citanie _data
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpTransportClient.SocketState._stream">
+            <summary>
+            Stream cez ktory sa komunikuje
+            </summary>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.SocketState.Client">
+            <summary>
+            Klient cez ktoreho prebieha komunikacia
+            </summary>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.SocketState.Data">
+            <summary>
+            Buffer na citanie _data
+            </summary>
+        </member>
+        <member name="P:Project858.Net.TcpTransportClient.SocketState.Stream">
+            <summary>
+            Stream cez ktory sa komunikuje
+            </summary>
+        </member>
+        <member name="T:Project858.Net.UdpTransportClient">
+            <summary>
+            Klient zabezpecujuci komunikaciu pomocou udp protokolu
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.#ctor(System.Net.IPAddress,System.Int32,System.Net.IPAddress,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="localAddress">Ip adresa na ktorej upd klient pocuva</param>
+            <param name="localPort">Ip port na ktorom upd klient pocuva</param>
+            <param name="remoteAddress">Ip adresa na ktoru sa data odosielaju</param>
+            <param name="remotePort">Ip port na ktory sa data odosielaju</param>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.#ctor(System.Net.IPEndPoint,System.Net.IPEndPoint)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="localIpEndPoint">Ip end point servera</param>
+            <param name="remoteIpEndPoint">Ip end point kde klient pocuva</param>
+        </member>
+        <member name="F:Project858.Net.UdpTransportClient.m_isConnectied">
+            <summary>
+            detekcia pripojenia
+            </summary>
+        </member>
+        <member name="F:Project858.Net.UdpTransportClient.m_thread">
+            <summary>
+            Thred zabezpecujuci citani dat.
+            </summary>
+        </member>
+        <member name="F:Project858.Net.UdpTransportClient.m_connectionState">
+            <summary>
+            Stav v akom sa nachadza komunikacia / komunikacny kanal
+            </summary>
+        </member>
+        <member name="F:Project858.Net.UdpTransportClient.m_remoteIpEndPoint">
+            <summary>
+            Ip end point kam je klient pripojeny
+            </summary>
+        </member>
+        <member name="F:Project858.Net.UdpTransportClient.m_localIpEndPoint">
+            <summary>
+            Ip end point kde klient pocuva
+            </summary>
+        </member>
+        <member name="F:Project858.Net.UdpTransportClient.m_client">
+            <summary>
+            Klient na udp komunikaciu
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.ToString">
+            <summary>
+            Vrati meno triedy
+            </summary>
+            <returns>Meno triedy</returns>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.Write(System.Byte[])">
+            <summary>
+            Zapise _data na komunikacnu linku
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            Vynimka v pripade ze sa snazime zapisat _data, ale spojenie nie je.
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+            <returns>True = _data boli uspesne zapisane, False = chyba pri zapise dat</returns>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalStart">
+            <summary>
+            Vykona interny start klienta
+            </summary>
+            <returns>True = start klienta bol uspesny</returns>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalStop">
+            <summary>
+            Vykona interny stop klienta
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalConnect">
+            <summary>
+            Vykona interny pokus o pripojenie k vzdialenemu bodu
+            </summary>
+            <returns>True = spojenie bolo uspesne vytvorene</returns>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalDisconnect">
+            <summary>
+            Interny disconnect
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalInitializeThread">
+            <summary>
+            Inicializuje pracovne vlakno zabezpecujuce citanie dat
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalDeinitializeThread">
+            <summary>
+            Deinicializuje pracovne vlakno
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.InternalReceive">
+            <summary>
+            Pracovne vlakno zabezpecujuce citanie dat
+            </summary>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.OnReceivedData(Project858.Net.DataEventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho prijatie dat
+            </summary>
+            <param name="e">EventArgs obsahujuci _data</param>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.OnConnected(System.EventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho pripojenie
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.OnDisconnected(System.EventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho pad spojenia
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.Net.UdpTransportClient.OnChangeConnectionState(System.EventArgs)">
+            <summary>
+            Vygeneruje event oznamujui zmenu stavu pripojenia
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.m_connectedEvent">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.ConnectedEvent">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.disconnectedEvent">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.DisconnectedEvent">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.m_receivedDataEvent">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.ReceivedDataEvent">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.m_changeConnectionStateEvent">
+            <summary>
+            Event oznamujuci zmenu stavu pripojenia
+            </summary>
+        </member>
+        <member name="E:Project858.Net.UdpTransportClient.ChangeConnectionStateEvent">
+            <summary>
+            Event oznamujuci zmenu stavu pripojenia
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+            Ak nie je autoreconnect povoleny
+            </exception>
+        </member>
+        <member name="P:Project858.Net.UdpTransportClient.ConnectionState">
+            <summary>
+            (Get / Set) Stav v akom sa nachadza komunikacia / komunikacny kanal
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.UdpTransportClient.IsConnected">
+            <summary>
+            (Get) Detekcia pripojenia
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="P:Project858.Net.UdpTransportClient.RemoteIpEndPoint">
+            <summary>
+            Ip end point kam je klient pripojeny
+            </summary>
+        </member>
+        <member name="P:Project858.Net.UdpTransportClient.LocalIpEndPoint">
+            <summary>
+            Ip end point kde klient pocuva
             </summary>
         </member>
         <member name="T:Project858.Reflection.ReflectionHelper">
@@ -2549,6 +3647,11 @@
             Kolekcia property objektu
             </summary>
         </member>
+        <member name="T:Project858.ServiceProcess.IWindowsServiceClient">
+            <summary>
+            Client ktory sa automaticky spusta pre WndowsService
+            </summary>
+        </member>
         <member name="T:Project858.Web.BinaryContentResult">
             <summary>
             An ActionResult used to send binary data to the browser.
@@ -2693,7 +3796,7 @@
         <!-- Badly formed XML comment ignored for member "M:Project858.Web.BinderNullableGuid.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)" -->
         <member name="M:Project858.Web.BinderNullableGuid.parseGuid(System.Web.Mvc.ValueProviderResult)">
             <summary>
-            Vyparsuje dateTime vo formate ISO 8601
+            Vyparsuje guid bez pomlcok
             </summary>
             <param name="value">Hodnota ktoru chceme parsovat</param>
             <returns>DateTime alebo null</returns>
@@ -2742,7 +3845,14 @@
             Binder na parsovanie decimal hodnoty s ciarkou alebo bodkou
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Project858.Web.BinderGuid.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)" -->
+        <member name="M:Project858.Web.BinderGuid.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)">
+            <summary>
+            Spracuje bindig na model
+            </summary>
+            <param name="controllerContext">ControllerContext</param>
+            <param name="bindingContext">ModelBindingContext</param>
+            <returns>Vyparsovany objekt alebo null</returns>
+        </member>
         <member name="M:Project858.Web.BinderGuid.parseGuid(System.Web.Mvc.ValueProviderResult)">
             <summary>
             Vyparsuje dateTime vo formate ISO 8601
@@ -3093,6 +4203,46 @@
             </summary>
             <param name="filterContext">ActionExecutingContext</param>
         </member>
+        <member name="T:Project858.Web.GuidJsonConverter">
+            <summary>
+            Guid convertor pre JsonNetResult
+            </summary>
+        </member>
+        <member name="M:Project858.Web.GuidJsonConverter.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.Web.GuidJsonConverter.CanConvert(System.Type)">
+            <summary>
+            Overi ci je mozne objekt konvertovat podla typu
+            </summary>
+            <param name="objectType">Typ objektu</param>
+            <returns>True = konvertovanie je mozne | false</returns>
+        </member>
+        <member name="M:Project858.Web.GuidJsonConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Zapise objekt do json
+            </summary>
+            <param name="writer">Writer na zapis objektu</param>
+            <param name="value">Hodnota ktoru chceme zapisat</param>
+            <param name="serializer">Serializer</param>
+        </member>
+        <member name="M:Project858.Web.GuidJsonConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Precita hodnotu z json
+            </summary>
+            <param name="reader">Reader na citanie</param>
+            <param name="objectType">Typ objektu</param>
+            <param name="existingValue">Aktualna hodnota</param>
+            <param name="serializer">Serializer</param>
+            <returns></returns>
+        </member>
+        <member name="P:Project858.Web.GuidJsonConverter.CanRead">
+            <summary>
+            Urcuje ci je mozne json citat
+            </summary>
+        </member>
         <member name="T:Project858.Web.HtmlViewRenderer">
             <summary>
             Renderer na vykreslovanie Html contentu
@@ -3304,6 +4454,27 @@
         <member name="P:Project858.Web.DropDownListAttribute.ResourceName">
             <summary>
             Menou resource odkial chceme text nacitat
+            </summary>
+        </member>
+        <member name="T:Project858.Web.JsonNetResult">
+            <summary>
+            Upraveny JsonResult so serializaciou Newtonsoft a upravou niektorych datovych typov
+            </summary>
+        </member>
+        <member name="M:Project858.Web.JsonNetResult.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="M:Project858.Web.JsonNetResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
+            <summary>
+            Spusti convet objektu do Json stringu
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="P:Project858.Web.JsonNetResult.Settings">
+            <summary>
+            Konfiguracia serializera
             </summary>
         </member>
         <member name="T:Project858.Web.OAuthBase">
@@ -3522,6 +4693,12 @@
             <summary>
             Bese controller with implementation
             </summary>
+        </member>
+        <member name="M:Project858.Web.WebControllerBase.GetHostAddress">
+            <summary>
+            Return current host address
+            </summary>
+            <returns>IP Address</returns>
         </member>
         <member name="M:Project858.Web.WebControllerBase.SendEmail(System.String,System.String,System.Object,System.String,System.String,System.String,System.String,System.String[])">
             <summary>
@@ -4188,7 +5365,7 @@
             <summary>
             Vrati uzivatela na zaklade id prihlasenia a IP adresy z ktorej uzivatel prichadza
             </summary>
-            <param name="token">Id prihlasenia uzivatela</param>
+            <param name="id">Id prihlasenia uzivatela</param>
             <param name="hostAddress">IP adresa z ktorej uzivatel prichadza</param>
             <returns>User alebo null</returns>
         </member>
@@ -5904,7 +7081,7 @@
             Zaloguje pozadovane data
             </summary>
             <param name="time">Cas logovacej spravy</param>
-            <param name="_traceType">Typ logovania</param>
+            <param name="traceType">Typ logovania</param>
             <param name="modulName">Nazov modulu ktory spravu vytvoril</param>
             <param name="message">Sprava s informaciou</param>
             <returns>True = logovanie bolo uspesne</returns>
@@ -5914,173 +7091,9 @@
             Zaloguje pozadovane data
             </summary>
             <param name="time">Cas logovacej spravy</param>
-            <param name="_traceType">Typ logovania</param>
+            <param name="traceType">Typ logovania</param>
             <param name="modulName">Nazov modulu ktory spravu vytvoril</param>
             <param name="message">Sprava s informaciou</param>
-        </member>
-        <member name="T:Project858.ComponentModel.Client.WindowsServiceClient">
-            <summary>
-            Klient predstavujuci Rodica spravujuceho viacero inych klientov
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.#ctor(System.String)">
-            <summary>
-            Initialize this class
-            </summary>
-            <exception cref="T:System.ArgumentNullException">
-            Vstupne meno klienta nie je zadane
-            </exception>
-            <param name="clientName">Meno / popis klienta</param>
-        </member>
-        <member name="F:Project858.ComponentModel.Client.WindowsServiceClient.clientName">
-            <summary>
-            Meno, popis klienta
-            </summary>
-        </member>
-        <member name="F:Project858.ComponentModel.Client.WindowsServiceClient.childClients">
-            <summary>
-            Kolekcia klientov ktory bezia pod spravnou this
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.PowerStatusChange(System.Windows.Forms.PowerLineStatus)">
-            <summary>
-            Metoda oznamujuca zmenu stavu napajania
-            </summary>
-            
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-            <exception cref="T:System.InvalidOperationException">
-            Ak klient nie je v rezime 'Start'
-            </exception>
-            
-            <param name="status">Aktualny stav napajania</param>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.ChangeBatteryLifePercent(System.Int32)">
-            <summary>
-            Metoda oznamujuca percentualnu zmenu stavu baterie
-            </summary>
-            
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-            <exception cref="T:System.InvalidOperationException">
-            Ak klient nie je v rezime 'Start'
-            </exception>
-            
-            <param name="batteryLifePercent">Percentualna hodnota baterie</param>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.LowBattery">
-            <summary>
-            Metoda oznamujuca nizsky stav baterie
-            </summary>
-            
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-            <exception cref="T:System.InvalidOperationException">
-            Ak klient nie je v rezime 'Start'
-            </exception>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.CriticalBattery">
-            <summary>
-            Metoda oznamujuca kriticky stav abterie
-            </summary>
-            
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
-            <exception cref="T:System.InvalidOperationException">
-            Ak klient nie je v rezime 'Start'
-            </exception>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.ToString">
-            <summary>
-            Vrati meno / popis klienta
-            </summary>
-            <returns>Popis klienta</returns>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.InternalStart">
-            <summary>
-            Interne spustenie klienta
-            </summary>
-            <returns>True = spustenie klienta bolo uspesne</returns>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.InternalPause">
-            <summary>
-            Pozastavi funkciu klienta
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.InternalStop">
-            <summary>
-            Ukonci funkciu klienta
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.InternalDispose">
-            <summary>
-            Vykona pred ukoncenim klienta
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.GetClients">
-            <summary>
-            Nacita kolekciu klientov
-            </summary>
-            <returns>Kolekcia klientov</returns>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.InitializeClients(Project858.ComponentModel.Client.ClientCollecion@)">
-            <summary>
-            Iniializuje klientov
-            </summary>
-            <param name="clients">Kolekcia klientov ktorych chceme inicializovat</param>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailLowBattery">
-            <summary>
-            Vytvori spravu oznamujucu nizky stav baterie v systeme pod ktorym klient bezi
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailCriticalBattery">
-            <summary>
-            Vytvori spravu oznamujucu kriticky stav baterie v systeme pod ktorym klient bezi
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailPowerAc">
-            <summary>
-            Vytvori spravu oznamujucu zmenu napajania na AC
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailPowerBattery">
-            <summary>
-            Vytvori spravu oznamujucu zmenu napajania na bateriu
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailClientStart">
-            <summary>
-            Vytvori spravu oznamujucu spustenie klienta
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailClientStop">
-            <summary>
-            Vytvori spravu oznamujucu ukoncenie klienta
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailClientPause">
-            <summary>
-            Vytvori spravu oznamujucu pozastavenie klienta
-            </summary>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.WindowsServiceClient.EmailClientError(System.Exception)">
-            <summary>
-            Vytvori a odosle spravu s chybou klienta
-            </summary>
-            <param name="ex">Chyba klienta</param>
-        </member>
-        <member name="P:Project858.ComponentModel.Client.WindowsServiceClient.ChildClients">
-            <summary>
-            (Get) Kolekcia klientov beziacich pod spravou
-            </summary>
-            <exception cref="T:System.ObjectDisposedException">
-            Ak je object v stave _disposed
-            </exception>
         </member>
         <member name="T:Project858.Diagnostics.TraceClientTypes">
             <summary>
@@ -7139,202 +8152,16 @@
             (Get / Set) Heslo k SQL serveru
             </summary>
         </member>
-        <member name="T:Project858.Configuration.WindowsServiceConfiguration">
-            <summary>
-            Konfiguracia WindowsService so zakladnymi nastaveniami
-            </summary>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.#ctor">
-            <summary>
-            Initialize this class
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.serviceName">
-            <summary>
-            Meno / Popis klienta
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.mailClientConfiguration">
-            <summary>
-            Konfiguracia Mail klienta
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.sqlClientConfiguration">
-            <summary>
-            Konfiguracia SQL klienta
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.description">
-            <summary>
-            Popis Windows Service
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.traceClientType">
-            <summary>
-            Definuje typ trace klienta pre service
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.traceType">
-            <summary>
-            Definuje typ logovania ktore su povolene
-            </summary>
-        </member>
-        <member name="F:Project858.Configuration.WindowsServiceConfiguration.traceErrorAlways">
-            <summary>
-            Definuje ci je logovanie chyb zapnute za kazdych okolnosti
-            </summary>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.Validate(System.String)">
-            <summary>
-            Overi spravnost poloziek z konfiguracie
-            </summary>
-            <exception cref="T:System.ArgumentException">
-            Chybny argument
-            </exception>
-            <exception cref="T:System.ArgumentNullException">
-            Cryptovacie heslo nie je zadane
-            </exception>
-            <param name="cryptoPassword">Cryptovacie heslo na overenie konfiguracie</param>
-            <returns>True = konfiguracia je spravna</returns>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.XMLSerialize(System.String,Project858.Configuration.WindowsServiceConfiguration,System.String)">
-            <summary>
-            Metoda ktora serializuje konfiguraciu do XML suboru
-            </summary>
-            <exception cref="T:System.ArgumentNullException">
-            Vstupny argument nie je inicializovany
-            </exception>
-            <param name="fileName">Meno suboru kam sa konfiguracia uklada</param>
-            <param name="configuration">Data ktore chceme serializovat</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.TryXMLSerialize(System.String,Project858.Configuration.WindowsServiceConfiguration,System.String)">
-            <summary>
-            Metoda ktora serializuje konfiguraciu do XML suboru
-            </summary>
-            <param name="fileName">Meno suboru kam sa konfiguracia uklada</param>
-            <param name="configuration">Data ktore chceme serializovat</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-            <returns>True = serializacia bola uspesna</returns>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.XMLDeserialize(System.String,System.String)">
-            <summary>
-            Metoda ktora deserializuje konfiguraciu z XML suboru
-            </summary>
-            <exception cref="T:System.ArgumentNullException">
-            Vstupny argument nie je inicializovany
-            </exception>
-            <exception cref="T:System.IO.FileNotFoundException">
-            Zadany subor neexistuje
-            </exception>
-            <param name="fileName">Meno suboru odkial chceme data deserializovat</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-            <returns>Deserializovana konfiguracia</returns>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.TryXMLDeserialize(System.String,System.String,Project858.Configuration.WindowsServiceConfiguration@)">
-            <summary>
-            Metoda ktora deserializuje konfiguraciu z XML suboru
-            </summary>
-            <param name="fileName">Meno suboru kam sa konfiguracia uklada</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-            <param name="configuration">Data ktore chceme serializovat</param>
-            <returns>True = serializacia bola uspesna</returns>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.BinarySerialize(System.String,Project858.Configuration.WindowsServiceConfiguration,System.String)">
-            <summary>
-            Metoda ktora serializuje konfiguraciu do binary suboru
-            </summary>
-            <exception cref="T:System.ArgumentNullException">
-            Vstupny argument nie je inicializovany
-            </exception>
-            <param name="fileName">Meno suboru kam sa konfiguracia uklada</param>
-            <param name="configuration">Data ktore chceme serializovat</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.TryBinarySerialize(System.String,Project858.Configuration.WindowsServiceConfiguration,System.String)">
-            <summary>
-            Metoda ktora serializuje konfiguraciu do binary suboru
-            </summary>
-            <param name="fileName">Meno suboru kam sa konfiguracia uklada</param>
-            <param name="configuration">Data ktore chceme serializovat</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-            <returns>True = serializacia bola uspesna</returns>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.BinaryDeserialize(System.String,System.String)">
-            <summary>
-            Metoda ktora deserializuje konfiguraciu z binary suboru
-            </summary>
-            <exception cref="T:System.ArgumentNullException">
-            Vstupny argument nie je inicializovany
-            </exception>
-            <exception cref="T:System.IO.FileNotFoundException">
-            Zadany subor neexistuje
-            </exception>
-            <param name="fileName">Meno suboru odkial chceme data deserializovat</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-            <returns>Deserializovana konfiguracia</returns>
-        </member>
-        <member name="M:Project858.Configuration.WindowsServiceConfiguration.TryBinaryDeserialize(System.String,System.String,Project858.Configuration.WindowsServiceConfiguration@)">
-            <summary>
-            Metoda ktora deserializuje konfiguraciu z binary suboru
-            </summary>
-            <param name="fileName">Meno suboru kam sa konfiguracia uklada</param>
-            <param name="cryptoPassword">Heslo na cryptovanie prihlasovacich hesiel</param>
-            <param name="configuration">Data ktore chceme serializovat</param>
-            <returns>True = serializacia bola uspesna</returns>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.ServiceName">
-            <summary>
-            (Get / Set) Meno / Popis klienta
-            </summary>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.Description">
-            <summary>
-            (Get / Set) Popis Windows Service
-            </summary>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.TraceClientType">
-            <summary>
-            (Get / Set) Definuje typ trace klienta pre service
-            </summary>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.TraceType">
-            <summary>
-            (Get / Set) Definuje typ logovania ktore su povolene
-            </summary>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.TraceErrorAlways">
-            <summary>
-            (Get / Set) Definuje ci je logovanie chyb zapnute za kazdych okolnosti
-            </summary>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.SqlClientConfiguration">
-            <summary>
-            (Get / Set) Konfiguracia SQL klienta
-            </summary>
-        </member>
-        <member name="P:Project858.Configuration.WindowsServiceConfiguration.MailClientConfiguration">
-            <summary>
-            (Get / Set) Konfiguracia Mail klienta
-            </summary>
-        </member>
-        <member name="T:Project858.Configuration.Version1ToVersion2DeserializationBinder">
-            <summary>
-            Pomocna trieda pre BinarySerializer pomocou ktorej ignorujeme verziu assembly v ninarnom subore
-            </summary>
-        </member>
-        <member name="M:Project858.Configuration.Version1ToVersion2DeserializationBinder.BindToType(System.String,System.String)">
-            <summary>
-            Vrati typ na ktory sa pretypovava serializovany objekt
-            </summary>
-            <param name="assemblyName">Meno assembly</param>
-            <param name="typeName">Meno povodneho typu</param>
-            <returns>Typ</returns>
-        </member>
         <member name="T:Project858.Data.SqlClient.SqlClient">
             <summary>
             Klient zabezpecujuci vykonavanie prikazov do SQL databazy 
             </summary>
+        </member>
+        <member name="M:Project858.Data.SqlClient.SqlClient.#ctor(System.Data.SqlClient.SqlConnectionStringBuilder)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="builder">Strng builder na vytvorenie SQL connection stringu</param>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClient.#ctor(System.String,System.String,System.String,System.String)">
             <summary>
@@ -7436,20 +8263,30 @@
             </summary>
             <param name="item">objekt ktorych chceme vlozit</param>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.TryUpdateObject(System.Object)">
+        <member name="M:Project858.Data.SqlClient.SqlClient.InsertCollection``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Insertne kolekciu dat do DB
+            </summary>
+            <typeparam name="T">Typ objektu ktory chceme insertnut</typeparam>
+            <param name="collection">Kolekcia dat</param>
+            <returns>Pocet riadkov ovplyvnenych insertom</returns>
+        </member>
+        <member name="M:Project858.Data.SqlClient.SqlClient.TryUpdateObject(System.Object,System.String)">
             <summary>
             Aktualizuje pozadovany objekt v SQL
             </summary>
             <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
             <param name="item">objekt ktorych chceme aktualizovat</param>
+            <param name="whereClause">Podmienka na aktualizaciu objektu</param>
             <returns>True = objekt bol uspesne aktualizovany</returns>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.UpdateObject(System.Object)">
+        <member name="M:Project858.Data.SqlClient.SqlClient.UpdateObject(System.Object,System.String)">
             <summary>
             Aktualizuje pozadovany objekt v SQL
             </summary>
             <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
             <param name="item">objekt ktorych chceme aktualizovat</param>
+            <param name="whereClause">Podmienka na aktualizaciu objektu</param>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClient.UpdateAndReloadObject(System.Object)">
             <summary>
@@ -7692,11 +8529,20 @@
             </summary>
             <param name="item">objekt ktorych chceme vlozit</param>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.InternalUpdateObject(System.Object)">
+        <member name="M:Project858.Data.SqlClient.SqlClient.InternalInsertCollection``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Insertne kolekciu dat do DB
+            </summary>
+            <typeparam name="T">Typ objektu ktory chceme insertnut</typeparam>
+            <param name="collection">Kolekcia dat</param>
+            <returns>Pocet riadkov ovplyvnenych insertom</returns>
+        </member>
+        <member name="M:Project858.Data.SqlClient.SqlClient.InternalUpdateObject(System.Object,System.String)">
             <summary>
             Aktualizuje pozadovany objekt v SQL
             </summary>
             <param name="item">objekt ktorych chceme aktualizovat</param>
+            <param name="whereClause">Podmienka na aktualizaciu objektu</param>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClient.InternalPrepareValue(System.Object,Project858.Data.SqlClient.ColumnAttribute)">
             <summary>
@@ -8440,73 +9286,6 @@
             Initialize this class
             </summary>
         </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._hardwareKeyValidate">
-            <summary>
-            Definuje ci sa overuje hardverovy kluc systemu
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._passwordConfiguration">
-            <summary>
-            Cryptovacie heslo na ulozenie hesiel v konfiguracii
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._windowsServiceClient">
-            <summary>
-            Klient vytvarajuci spravu modulov beziacich pod WIndows Service
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._traceClient">
-            <summary>
-            Trace klient na logovanie informacii
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._mailClient">
-            <summary>
-            Mail klient na odosielanie emailovych sprav
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._sqlClient">
-            <summary>
-            SQL klient na pristup k databaze
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._criticalBatteryInfo">
-            <summary>
-            Definuje ci bola oznamena informacia o kritickom stave baterie
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._lowBatteryInfo">
-            <summary>
-            Definuje ci bola oznamena informacia o nizskom stave baterie
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._criticalBatteryPercents">
-            <summary>
-            Definuje percento pri ktorom sa oznamuje informacia o kritickom stave baterie
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._lowBatteryPercents">
-            <summary>
-            Definuje percento pri ktorom sa oznamuje informacia o nizskom  stave baterie
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._batteryLifePercent">
-            <summary>
-            pomocna premenna na ukladanie percentualnej hodnoty stavu baterie
-            </summary>
-        </member>
-        <member name="F:Project858.ServiceProcess.WindowsServiceBase._powerTimer">
-            <summary>
-            Timer zabezpecujuci sledovanie stavu napajania pri rezime Baterie
-            </summary>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnPowerEvent(System.ServiceProcess.PowerBroadcastStatus)">
-            <summary>
-            Zachytava event oznamujuci zmenu napajania, alebo zmenu stavu
-            </summary>
-            <param name="powerStatus">PowerBroadcastStatus</param>
-            <returns>???</returns>
-        </member>
         <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnStart(System.String[])">
             <summary>
             Start service
@@ -8528,208 +9307,89 @@
             Shutdown service
             </summary>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.PowerMonitoringTick(System.Object)">
+        <member name="F:Project858.ServiceProcess.WindowsServiceBase.m_clients">
             <summary>
-            Periodicka metoda sledujuca stav napajania v rezime baterie
-            </summary>
-            <param name="obj">Arguments</param>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.PowerMonitoringTick">
-            <summary>
-            Metoda ktora periodicky kontoluje stav baterie
+            Kolekcia aktualnych klientov
             </summary>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.ValidateHardwareKey">
-            <summary>
-            Overi hardverovy kluc systemu v ktorom service bezi
-            </summary>
-            <returns>True = hardverovy kluc je spravny</returns>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InitializeWindowsServiceClient(Project858.Configuration.WindowsServiceConfiguration)">
-            <summary>
-            Inicializuje Klienta zabezpecujuceho spravu modulov beziacich pod WIndowsService
-            </summary>
-            
-            <exception cref="T:System.ArgumentException">
-            Chyba pri Validacii konfiguracie
-            </exception>
-            <exception cref="T:System.ArgumentNullException">
-            Konfiguracia nie je inicializovana
-            </exception>
-            
-            <param name="configuration">Nacitana konfiguracia</param>
-            <returns>Initializovany WindowsServiceClient alebo null</returns>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InitializeClients(Project858.Configuration.WindowsServiceConfiguration)">
-            <summary>
-            Nacita a inicializuje vsetkych klientov
-            </summary>
-            
-            <exception cref="T:System.ArgumentException">
-            Chyba pri Validacii konfiguracie
-            </exception>
-            <exception cref="T:System.ArgumentNullException">
-            Konfiguracia nie je inicializovana
-            </exception>
-            
-            <param name="configuration">Nacitana konfiguracia</param>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InitializeTraceClient(Project858.Configuration.WindowsServiceConfiguration)">
-            <summary>
-            Inicializuje trace klienta na zaklade nacitanej konfiguracie
-            </summary>
-            
-            <exception cref="T:System.ArgumentException">
-            Chyba pri Validacii konfiguracie
-            </exception>
-            <exception cref="T:System.ArgumentNullException">
-            Konfiguracia nie je inicializovana
-            </exception>
-            
-            <param name="configuration">Nacitana konfiguracia</param>
-            <returns>Inicializovany Trace ClientBase, inak NULL</returns>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InitializeSqlClient(Project858.Configuration.SqlClientConfiguration)">
-            <summary>
-            Inicializuje SQL klienta na zaklade nacitanej konfiguracie
-            </summary>
-            
-            <exception cref="T:System.ArgumentException">
-            Chyba pri Validacii konfiguracie
-            </exception>
-            <exception cref="T:System.ArgumentNullException">
-            Konfiguracia nie je inicializovana
-            </exception>
-            
-            <param name="configuration">Nacitana konfiguracia sql clienta</param>
-            <returns>Inicializovany SQL ClientBase, inak NULL</returns>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InitializeMailClient(Project858.Configuration.MailClientConfiguration)">
-            <summary>
-            Inicializuje SQL klienta na zaklade nacitanej konfiguracie
-            </summary>
-            
-            <exception cref="T:System.ArgumentException">
-            Chyba pri Validacii konfiguracie
-            </exception>
-            <exception cref="T:System.ArgumentNullException">
-            Konfiguracia nie je inicializovana
-            </exception>
-            
-            <param name="configuration">Nacitana konfiguracia mailoveho klienta</param>
-            <returns>Inicializovany SQL ClientBase, inak NULL</returns>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.LoadConfiguration">
-            <summary>
-            Nacita konfiguracia. Prvou je Binarna, druhou je Config
-            </summary>
-            <returns>Nacitana konfiguracia, alebo NULL</returns>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.ServiceStart(System.String[])">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalServiceStart(System.String[])">
             <summary>
             Metoda oznamujuca start service
             </summary>
             <param name="args">Argumenty pri starte</param>
             <returns>True = start service bol uspesny</returns>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.ServicePause">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalServicePause">
             <summary>
             Metoda oznamujuca pozastavenie service
             </summary>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.ServiceStop">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalServiceStop">
             <summary>
             Metoda oznamujuca ukoncenie service
             </summary>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.ServiceShutdown">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalServiceShutdown">
             <summary>
             Metoda oznamujuca ukoncenie service na zakalde ukoncenia systemu
             </summary>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnPowerStatusChange(System.Windows.Forms.PowerLineStatus)">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalClientStop">
             <summary>
-            Metoda oznamujuca zmenu stavu napajania
-            </summary>
-            <param name="status">Aktualny stav napajania</param>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnChangeBatteryLifePercent(System.Int32)">
-            <summary>
-            Metoda oznamujuca percentualnu zmenu stavu baterie
-            </summary>
-            <param name="batteryLifePercent">Percentualna hodnota baterie</param>
-        </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnLowBattery">
-            <summary>
-            Metoda oznamujuca nizsky stav baterie
+            Ukonci vsetky instancie ktore su dostupne
             </summary>
         </member>
-        <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnCriticalBattery">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalClientStart">
             <summary>
-            Metoda oznamujuca kriticky stav abterie
+            Spusti vsetky instancie ktore su dostupne
             </summary>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.HardwareKeyValidate">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalGetCurrentPath">
             <summary>
-            (Get / Set) Definuje ci sa overuje hardverovy kluc systemu
+            Vrati cestu k aktualnemu priecinku odkial je aplikacia spustena
             </summary>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.PasswordConfiguration">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalGetAllLibrary(System.String)">
             <summary>
-            (Get / Set) Cryptovacie heslo na ulozenie hesiel v konfiguracii
+            Vrati cesu k vsetkym knizniciam ktore sa nachadzaju na pozadovanej ceste
             </summary>
+            <param name="path">Cesta v ktorej chceme najst vsetky kniznice</param>
+            <returns>Kolekci kniznic</returns>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.CanPauseAndContinue">
+        <!-- Badly formed XML comment ignored for member "M:Project858.ServiceProcess.WindowsServiceBase.InternalGetAllAssemblyFromFiles(System.String[])" -->
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalGetAllInstanceType(System.Collections.Generic.List{System.Reflection.Assembly},System.Type)">
             <summary>
-            (Get) Value indicating whether the service can be paused and resumed.
+            Vrati kolekciu typov ktore su zhodne s pozadovanym typom pluginu
             </summary>
+            <param name="assemblies">Kolekcia assemblies ktore su dostupne</param>
+            <param name="pluginType">Typ pluginu ktory hladame</param>
+            <returns>Kolekcia typov</returns>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.CanShutdown">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalCreateInstance(System.Collections.Generic.List{System.Type})">
             <summary>
-            (Get) Value indicating whether the service should be notified when 
-            the system is shutting down.
+            Vytvori instancie pluginov ktore su urcene na spustenie
             </summary>
+            <param name="types">Typy pluginov ktore maju byt vytvorene</param>
+            <returns>Kolekcia instancii</returns>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.WindowsServiceClient">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalTrace(System.String,System.Object[])">
             <summary>
-            (Get / Set) Klient vytvarajuci spravu modulov beziacich pod WIndows Service
+            Zaloguje spravu do suboru
             </summary>
+            <param name="message">Sprava</param>
+            <param name="args">String.Format argumenty pre spravu</param>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.TraceClient">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalTrace(System.Exception)">
             <summary>
-            (Get / internal Set) Trace klient na logovanie informacii
+            Zaloguje chybu do log suboru
             </summary>
+            <param name="exception">Chyba ktoru chceme zalogovat</param>
         </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.MailClient">
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalCreateInstance">
             <summary>
-            (Get / internal Set) Mail klient na odosielanie emailovych sprav
+            Vytvori a vrati vsetky instancie pluginov ktore su dostupne
             </summary>
-        </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.SqlClient">
-            <summary>
-            (Get / internal Set) SQL klient na pristup k databaze
-            </summary>
-        </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.PowerStatusIsAC">
-            <summary>
-            (Get) Vrati True ak je aktualny zdroj napajania AC
-            </summary>
-        </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.CriticalBatteryPercents">
-            <summary>
-            (Get / internal Set) Definuje percento pri ktorom sa oznamuje informacia o kritickom stave baterie
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-            Ak je argument mimo stanoveny rozsah
-            </exception>
-        </member>
-        <member name="P:Project858.ServiceProcess.WindowsServiceBase.LowBatteryPercents">
-            <summary>
-            (Get / internal Set) Definuje percento pri ktorom sa oznamuje informacia o nizskom  stave baterie
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-            Ak je argument mimo stanoveny rozsah
-            </exception>
+            <returns>Kolekcia pluginov alebo null</returns>
         </member>
         <member name="T:Project858.Win32.NativeMethods">
             <summary>

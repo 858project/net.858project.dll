@@ -51,7 +51,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this._mailEvent += value;
             }
             remove
@@ -60,7 +60,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this._mailEvent -= value;
             }
         }
@@ -84,7 +84,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.clientStartEvent += value;
             }
             remove
@@ -93,7 +93,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.clientStartEvent -= value;
             }
         }
@@ -117,7 +117,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.clientPauseEvent += value;
             }
             remove
@@ -126,7 +126,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.clientPauseEvent -= value;
             }
         }
@@ -150,7 +150,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.clientStopEvent += value;
             }
             remove
@@ -159,7 +159,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.clientStopEvent -= value;
             }
         }
@@ -183,7 +183,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.traceEvent += value;
             }
             remove
@@ -192,7 +192,7 @@ namespace Project858.ComponentModel.Client
                 if (this._disposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this.traceEvent -= value;
             }
         }
@@ -626,7 +626,7 @@ namespace Project858.ComponentModel.Client
         /// <summary>
         /// Pomocny objekt na synchronizaciu pristupu k eventom
         /// </summary>
-        protected readonly Object _eventLock = new Object();
+        protected readonly Object m_eventLock = new Object();
         /// <summary>
         /// Definuje ci je event 'TraceEvent' v asynchronnom mode
         /// </summary>

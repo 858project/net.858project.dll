@@ -77,7 +77,7 @@ namespace Project858.Data.SqlClient
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this._connectingFaultEvent += value;
             }
             remove
@@ -86,7 +86,7 @@ namespace Project858.Data.SqlClient
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this._connectingFaultEvent -= value;
             }
         }
@@ -105,7 +105,7 @@ namespace Project858.Data.SqlClient
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this._connectionStateChangeEvent += value;
             }
             remove
@@ -114,7 +114,7 @@ namespace Project858.Data.SqlClient
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this._eventLock)
+                lock (this.m_eventLock)
                     this._connectionStateChangeEvent -= value;
             }
         }

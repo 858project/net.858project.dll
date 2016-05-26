@@ -114,6 +114,7 @@
     <Compile Include="858project.Drawing\UseGraphicsAntiAlias.cs" />
     <Compile Include="858project.Drawing\UseGraphicsClearTypeGridFit.cs" />
     <Compile Include="858project.Globalization\CalendarNames.cs" />
+    <Compile Include="858project.Net\DataEventHandler.cs" />
     <Compile Include="858project.Management\ExitTheWin.cs" />
     <Compile Include="858project.Management\PrivilegeException.cs" />
     <Compile Include="858project.Management\SystemEventTypes.cs" />
@@ -163,9 +164,19 @@
     <Compile Include="858project.Management\Volume\Windows7\PropVariant.cs" />
     <Compile Include="858project.Management\Volume\Windows7\SessionCollection.cs" />
     <Compile Include="858project.Management\Volume\Windows7\SimpleAudioVolume.cs" />
+    <Compile Include="858project.Net\DataEventArgs.cs" />
+    <Compile Include="858project.Net\IpEndPointCollection.cs" />
+    <Compile Include="858project.Net\ITransportClient.cs" />
+    <Compile Include="858project.Net\TcpClientEventArgs.cs" />
+    <Compile Include="858project.Net\TcpClientEventHandler.cs" />
+    <Compile Include="858project.Net\TcpContractServer.cs" />
+    <Compile Include="858project.Net\TcpServer.cs" />
+    <Compile Include="858project.Net\TcpTransportClient.cs" />
+    <Compile Include="858project.Net\UdpTransportClient.cs" />
     <Compile Include="858project.Reflection\ReflectionHelper.cs" />
     <Compile Include="858project.Reflection\ReflectionProperty.cs" />
     <Compile Include="858project.Reflection\ReflectionType.cs" />
+    <Compile Include="858project.ServiceProcess\IWindowsServiceClient.cs" />
     <Compile Include="858project.Web\BinaryContentResult.cs" />
     <Compile Include="858project.Web\Cache.cs" />
     <Compile Include="858project.Web\CacheItem.cs" />
@@ -220,7 +231,6 @@
     <Compile Include="858project.Net.Mail\IMailClient.cs" />
     <Compile Include="858project.Data.SqlClient\ISqlClient.cs" />
     <Compile Include="858project.Diagnostics\ITraceClient.cs" />
-    <Compile Include="858project.ComponentModel.Client\WindowsServiceClient.cs" />
     <Compile Include="858project.Diagnostics\TraceClientTypes.cs" />
     <Compile Include="858project.Diagnostics\TraceTypes.cs" />
     <Compile Include="858project\ChangeStateEventArgs.cs" />
@@ -235,7 +245,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="858project.Configuration\MailClientConfiguration.cs" />
     <Compile Include="858project.Configuration\SqlClientConfiguration.cs" />
-    <Compile Include="858project.Configuration\WindowsServiceConfiguration.cs" />
     <Compile Include="858project.Data.SqlClient\SqlClient.cs" />
     <Compile Include="858project.Diagnostics\TraceLogger.cs" />
     <Compile Include="858project.Diagnostics\TraceSqlLiteClient.cs" />
