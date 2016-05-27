@@ -218,6 +218,16 @@ namespace Project858.ServiceProcess
                         //zalogujeme
                         this.InternalTrace("Spustanie instancie. [{0}]", client.GetType());
 
+                        //overime ci ide o klienta
+                        if (client is ClientBase)
+                        {
+                            (client as ClientBase).TraceType = TraceTypes.Error;
+                            (client as ClientBase).TraceEvent += (sender, e) =>
+                            {
+                                this.InternalTrace(e.Message);
+                            };
+                        }
+
                         //start klienta
                         client.Start();
 

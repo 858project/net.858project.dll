@@ -175,7 +175,10 @@ namespace Project858.Net
 				this.m_listener.Start();
 
 				//spustime thread na prijimanie klientov
-				this.m_processThread = new Thread(new ThreadStart(this.InternalListenerProcess));
+				this.m_processThread = new Thread(new ThreadStart(() => 
+                {
+                    this.InternalListenerProcess();
+                }));
                 this.m_processThread.IsBackground = true;
 				this.m_processThread.Start();
 

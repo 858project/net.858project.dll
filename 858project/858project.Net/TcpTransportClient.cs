@@ -660,6 +660,7 @@ namespace Project858.Net
 		{
             //zmenime stav
             this.m_connectionState = ConnectionStates.Connecting;
+
             //doslo k zmene stavu
             this.OnChangeConnectionState(EventArgs.Empty);
 
@@ -805,17 +806,16 @@ namespace Project858.Net
                     //adresa ku ktorej som pripojeny
                     this.m_actualIpEndPoint = (IPEndPoint)this.m_tcpClient.Client.RemoteEndPoint;
                 }
-#if XP
+
                 //nastavime timeoty pre socket
-                this._tcpClient.ReceiveTimeout = this._tcpReadTimeout;
-                this._tcpClient.SendTimeout = this._tcpWriteTimeout;
-#endif
+                this.m_tcpClient.ReceiveTimeout = this.m_tcpReadTimeout;
+                this.m_tcpClient.SendTimeout = this.m_tcpWriteTimeout;
+
 				//ziskame komunikacny stream
 				this.m_networkStream = m_tcpClient.GetStream();
-#if XP
-                _networkStream.ReadTimeout = this._nsReadTimeout;
-                _networkStream.WriteTimeout = this._nsWriteTimeout;
-#endif
+                this.m_networkStream.ReadTimeout = this.m_nsReadTimeout;
+                this.m_networkStream.WriteTimeout = this.m_nsWriteTimeout;
+
 				//inicializujeme state
 				SocketState state = new SocketState()
                 {
@@ -950,20 +950,14 @@ namespace Project858.Net
 		/// <param name="ar">IAsyncResult</param>
 		private void tcp_DataReceived(IAsyncResult ar)
 		{
-			try
-			{
-				this.DataReceived(ar);
-			}
-#if DEBUG
-			catch (Exception ex)
-			{
-
-				Console.WriteLine("Chyba pri asynchronnom prijimani dat. {0}", ex);
-#else
-			catch 
-			{
-#endif
-			}
+            try
+            {
+                this.DataReceived(ar);
+            }
+            catch (Exception ex)
+            {
+                this.InternalTrace(TraceTypes.Error, "Chyba pri asynchronnom prijimani dat. {0}", ex);
+            }
 		}
 		/// <summary>
 		/// Calback / prichod dat an streame
@@ -971,6 +965,8 @@ namespace Project858.Net
 		/// <param name="ar">IAsyncResult</param>
 		private void DataReceived(IAsyncResult ar)
 		{
+            this.InternalTrace(TraceTypes.Verbose, "trace 1");
+
 			lock (this)
 			{
 				//inicializacia
@@ -1026,15 +1022,12 @@ namespace Project858.Net
 				//_data su akeptovane len ak sme pripojeny
 				if (this.IsConnected)
 				{
-					//vytvorime udalost a posleme _data
+					//vytvorime udalost a posleme data
 					OnReceivedData(new DataEventArgs(rdata, state.Client.Client.RemoteEndPoint as IPEndPoint));
 				}
 
 				try
 				{
-					//inicializujeme state
-					state = new SocketState();
-					state.Stream = stream;
 					//otvorime asynchronne citanie na streame
 					stream.BeginRead(state.Data, 0, state.Data.Length, tcp_DataReceived, state);
 				}
