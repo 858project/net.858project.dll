@@ -43,7 +43,7 @@ namespace Project858.ServiceProcess
             base.CanHandlePowerEvent = true;
         }
         #endregion
-
+ 
         #region - Service Method -
         /// <summary>
         /// Start service
@@ -56,6 +56,11 @@ namespace Project858.ServiceProcess
             {
                 //base call
                 base.OnStart(args);
+            }
+            else
+            {
+                //ukoncime
+                this.Stop();
             }
         }
         /// <summary>
@@ -116,6 +121,16 @@ namespace Project858.ServiceProcess
                 //vytvorime instancie
                 this.m_clients = this.InternalCreateInstance();
 
+                //overime ci je co spustit
+                if (this.m_clients.Count == 0)
+                {
+                    //ukoncime
+                    this.InternalTrace("K dispozicii nie su ziadne instancie na spustenie.");
+
+                    //start sluzby sa nepodaril
+                    return false;
+                }
+
                 //spustime klientov
                 this.InternalClientStart();
 
@@ -132,6 +147,7 @@ namespace Project858.ServiceProcess
 
                 //start sluzby sa nepodaril
                 return false;
+
             }
         }
         /// <summary>
@@ -168,13 +184,19 @@ namespace Project858.ServiceProcess
                 {
                     try
                     {
+                        //zalogujeme
+                        this.InternalTrace("Ukoncovanie instancie. [{0}]", client.GetType());
+
                         //start klienta
                         client.Stop();
+
+                        //zalogujeme
+                        this.InternalTrace("Ukoncenie instancie bolo uspesne.");
                     }
                     catch (Exception ex)
                     {
                         //zalogujeme chybu
-                        this.InternalTrace("Start instancie sa nepodaril. [{0}]", client.GetType());
+                        this.InternalTrace("Ukoncenie instancie sa nepodarilo. [{0}]", client.GetType());
                         this.InternalTrace(ex);
                     }
                 }
@@ -193,13 +215,19 @@ namespace Project858.ServiceProcess
                 {
                     try
                     {
+                        //zalogujeme
+                        this.InternalTrace("Spustanie instancie. [{0}]", client.GetType());
+
                         //start klienta
                         client.Start();
+
+                        //zalogujeme
+                        this.InternalTrace("Spustanie instancie bolo uspesne.");
                     }
                     catch (Exception ex)
                     {
                         //zalogujeme chybu
-                        this.InternalTrace("Start instancie sa nepodaril. [{0}]", client.GetType());
+                        this.InternalTrace("Spustanie instancie sa nepodarilo. [{0}]", client.GetType());
                         this.InternalTrace(ex);
                     }
                 }
@@ -245,26 +273,34 @@ namespace Project858.ServiceProcess
         /// Vrati kolekciu typov ktore su zhodne s pozadovanym typom pluginu
         /// </summary>
         /// <param name="assemblies">Kolekcia assemblies ktore su dostupne</param>
-        /// <param name="pluginType">Typ pluginu ktory hladame</param>
+        /// <param name="instanceType">Typ pluginu ktory hladame</param>
         /// <returns>Kolekcia typov</returns>
-        private List<Type> InternalGetAllInstanceType(List<Assembly> assemblies, Type pluginType)
+        private List<Type> InternalGetAllInstanceType(List<Assembly> assemblies, Type instanceType)
         {
             List<Type> collection = new List<Type>();
             foreach (Assembly assembly in assemblies)
             {
-                if (assembly != null)
+                try
                 {
-                    Type[] types = assembly.GetTypes();
-                    foreach (Type type in types)
+                    if (assembly != null)
                     {
-                        if (!type.IsInterface && !type.IsAbstract)
+                        Type[] types = assembly.GetTypes();
+                        foreach (Type type in types)
                         {
-                            if (type.GetInterface(pluginType.FullName) != null)
+                            if (!type.IsInterface && !type.IsAbstract)
                             {
-                                collection.Add(type);
+                                if (type.GetInterface(instanceType.FullName) != null)
+                                {
+                                    collection.Add(type);
+                                }
                             }
                         }
                     }
+                }
+                catch (ReflectionTypeLoadException exception)
+                {
+                    //zapiseme chybu do logu
+                    exception.Print();
                 }
             }
             return collection;

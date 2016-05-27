@@ -1,5 +1,6 @@
 ﻿using Microsoft.SqlServer.Types;
 using Newtonsoft.Json.Linq;
+using Project858.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -9,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Dynamic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -573,6 +575,32 @@ namespace Project858
         {
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
             return codecs.First(codec => codec.FormatID == imageFormat.Guid).MimeType;
+        }
+        #endregion
+
+        #region - Public Static Exception Methods -
+        /// <summary>
+        /// Vypise informacie o chybe ReflectionTypeLoadException do trace suboru
+        /// </summary>
+        /// <param name="exception">Chyba ktoru chceme vypisat</param>
+        public static void Print(this ReflectionTypeLoadException exception) 
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Exception childException in exception.LoaderExceptions)
+            {
+                builder.AppendLine(childException.Message);
+                FileNotFoundException exFileNotFound = childException as FileNotFoundException;
+                if (exFileNotFound != null)
+                {                
+                    if(!String.IsNullOrEmpty(exFileNotFound.FusionLog))
+                    {
+                        builder.AppendLine("Fusion Log:");
+                        builder.AppendLine(exFileNotFound.FusionLog);
+                    }
+                }
+                builder.AppendLine();
+            }
+            TraceLogger.Error(builder.ToString());
         }
         #endregion
     }
