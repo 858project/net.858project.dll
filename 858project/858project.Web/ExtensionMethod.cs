@@ -59,7 +59,7 @@ namespace Project858.Web
                 value = value.ToLower().Trim();
 
                 //remove all char
-                value = Regex.Replace(value, "[-:.,&]", "");
+                value = Regex.Replace(value, "[-:.,&()]", "");
 
                 //remove all white space
                 value = Regex.Replace(value, "\\s+", "-");
