@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ namespace Project858.Web
                 Formatting = Formatting.Indented
             };
 
+            //setrings
+            this.Settings.ContractResolver = new LowerCaseContractResolver();
+
             //pridame konvertory
             this.Settings.Converters.Add(new GuidJsonConverter());
         }
@@ -39,6 +43,14 @@ namespace Project858.Web
         #endregion
 
         #region - Public Methods -
+        /// <summary>
+        /// Prida converter do konfiguracie
+        /// </summary>
+        /// <param name="converter">Konverter ktory chceme pridat</param>
+        public void AddConverters(JsonConverter converter)
+        {
+            this.Settings.Converters.Add(converter);
+        }
         /// <summary>
         /// Spusti convet objektu do Json stringu
         /// </summary>
