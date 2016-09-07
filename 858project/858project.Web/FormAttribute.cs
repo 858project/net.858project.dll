@@ -26,12 +26,16 @@ namespace Project858.Web
                 filterContext.Controller.PrintModelStateError();
 
                 //vytvorime zoznam chyb
-                List<String> errors = new List<String>();
+                List<PairItemBase> errors = new List<PairItemBase>();
                 foreach (ModelState modelState in viewData.ModelState.Values)
                 {
                     foreach (ModelError error in modelState.Errors)
                     {
-                        errors.Add(error.ErrorMessage);
+                        errors.Add(new ErrorPairItem()
+                        {
+                            Name = "model-error",
+                            Error = error.ErrorMessage
+                        });
                     }
                 }
 

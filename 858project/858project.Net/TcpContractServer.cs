@@ -305,11 +305,11 @@ namespace Project858.Net
             lock (this)
             {
 				//zalofujeme
-                this.InternalTrace(TraceTypes.Error, "Pocet klientov: pred odobratim dalsieho {0}", this.m_contracts.Count);
+                this.InternalTrace(TraceTypes.Info, "Pocet klientov: pred odobratim dalsieho {0}", this.m_contracts.Count);
                 //odoberieme contract
                 this.m_contracts.Remove(contract);
 				//zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Pocet klientov: po odobrati dalsieho {0}", this.m_contracts.Count);
+                this.InternalTrace(TraceTypes.Info, "Pocet klientov: po odobrati dalsieho {0}", this.m_contracts.Count);
             }
 
 			//ukoncime inicializovany contract
