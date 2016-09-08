@@ -108,6 +108,15 @@ namespace Project858
         /// <returns>DateTimeOffset</returns>
         public static DateTimeOffset ToDateTimeOffset(this string value) 
         {
+            return DateTimeOffset.ParseExact(value, "yyyy-MM-ddTHH:mm:ss.fffZ", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        /// <summary>
+        /// Skonvertuje string na DateTime
+        /// </summary>
+        /// <param name="value">Hodnota ktoru chceme parsovat</param>
+        /// <returns>DateTimeOffset</returns>
+        public static DateTime ToDateTime(this string value)
+        {
             return DateTime.ParseExact(value, "yyyy-MM-ddTHH:mm:ss.fffZ", System.Globalization.CultureInfo.InvariantCulture);
         }
         /// <summary>
@@ -221,7 +230,7 @@ namespace Project858
         /// <returns>ISO 8601 format</returns>
         public static String ToIso8601String(this DateTime value)
         {
-            return value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+            return value.ToString("yyyy-MM-ddTHH:mm:ss.fff");
         }
         /// <summary>
         /// Skonvertuje datum a cas na iso 8601 format
