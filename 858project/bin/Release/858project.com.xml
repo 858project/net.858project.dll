@@ -3873,6 +3873,26 @@
             <param name="value">Hodnota ktoru chceme parsovat</param>
             <returns>DateTime alebo null</returns>
         </member>
+        <member name="T:Project858.Web.ErrorPairItem">
+            <summary>
+            Eror definujuci dovod zamietnutia
+            </summary>
+        </member>
+        <member name="T:Project858.Web.PairItemBase">
+            <summary>
+            Definuje par hodnot
+            </summary>
+        </member>
+        <member name="P:Project858.Web.PairItemBase.Name">
+            <summary>
+            Meno hodnoty
+            </summary>
+        </member>
+        <member name="P:Project858.Web.ErrorPairItem.Error">
+            <summary>
+            Definuje popis chyby
+            </summary>
+        </member>
         <member name="T:Project858.Web.ExtensionMethod">
             <summary>
             Metody na rozsirenie vlastnosti objektov
@@ -4466,6 +4486,12 @@
             Initialize this class
             </summary>
         </member>
+        <member name="M:Project858.Web.JsonNetResult.AddConverters(Newtonsoft.Json.JsonConverter)">
+            <summary>
+            Prida converter do konfiguracie
+            </summary>
+            <param name="converter">Konverter ktory chceme pridat</param>
+        </member>
         <member name="M:Project858.Web.JsonNetResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
             <summary>
             Spusti convet objektu do Json stringu
@@ -4476,6 +4502,18 @@
             <summary>
             Konfiguracia serializera
             </summary>
+        </member>
+        <member name="T:Project858.Web.LowerCaseContractResolver">
+            <summary>
+            Resolver na upravu json vystupu
+            </summary>
+        </member>
+        <member name="M:Project858.Web.LowerCaseContractResolver.ResolvePropertyName(System.String)">
+            <summary>
+            Update property name
+            </summary>
+            <param name="propertyName">Property name</param>
+            <returns>Updated property name</returns>
         </member>
         <member name="T:Project858.Web.OAuthBase">
             <summary>
@@ -7284,6 +7322,13 @@
             <param name="value">Hodnota ktoru chceme parsovat</param>
             <returns>DateTimeOffset</returns>
         </member>
+        <member name="M:Project858.ExtensionMethod.ToDateTime(System.String)">
+            <summary>
+            Skonvertuje string na DateTime
+            </summary>
+            <param name="value">Hodnota ktoru chceme parsovat</param>
+            <returns>DateTimeOffset</returns>
+        </member>
         <member name="M:Project858.ExtensionMethod.ToGuid(System.String)">
             <summary>
             Skonvertuje string do guid, alebo vrati Empty
@@ -7533,6 +7578,12 @@
             </summary>
             <param name="imageFormat">Format ktoreho content typ chceme ziskat</param>
             <returns>ContentType</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.Print(System.Reflection.ReflectionTypeLoadException)">
+            <summary>
+            Vypise informacie o chybe ReflectionTypeLoadException do trace suboru
+            </summary>
+            <param name="exception">Chyba ktoru chceme vypisat</param>
         </member>
         <member name="T:Project858.FingerPrint">
             <summary>
@@ -9362,7 +9413,7 @@
             Vrati kolekciu typov ktore su zhodne s pozadovanym typom pluginu
             </summary>
             <param name="assemblies">Kolekcia assemblies ktore su dostupne</param>
-            <param name="pluginType">Typ pluginu ktory hladame</param>
+            <param name="instanceType">Typ pluginu ktory hladame</param>
             <returns>Kolekcia typov</returns>
         </member>
         <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalCreateInstance(System.Collections.Generic.List{System.Type})">

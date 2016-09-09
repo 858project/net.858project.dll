@@ -230,7 +230,7 @@ namespace Project858
         /// <returns>ISO 8601 format</returns>
         public static String ToIso8601String(this DateTime value)
         {
-            return value.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+            return value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
         }
         /// <summary>
         /// Skonvertuje datum a cas na iso 8601 format
