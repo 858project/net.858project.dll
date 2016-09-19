@@ -1518,8 +1518,25 @@ namespace Project858.Data.SqlClient
         /// <returns>Hodnota</returns>
         private Object InternalPrepareValue(Object value, ColumnAttribute attribute)
         {
-            value = value == null ? DBNull.Value : value;
-            return this.InternalTruncateValue(value, attribute);
+            if (value != null)
+            {
+                switch (attribute.Type)
+                { 
+                    case SqlDbType.Date:
+                        if (value is DateTime)
+                        {
+                            return ((DateTime)value).ToLocalTime();
+                        }
+                        return value;
+                    case SqlDbType.VarChar:
+                    case SqlDbType.NVarChar:
+                    case SqlDbType.Text:
+                        return this.InternalTruncateValue(value, attribute);
+                    default:
+                        return value;
+                }
+            }
+            return DBNull.Value;
         }
         /// <summary>
         /// Vykona skratenie hodnoty ak je dostupna a je to povolene

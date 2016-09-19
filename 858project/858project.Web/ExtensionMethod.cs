@@ -27,6 +27,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -270,6 +271,22 @@ namespace Project858.Web
                     builder.Append(Environment.NewLine);
                     builder.AppendFormat("RawUrl: {0}", request.RawUrl);
                 }
+
+                Stream inputStream = request.InputStream;
+                if (inputStream != null)
+                {
+                    inputStream.Seek(0, System.IO.SeekOrigin.Begin);
+                    using (StreamReader reader = new StreamReader(inputStream))
+                    {
+                        String body = reader.ReadToEnd();
+                        if (!String.IsNullOrWhiteSpace(body))
+                        {
+                            builder.AppendFormat("Body: {0}", body);
+                        }
+                    }
+                }
+                
+
                 WebUtility.Trace(builder.ToString());
             }
         }
