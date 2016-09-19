@@ -114,6 +114,8 @@
     <Compile Include="858project.Drawing\UseGraphicsAntiAlias.cs" />
     <Compile Include="858project.Drawing\UseGraphicsClearTypeGridFit.cs" />
     <Compile Include="858project.Globalization\CalendarNames.cs" />
+    <Compile Include="858project.Net\FrameEventHandler.cs" />
+    <Compile Include="858project.Net\FrameEventArgs.cs" />
     <Compile Include="858project.Net\DataEventHandler.cs" />
     <Compile Include="858project.Management\ExitTheWin.cs" />
     <Compile Include="858project.Management\PrivilegeException.cs" />
@@ -165,11 +167,14 @@
     <Compile Include="858project.Management\Volume\Windows7\SessionCollection.cs" />
     <Compile Include="858project.Management\Volume\Windows7\SimpleAudioVolume.cs" />
     <Compile Include="858project.Net\DataEventArgs.cs" />
+    <Compile Include="858project.Net\FrameItem.cs" />
     <Compile Include="858project.Net\IpEndPointCollection.cs" />
     <Compile Include="858project.Net\ITransportClient.cs" />
+    <Compile Include="858project.Net\Frame.cs" />
     <Compile Include="858project.Net\TcpClientEventArgs.cs" />
     <Compile Include="858project.Net\TcpClientEventHandler.cs" />
     <Compile Include="858project.Net\TcpContractServer.cs" />
+    <Compile Include="858project.Net\TcpProtocolClient.cs" />
     <Compile Include="858project.Net\TcpServer.cs" />
     <Compile Include="858project.Net\TcpTransportClient.cs" />
     <Compile Include="858project.Net\UdpTransportClient.cs" />

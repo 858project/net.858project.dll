@@ -12,7 +12,6 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -107,6 +106,15 @@ namespace Project858
         /// <param name="value">Hodnota ktoru chceme parsovat</param>
         /// <returns>DateTimeOffset</returns>
         public static DateTimeOffset ToDateTimeOffset(this string value) 
+        {
+            return DateTimeOffset.ParseExact(value, "yyyy-MM-ddTHH:mm:ss.fffZ", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        /// <summary>
+        /// Skonvertuje string na DateTime
+        /// </summary>
+        /// <param name="value">Hodnota ktoru chceme parsovat</param>
+        /// <returns>DateTimeOffset</returns>
+        public static DateTime ToDateTime(this string value)
         {
             return DateTime.ParseExact(value, "yyyy-MM-ddTHH:mm:ss.fffZ", System.Globalization.CultureInfo.InvariantCulture);
         }
