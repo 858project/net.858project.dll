@@ -171,9 +171,14 @@ namespace Project858.Net
 
 				//inicializacia listenera
 				this.m_listener = new TcpListener(this.m_ipAddress, this.m_ipPort);
-				//spustime listener
+				
+                //spustime listener
 				this.m_listener.Start();
 
+                //accept client
+                this.m_listener.BeginAcceptTcpClient(this.InternalOnAccept, null);
+
+                /*
 				//spustime thread na prijimanie klientov
 				this.m_processThread = new Thread(new ThreadStart(() => 
                 {
@@ -181,6 +186,7 @@ namespace Project858.Net
                 }));
                 this.m_processThread.IsBackground = true;
 				this.m_processThread.Start();
+                */
 
                 //zalogujeme
                 this.InternalTrace(TraceTypes.Verbose, "Iniializacia listenera bola uspesna.");
@@ -246,6 +252,33 @@ namespace Project858.Net
                 this.m_isListened = false;
 			}
 		}
+        /// <summary>
+        /// Vykona akceptaciu prijateho klienta
+        /// </summary>
+        /// <param name="result">Asynchronny result</param>
+        private void InternalOnAccept(IAsyncResult result)
+        {
+            //get tcp client
+            TcpClient client = result != null ? this.m_listener.EndAcceptTcpClient(result) : null;
+
+            //overime klienta
+            if (client != null)
+            {
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Info, "Akceptovanie klienta: '{0}'", client.Client.RemoteEndPoint);
+
+                //odosleme event s prijatym klientom
+                this.OnTcpClientReceived(new TcpClientEventArgs(client));
+
+                //new accept
+                this.m_listener.BeginAcceptTcpClient(this.InternalOnAccept, null);
+            }
+            else
+            {
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Warning, "Akceptovanie klienta zalyalo. Vlakno bude ukoncene.");
+            }
+        }
 		/// <summary>
 		/// Obsluha pracovneho vlakna
 		/// </summary>

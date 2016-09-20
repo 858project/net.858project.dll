@@ -110,12 +110,12 @@ namespace Project858.Net
             //items
             foreach (IFrameItem item in this.m_items)
             {
-                builder.AppendFormat("[{0}] - {1} - {2}", item.GetType(), item.Address, item.GetValue());
+                builder.AppendFormat("[{0}] - [{1} - {1:x4}] - {2}", item.GetType(), item.Address, item.GetValue());
                 builder.Append(Environment.NewLine);
             }
 
             //return string
-            return base.ToString();
+            return builder.ToString();
         }
         #endregion
 
