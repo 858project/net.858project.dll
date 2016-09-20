@@ -23,6 +23,11 @@ namespace Project858.Net
 
         #region - Public Methods -
         /// <summary>
+        /// this function returns value
+        /// </summary>
+        /// <returns>Value</returns>
+        Object GetValue();
+        /// <summary>
         /// This function returns item data
         /// </summary>
         /// <returns>Item array data</returns>

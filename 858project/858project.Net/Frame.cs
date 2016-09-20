@@ -76,6 +76,23 @@ namespace Project858.Net
         {
             return this.InternalToByteArray();
         }
+        /// <summary>
+        /// This function returns value 
+        /// </summary>
+        /// <typeparam name="T">Type of value</typeparam>
+        /// <param name="address">Address</param>
+        /// <returns>Value | null</returns>
+        public T GetValue<T>(Int16 address)
+        {
+            foreach (IFrameItem item in this.m_items)
+            {
+                if (item.Address == address)
+                {
+                    return (T)Convert.ChangeType(item.GetValue(), typeof(T));
+                }
+            }
+            return default(T);
+        }
         #endregion
 
         #region - Private Methods -
@@ -87,7 +104,7 @@ namespace Project858.Net
         {
             //variables
             List<Byte> collection = new List<Byte>();
-            Int16 length = 0x00;
+            Int16 length = 0x05;
 
             //add items
             foreach (IFrameItem item in this.m_items)
@@ -100,10 +117,10 @@ namespace Project858.Net
             //add headers
             Byte[] header = new Byte[5];
             header[0] = 0x68;
-            header[1] = (byte)(length >> 8);
-            header[2] = (byte)(length);
-            header[3] = (byte)(this.CommandAddress >> 8);
-            header[4] = (byte)(this.CommandAddress);
+            header[1] = (byte)(length);
+            header[2] = (byte)(length >> 8);
+            header[3] = (byte)(this.CommandAddress);
+            header[4] = (byte)(this.CommandAddress >> 8);
             collection.InsertRange(0, header);
 
             //check sum
@@ -166,7 +183,7 @@ namespace Project858.Net
                 }
 
                 //next
-                i += 4 + length;
+                i += 3 + length;
             }
         }
         /// <summary>
