@@ -167,7 +167,13 @@
     <Compile Include="858project.Management\Volume\Windows7\SessionCollection.cs" />
     <Compile Include="858project.Management\Volume\Windows7\SimpleAudioVolume.cs" />
     <Compile Include="858project.Net\DataEventArgs.cs" />
-    <Compile Include="858project.Net\FrameItem.cs" />
+    <Compile Include="858project.Net\FrameItemString.cs" />
+    <Compile Include="858project.Net\FrameItemGuid.cs" />
+    <Compile Include="858project.Net\FrameItemUnkown.cs" />
+    <Compile Include="858project.Net\FrameItemTypes.cs" />
+    <Compile Include="858project.Net\IFrameItem.cs" />
+    <Compile Include="858project.Net\FrameItemBase.cs" />
+    <Compile Include="858project.Net\FrameItemDateTime.cs" />
     <Compile Include="858project.Net\IpEndPointCollection.cs" />
     <Compile Include="858project.Net\ITransportClient.cs" />
     <Compile Include="858project.Net\Frame.cs" />

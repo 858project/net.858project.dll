@@ -51,6 +51,19 @@ namespace Project858
         }
         #endregion
 
+        #region - Public Static Byte Methods -
+        /// <summary>
+        /// This function returns bit value from position
+        /// </summary>
+        /// <param name="data">byte</param>
+        /// <param name="position">Position</param>
+        /// <returns>True = bit = 1, False = bit = 0</returns>
+        public static Boolean GetBitValue(this Byte value, int position)
+        {
+            return Utility.GetBitValue(value, position);
+        }
+        #endregion
+
         #region - Public Static Guid Methods -
         /// <summary>
         /// Skonvertuje guid to stringu bez pomlciek

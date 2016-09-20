@@ -250,7 +250,7 @@ namespace Project858.Net
                 List<Byte> temp = array.GetRange(index, length);
 
                 //initialize package
-                Frame frame = new Frame(commandAddress, temp);
+                Frame frame = new Frame(commandAddress, temp, this.InternalGetFrameItemType);
 
                 //remove data
                 array.RemoveRange(0, length + index + 1);
@@ -278,6 +278,12 @@ namespace Project858.Net
             sum = sum & 0xFF;
             return (byte)(256 - sum);
         }
+        /// <summary>
+        /// This function returns frame item type from address
+        /// </summary>
+        /// <param name="address">Address to detect type</param>
+        /// <returns>Frame item type</returns>
+        protected abstract FrameItemTypes InternalGetFrameItemType(Int16 address);
         #endregion
 
         #region - Call Event Method -

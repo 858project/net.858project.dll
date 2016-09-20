@@ -80,6 +80,19 @@ namespace Project858
 
         #region - Public Static Method -
         /// <summary>
+        /// This function returns bit value from position
+        /// </summary>
+        /// <param name="data">byte</param>
+        /// <param name="position">Position</param>
+        /// <returns>True = bit = 1, False = bit = 0</returns>
+        public static Boolean GetBitValue(Byte data, int position)
+        {
+            if ((((data) >> (position)) & 1) == 0)
+                return false;
+            else
+                return true;
+        }
+        /// <summary>
         /// Vrati extension z mime typu
         /// </summary>
         /// <param name="type">Mime type z ktoreho chceme nacitat extension</param>
