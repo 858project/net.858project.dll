@@ -27,7 +27,7 @@ namespace Project858.Net
         {
             this.CommandAddress = commandAddress;
             this.m_items = new List<IFrameItem>();
-            if (data != null && action != null)
+            if (data != null)
             {
                 this.InternalParseFrame(data.ToArray(), action);
             }
@@ -74,11 +74,62 @@ namespace Project858.Net
         /// <returns>Byte array | null</returns>
         public Byte[] ToByteArray()
         {
-            return null;
+            return this.InternalToByteArray();
         }
         #endregion
 
         #region - Private Methods -
+        /// <summary>
+        /// This finction converts frame to byte array
+        /// </summary>
+        /// <returns>Byte array | null</returns>
+        private Byte[] InternalToByteArray()
+        {
+            //variables
+            List<Byte> collection = new List<Byte>();
+            Int16 length = 0x00;
+
+            //add items
+            foreach (IFrameItem item in this.m_items)
+            {
+                Byte[] data = item.ToByteArray();
+                length += (Int16)data.Length;
+                collection.AddRange(data);
+            }
+
+            //add headers
+            Byte[] header = new Byte[5];
+            header[0] = 0x68;
+            header[1] = (byte)(length >> 8);
+            header[2] = (byte)(length);
+            header[3] = (byte)(this.CommandAddress >> 8);
+            header[4] = (byte)(this.CommandAddress);
+            collection.InsertRange(0, header);
+
+            //check sum
+            Byte checkSum = this.internalGetFrameDataCheckSum(collection);
+            collection.Add(checkSum);
+
+            //return frame as data array
+            return collection.ToArray();
+        }
+        /// <summary>
+        /// This function calculate check sum from frame
+        /// </summary>
+        /// <param name="array">Data array</param>
+        /// <returns>Check sum</returns>
+        private Byte internalGetFrameDataCheckSum(List<Byte> array)
+        {
+            int sum = 0;
+            int count = array.Count;
+            for (int currentIndex = 1; currentIndex < count; currentIndex++)
+            {
+                sum += (int)array[currentIndex];
+            }
+            sum += 0xA5;
+            sum = sum & 0xFF;
+            return (byte)(256 - sum);
+        }
         /// <summary>
         /// This function parse frame from data
         /// </summary>
@@ -101,7 +152,7 @@ namespace Project858.Net
                 length = (Int16)(data[i + 3] << 8 | data[i + 2]);
 
                 //read frame item type
-                type = action(address);
+                type = action != null ? action(address) : FrameItemTypes.Unkown;
  
                 //read data
                 dataItem = new Byte[length];
