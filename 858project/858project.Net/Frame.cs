@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
 
 namespace Project858.Net
 {
@@ -92,6 +93,29 @@ namespace Project858.Net
                 }
             }
             return default(T);
+        }
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            //initialize builder
+            StringBuilder builder = new StringBuilder();
+
+            //base information
+            builder.AppendFormat("CommandAddress: {0}, Items: {1}", this.CommandAddress, this.Items.Count);
+            builder.Append(Environment.NewLine);
+
+            //items
+            foreach (IFrameItem item in this.m_items)
+            {
+                builder.AppendFormat("[{0}] - {1} - {2}", item.GetType(), item.Address, item.GetValue());
+                builder.Append(Environment.NewLine);
+            }
+
+            //return string
+            return base.ToString();
         }
         #endregion
 
