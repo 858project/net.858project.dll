@@ -228,6 +228,12 @@ namespace Project858.Net
                     return new FrameItemGuid(address, data);
                 case FrameItemTypes.String:
                     return new FrameItemString(address, data);
+                case FrameItemTypes.Int16:
+                    return new FrameItemInt16(address, data);
+                case FrameItemTypes.Int32:
+                    return new FrameItemInt32(address, data);
+                case FrameItemTypes.Int64:
+                    return new FrameItemInt64(address, data);
                 default:
                     return new FrameItemUnkown(address, data);
             }

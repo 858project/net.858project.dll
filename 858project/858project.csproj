@@ -167,6 +167,9 @@
     <Compile Include="858project.Management\Volume\Windows7\SessionCollection.cs" />
     <Compile Include="858project.Management\Volume\Windows7\SimpleAudioVolume.cs" />
     <Compile Include="858project.Net\DataEventArgs.cs" />
+    <Compile Include="858project.Net\FrameItemInt16.cs" />
+    <Compile Include="858project.Net\FrameItemInt64.cs" />
+    <Compile Include="858project.Net\FrameItemInt32.cs" />
     <Compile Include="858project.Net\FrameItemString.cs" />
     <Compile Include="858project.Net\FrameItemGuid.cs" />
     <Compile Include="858project.Net\FrameItemUnkown.cs" />
