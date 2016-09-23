@@ -167,6 +167,8 @@
     <Compile Include="858project.Management\Volume\Windows7\SessionCollection.cs" />
     <Compile Include="858project.Management\Volume\Windows7\SimpleAudioVolume.cs" />
     <Compile Include="858project.Net\DataEventArgs.cs" />
+    <Compile Include="858project.Net\FrameHelper.cs" />
+    <Compile Include="858project.Net\FrameItemByte.cs" />
     <Compile Include="858project.Net\FrameItemInt16.cs" />
     <Compile Include="858project.Net\FrameItemInt64.cs" />
     <Compile Include="858project.Net\FrameItemInt32.cs" />
@@ -180,6 +182,7 @@
     <Compile Include="858project.Net\IpEndPointCollection.cs" />
     <Compile Include="858project.Net\ITransportClient.cs" />
     <Compile Include="858project.Net\Frame.cs" />
+    <Compile Include="858project.Net\StringAttribute.cs" />
     <Compile Include="858project.Net\TcpClientEventArgs.cs" />
     <Compile Include="858project.Net\TcpClientEventHandler.cs" />
     <Compile Include="858project.Net\TcpContractServer.cs" />

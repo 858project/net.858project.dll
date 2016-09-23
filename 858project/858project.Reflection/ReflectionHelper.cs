@@ -30,6 +30,15 @@ namespace Project858.Reflection
 
         #region - Public Static Methods -
         /// <summary>
+        /// Vrati reflekciu pre pozadovany typ
+        /// </summary>
+        /// <param name="type">Typ ktoreho reflekciu pozadujeme</param>
+        /// <returns>Reflekcia alebo null</returns>
+        public static ReflectionType GetType(Type type)
+        {
+            return ReflectionHelper.InternalGetType(type);
+        }
+        /// <summary>
         /// Vrati property z datoveho typu podla mena
         /// </summary>
         /// <param name="type">Typ objektu z ktoreho chceme vratit property</param>

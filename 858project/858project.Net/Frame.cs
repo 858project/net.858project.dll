@@ -60,6 +60,47 @@ namespace Project858.Net
         private List<IFrameItem> m_items = null;
         #endregion
 
+        #region - Public Static Methods -
+        /// <summary>
+        /// Create frame from Byte value
+        /// </summary>
+        /// <param name="commandAddress">Frame command address</param>
+        /// <param name="address">Tag address for value</param>
+        /// <param name="value">Value as Byte</param>
+        /// <returns>New frame</returns>
+        public static Frame FrameFromByte(Int16 commandAddress, Int16 address, Byte value)
+        {
+            Frame frame = new Frame(commandAddress);
+            frame.AddItem(new FrameItemByte(address, value));
+            return frame;
+        }
+        /// <summary>
+        /// This function return NET object type from Frame Item type
+        /// </summary>
+        /// <param name="type">Frame item type</param>
+        /// <returns>NET object type</returns>
+        public static Type GetObjectTypeFromFrameItemType(FrameItemTypes type)
+        {
+            switch (type)
+            {
+                case FrameItemTypes.DateTime:
+                    return typeof(DateTime);
+                case FrameItemTypes.Guid:
+                    return typeof(Guid);
+                case FrameItemTypes.Int16:
+                    return typeof(Int16);
+                case FrameItemTypes.Int32:
+                    return typeof(Int32);
+                case FrameItemTypes.Int64:
+                    return typeof(Int64);
+                case FrameItemTypes.String:
+                    return typeof(String);
+                default:
+                    return typeof(Object);
+            }
+        }
+        #endregion
+
         #region - Public Methods -
         /// <summary>
         /// Adds an item to the end of the Frame
@@ -234,6 +275,8 @@ namespace Project858.Net
                     return new FrameItemInt32(address, data);
                 case FrameItemTypes.Int64:
                     return new FrameItemInt64(address, data);
+                case FrameItemTypes.Byte:
+                    return new FrameItemByte(address, data);
                 default:
                     return new FrameItemUnkown(address, data);
             }
