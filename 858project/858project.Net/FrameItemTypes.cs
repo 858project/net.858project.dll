@@ -23,6 +23,10 @@ namespace Project858.Net
         /// </summary>
         String,
         /// <summary>
+        /// Bool hodnota
+        /// </summary>
+        Boolean,
+        /// <summary>
         /// Bytova hodnota
         /// </summary>
         Byte,

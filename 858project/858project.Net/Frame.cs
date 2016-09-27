@@ -277,6 +277,8 @@ namespace Project858.Net
                     return new FrameItemInt64(address, data);
                 case FrameItemTypes.Byte:
                     return new FrameItemByte(address, data);
+                case FrameItemTypes.Boolean:
+                    return new FrameItemBoolean(address, data);
                 default:
                     return new FrameItemUnkown(address, data);
             }
