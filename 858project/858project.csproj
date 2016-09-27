@@ -168,6 +168,7 @@
     <Compile Include="858project.Management\Volume\Windows7\SimpleAudioVolume.cs" />
     <Compile Include="858project.Net\DataEventArgs.cs" />
     <Compile Include="858project.Net\FrameHelper.cs" />
+    <Compile Include="858project.Net\FrameItemBoolean.cs" />
     <Compile Include="858project.Net\FrameItemByte.cs" />
     <Compile Include="858project.Net\FrameItemInt16.cs" />
     <Compile Include="858project.Net\FrameItemInt64.cs" />
