@@ -13,6 +13,16 @@ namespace Project858.Net
     {
         #region - Public Static Methods -
         /// <summary>
+        /// Serializes the specified Object to Frame
+        /// </summary>
+        /// <typeparam name="T">The type of the object to serialize to.</typeparam>
+        /// <param name="commandAddress">Frame command address</param>
+        /// <returns>Frame | null</returns>
+        public static Frame Serialize<T>(Int16 commandAddress)
+        {
+            return null;
+        }
+        /// <summary>
         /// Deserializes the Frame to a .NET object.
         /// </summary>
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>

@@ -25,6 +25,7 @@ namespace Project858.Web
         UserIsPermanentlyBlocked = 12,
         UserIsNotConfirmed = 13,
         UserIsNotLogged = 14,
-        Rejected = 15
+        Rejected = 15,
+        DataAreNotAvailable = 16
     }
 }
