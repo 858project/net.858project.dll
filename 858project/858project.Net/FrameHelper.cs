@@ -104,7 +104,7 @@ namespace Project858.Net
                             value = item.Property.GetValue(obj, null);
                             if (value != null)
                             {
-                                IFrameItem frameItem = Frame.GetFrameItem(attribute.Type, attribute.Address, value);
+                                IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
                                     result.AddItem(frameItem);

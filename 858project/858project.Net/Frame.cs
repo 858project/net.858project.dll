@@ -68,7 +68,7 @@ namespace Project858.Net
         /// <param name="address">Tag address for value</param>
         /// <param name="value">Value as Byte</param>
         /// <returns>New frame</returns>
-        public static Frame FrameFromByte(Int16 commandAddress, Int16 address, Byte value)
+        public static Frame CreateFrame(Int16 commandAddress, Int16 address, Byte value)
         {
             Frame frame = new Frame(commandAddress);
             frame.AddItem(new FrameItemByte(address, value));
@@ -78,9 +78,10 @@ namespace Project858.Net
         /// This function initialize item of type
         /// </summary>
         /// <param name="type">Item type</param>
+        /// <param name="address">Item address for value</param>
         /// <param name="value">Value</param>
         /// <returns>Frame item | null</returns>
-        public static IFrameItem GetFrameItem(FrameItemTypes type, Int16 address, Object value)
+        public static IFrameItem CreateFrameItem(FrameItemTypes type, Int16 address, Object value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
