@@ -75,6 +75,39 @@ namespace Project858.Net
             return frame;
         }
         /// <summary>
+        /// This function initialize item of type
+        /// </summary>
+        /// <param name="type">Item type</param>
+        /// <param name="value">Value</param>
+        /// <returns>Frame item | null</returns>
+        public static IFrameItem GetFrameItem(FrameItemTypes type, Int16 address, Object value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            switch (type)
+            {
+                case FrameItemTypes.DateTime:
+                    return new FrameItemDateTime(address, (DateTime)value);
+                case FrameItemTypes.Guid:
+                    return new FrameItemGuid(address, (Guid)value);
+                case FrameItemTypes.String:
+                    return new FrameItemString(address, (String)value);
+                case FrameItemTypes.Int16:
+                    return new FrameItemInt16(address, (Int16)value);
+                case FrameItemTypes.Int32:
+                    return new FrameItemInt32(address, (Int32)value);
+                case FrameItemTypes.Int64:
+                    return new FrameItemInt64(address, (Int64)value);
+                case FrameItemTypes.Byte:
+                    return new FrameItemByte(address, (Byte)value);
+                case FrameItemTypes.Boolean:
+                    return new FrameItemBoolean(address, (Boolean)value);
+                default:
+                    return new FrameItemUnkown(address, (List<Byte>)value);
+            }
+        }
+        /// <summary>
         /// This function return NET object type from Frame Item type
         /// </summary>
         /// <param name="type">Frame item type</param>
@@ -95,6 +128,10 @@ namespace Project858.Net
                     return typeof(Int64);
                 case FrameItemTypes.String:
                     return typeof(String);
+                case FrameItemTypes.Byte:
+                    return typeof(Byte);
+                case FrameItemTypes.Boolean:
+                    return typeof(Boolean);
                 default:
                     return typeof(Object);
             }
