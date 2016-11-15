@@ -230,10 +230,10 @@ namespace Project858.Net
                 if (array[index] == 0x68 && (count - (index + 2)) >= 2)
                 {
                     //get length from array
-                    short length = (short)(array[index + 2] << 8 | array[index + 1]);
+                    UInt16 length = (UInt16)(array[index + 2] << 8 | array[index + 1]);
 
                     //get command from array
-                    short commandAddress = (short)(array[index + 4] << 8 | array[index + 3]);
+                    UInt16 commandAddress = (UInt16)(array[index + 4] << 8 | array[index + 3]);
 
                     //overime ci je dostatok dat na vytvorenie package
                     if (length <= (count - 1))
@@ -273,7 +273,7 @@ namespace Project858.Net
         /// <param name="length">Frame length</param>
         /// <param name="commandAddress">Command address from frame</param>
         /// <returns>Frame | null</returns>
-        private Frame internalConstructFrame(List<Byte> array, int index, int length, short commandAddress)
+        private Frame internalConstructFrame(List<Byte> array, int index, int length, UInt16 commandAddress)
         {
             //check data length available
             if ((array.Count - index) >= length)
@@ -323,7 +323,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected abstract FrameItemTypes InternalGetFrameItemType(Int16 address);
+        protected abstract FrameItemTypes InternalGetFrameItemType(UInt16 address);
         #endregion
 
         #region - Call Event Method -

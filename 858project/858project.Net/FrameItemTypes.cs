@@ -43,6 +43,10 @@ namespace Project858.Net
         /// </summary>
         Int64,
         /// <summary>
+        /// Unsigned long value
+        /// </summary>
+        UInt64,
+        /// <summary>
         /// Unkown type
         /// </summary>
         Unkown,

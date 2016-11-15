@@ -17,7 +17,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemDateTime(Int16 address, DateTime value)
+        public FrameItemDateTime(UInt16 address, DateTime value)
             : base(address, value)
         {
  
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemDateTime(Int16 address, Byte[] data)
+        public FrameItemDateTime(UInt16 address, Byte[] data)
             : base(address, data)
         {
  
@@ -73,7 +73,7 @@ namespace Project858.Net
             var tm_min = value.Minute;
             var tm_hour = value.Hour;
             var tm_mday = value.Day;
-            var tm_mon = value.Month + 1;
+            var tm_mon = value.Month;
             var tm_year = value.Year % 100;
             var tm_wday = value.DayOfWeek != 0 ? (int)value.DayOfWeek : 7;
 

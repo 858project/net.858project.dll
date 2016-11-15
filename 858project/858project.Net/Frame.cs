@@ -15,7 +15,7 @@ namespace Project858.Net
         /// Initialize this class
         /// </summary>
         /// <param name="commandAddress">Command address</param>
-        public Frame(Int16 commandAddress)
+        public Frame(UInt16 commandAddress)
             : this(commandAddress, null, null)
         {
         }
@@ -24,7 +24,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="commandAddress">Command address</param>
         /// <param name="data">Frame data</param>
-        public Frame(Int16 commandAddress, List<Byte> data, Func<Int16, FrameItemTypes> action)
+        public Frame(UInt16 commandAddress, List<Byte> data, Func<UInt16, FrameItemTypes> action)
         {
             this.CommandAddress = commandAddress;
             this.m_items = new List<IFrameItem>();
@@ -39,7 +39,7 @@ namespace Project858.Net
         /// <summary>
         /// Command address
         /// </summary>
-        public Int16 CommandAddress
+        public UInt16 CommandAddress
         {
             get;
             private set;
@@ -68,7 +68,7 @@ namespace Project858.Net
         /// <param name="address">Tag address for value</param>
         /// <param name="value">Value as Byte</param>
         /// <returns>New frame</returns>
-        public static Frame CreateFrame(Int16 commandAddress, Int16 address, Byte value)
+        public static Frame CreateFrame(UInt16 commandAddress, UInt16 address, Byte value)
         {
             Frame frame = new Frame(commandAddress);
             frame.AddItem(new FrameItemByte(address, value));
@@ -81,7 +81,7 @@ namespace Project858.Net
         /// <param name="address">Item address for value</param>
         /// <param name="value">Value</param>
         /// <returns>Frame item | null</returns>
-        public static IFrameItem CreateFrameItem(FrameItemTypes type, Int16 address, Object value)
+        public static IFrameItem CreateFrameItem(FrameItemTypes type, UInt16 address, Object value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
@@ -104,6 +104,8 @@ namespace Project858.Net
                     return new FrameItemByte(address, (Byte)value);
                 case FrameItemTypes.Boolean:
                     return new FrameItemBoolean(address, (Boolean)value);
+                case FrameItemTypes.UInt64:
+                    return new FrameItemUInt64(address, (UInt64)value);
                 default:
                     return new FrameItemUnkown(address, (List<Byte>)value);
             }
@@ -133,6 +135,8 @@ namespace Project858.Net
                     return typeof(Byte);
                 case FrameItemTypes.Boolean:
                     return typeof(Boolean);
+                case FrameItemTypes.UInt64:
+                    return typeof(UInt64);
                 default:
                     return typeof(Object);
             }
@@ -162,7 +166,7 @@ namespace Project858.Net
         /// <typeparam name="T">Type of value</typeparam>
         /// <param name="address">Address</param>
         /// <returns>Value | null</returns>
-        public T GetValue<T>(Int16 address)
+        public T GetValue<T>(UInt16 address)
         {
             foreach (IFrameItem item in this.m_items)
             {
@@ -255,11 +259,11 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Data to parse</param>
         /// <param name="action">Function to get frame item type</param>
-        private void InternalParseFrame(Byte[] data, Func<Int16, FrameItemTypes> action)
+        private void InternalParseFrame(Byte[] data, Func<UInt16, FrameItemTypes> action)
         {
             //vriables
-            Int16 address = 0x00;
-            Int16 length = 0x00;
+            UInt16 address = 0x00;
+            UInt16 length = 0x00;
             Byte[] dataItem = null;
             FrameItemTypes type = FrameItemTypes.Unkown;
             int count = data.Length;
@@ -268,8 +272,8 @@ namespace Project858.Net
             for (int i = 0; i < count; i++)
             {
                 //read address
-                address = (Int16)(data[i + 1] << 8 | data[i]);
-                length = (Int16)(data[i + 3] << 8 | data[i + 2]);
+                address = (UInt16)(data[i + 1] << 8 | data[i]);
+                length = (UInt16)(data[i + 3] << 8 | data[i + 2]);
 
                 //read frame item type
                 type = action != null ? action(address) : FrameItemTypes.Unkown;
@@ -297,7 +301,7 @@ namespace Project858.Net
         /// <param name="length">Frame item length</param>
         /// <param name="data">Data frame item</param>
         /// <returns>Frame item or null</returns>
-        private IFrameItem InternalParseFrame(FrameItemTypes type, Int16 address, Int16 length, Byte[] data)
+        private IFrameItem InternalParseFrame(FrameItemTypes type, UInt16 address, UInt16 length, Byte[] data)
         {
             switch (type)
             {
@@ -317,6 +321,8 @@ namespace Project858.Net
                     return new FrameItemByte(address, data);
                 case FrameItemTypes.Boolean:
                     return new FrameItemBoolean(address, data);
+                case FrameItemTypes.UInt64:
+                    return new FrameItemUInt64(address, data);
                 default:
                     return new FrameItemUnkown(address, data);
             }

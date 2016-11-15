@@ -19,7 +19,7 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="commandAddress">Frame command address</param>
         /// <returns>Frame | null</returns>
-        public static Frame Serialize<T>(T obj, Int16 commandAddress)
+        public static Frame Serialize<T>(T obj, UInt16 commandAddress)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -49,7 +49,7 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="commandAddress">Frame command address</param>
         /// <returns>Frame | null</returns>
-        private static Frame InternalSerialize<T>(T obj, Int16 commandAddress)
+        private static Frame InternalSerialize<T>(T obj, UInt16 commandAddress)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
@@ -83,7 +83,7 @@ namespace Project858.Net
         /// <param name="commandAddress">Frame command address</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>Frame | null</returns>
-        private static Frame InternalSerialize<T>(T obj, Int16 commandAddress, ReflectionType reflection)
+        private static Frame InternalSerialize<T>(T obj, UInt16 commandAddress, ReflectionType reflection)
         {
             //intiailize object
             Frame result = new Frame(commandAddress);

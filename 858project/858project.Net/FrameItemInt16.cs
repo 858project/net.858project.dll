@@ -17,7 +17,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemInt16(Int16 address, Int16 value)
+        public FrameItemInt16(UInt16 address, Int16 value)
             : base(address, value)
         {
  
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemInt16(Int16 address, Byte[] data)
+        public FrameItemInt16(UInt16 address, Byte[] data)
             : base(address, data)
         {
  

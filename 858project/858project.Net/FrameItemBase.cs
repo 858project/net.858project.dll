@@ -16,7 +16,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemBase(Int16 address, T value)
+        public FrameItemBase(UInt16 address, T value)
         {
             this.Address = address;
             this.Data = this.InternalParseFromValue(value);
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemBase(Int16 address, Byte[] data)
+        public FrameItemBase(UInt16 address, Byte[] data)
         {
             this.Data = data;
             this.Value = this.InternalParseValue(data);
@@ -43,7 +43,7 @@ namespace Project858.Net
         /// <summary>
         /// Item address
         /// </summary>
-        public Int16 Address { get; protected set; }
+        public UInt16 Address { get; protected set; }
         /// <summary>
         /// Data item
         /// </summary>
