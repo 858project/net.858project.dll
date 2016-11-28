@@ -26,7 +26,7 @@ namespace Project858.Net
         /// <param name="data">Frame data</param>
         public Frame(UInt16 commandAddress, List<Byte> data, Func<UInt16, FrameItemTypes> action)
         {
-            this.CommandAddress = commandAddress;
+            this.Address = commandAddress;
             this.m_items = new List<IFrameItem>();
             if (data != null)
             {
@@ -39,7 +39,7 @@ namespace Project858.Net
         /// <summary>
         /// Command address
         /// </summary>
-        public UInt16 CommandAddress
+        public UInt16 Address
         {
             get;
             private set;
@@ -145,6 +145,14 @@ namespace Project858.Net
 
         #region - Public Methods -
         /// <summary>
+        /// Change frame address
+        /// </summary>
+        /// <param name="address">new address</param>
+        public void ChangeAddress(UInt16 address)
+        {
+            this.Address = address;
+        }
+        /// <summary>
         /// Adds an item to the end of the Frame
         /// </summary>
         /// <param name="item">The item to be added to the end of the Frame</param>
@@ -187,7 +195,7 @@ namespace Project858.Net
             StringBuilder builder = new StringBuilder();
 
             //base information
-            builder.AppendFormat("CommandAddress: {0}, Items: {1}", this.CommandAddress, this.Items.Count);
+            builder.AppendFormat("Address: {0}, Items: {1}", this.Address, this.Items.Count);
             builder.Append(Environment.NewLine);
 
             //items
@@ -226,8 +234,8 @@ namespace Project858.Net
             header[0] = 0x68;
             header[1] = (byte)(length);
             header[2] = (byte)(length >> 8);
-            header[3] = (byte)(this.CommandAddress);
-            header[4] = (byte)(this.CommandAddress >> 8);
+            header[3] = (byte)(this.Address);
+            header[4] = (byte)(this.Address >> 8);
             collection.InsertRange(0, header);
 
             //check sum
