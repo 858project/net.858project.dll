@@ -288,7 +288,7 @@ namespace Project858.Net
                 //pridame dalsi contract do kolekcia
                 this.m_contracts.Add(contract);
 #if DEBUG
-				ConsoleLogger.WriteLine("Pocet klientov: po prijati dalsieho {0}", this._contracts.Count);
+				ConsoleLogger.WriteLine("Pocet klientov: po prijati dalsieho {0}", this.m_contracts.Count);
 #endif
             }
         }
