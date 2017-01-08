@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -110,6 +111,14 @@ namespace Project858
         /// </summary>
         /// <param name="command">Command ktory chceme zalogovat</param>
         public static String ToTraceString(this SqlCommand command)
+        {
+            return Utility.GetTraceString(command);
+        }
+        /// <summary>
+        /// Vytvori log zaznam z commandu
+        /// </summary>
+        /// <param name="command">Command ktory chceme zalogovat</param>
+        public static String ToTraceString(this SQLiteCommand command)
         {
             return Utility.GetTraceString(command);
         }

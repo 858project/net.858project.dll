@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Project858.ComponentModel.Client;
 using System.Data;
-using System.Data.SQLite;
-using System.Net.Mail;
-using System.Diagnostics;
 using Project858.Diagnostics;
-using System.Threading;
-using Project858;
-using System.Text.RegularExpressions;
-using System.ComponentModel;
 using System.Reflection;
+using System.Dynamic;
+using System.Data.SQLite;
 
 namespace Project858.Data.SqlClient
 {
@@ -26,21 +20,20 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="builder">Strng builder na vytvorenie SQL connection stringu</param>
         public SQLiteClient(SQLiteConnectionStringBuilder builder)
-            : this(builder.DataSource, builder.Password)
+            : base(builder)
         {
-
+            this.m_lockObj = new Object();
+            this.m_reflectionPropertyCollection = new ReflectionObjectItemCollection();
         }
         /// <summary>
         /// Initialize this class
         /// </summary>
-        /// <exception cref="ArgumentNullException">
-        /// Vstupny argument nie je inicializovany
-        /// </exception>
-        /// <param name="database">Databaza do ktorej pristupujeme</param>
-        /// <param name="password">Heslo k SQL serveru</param>
-        public SQLiteClient(String database, String password)
-            : base(database, password)
+        /// <param name="dataSource">Data source database</param>
+        /// <param name="password">Password fort sqlite database</param>
+        public SQLiteClient(String dataSource, String password)
+            : base(dataSource, password)
         {
+            this.m_lockObj = new Object();
             this.m_reflectionPropertyCollection = new ReflectionObjectItemCollection();
         }
         #endregion
@@ -69,15 +62,19 @@ namespace Project858.Data.SqlClient
             /// <summary>
             /// Vrati atributy prisluchajucej property
             /// </summary>
-            public Object[] Attributes
+            public ColumnAttribute ColumnAttribute
             {
                 get
                 {
-                    if (this.m_attributes == null)
+                    if (this.m_columnAttributes == null)
                     {
-                        this.m_attributes = this.m_property.GetCustomAttributes(typeof(ColumnAttribute), true);
+                        Object[] attributes = this.Property.GetCustomAttributes(typeof(ColumnAttribute), true);
+                        if (attributes != null && attributes.Length == 1)
+                        {
+                            this.m_columnAttributes = attributes[0] as ColumnAttribute;
+                        }
                     }
-                    return this.m_attributes;
+                    return this.m_columnAttributes;
                 }
             }
             /// <summary>
@@ -93,7 +90,7 @@ namespace Project858.Data.SqlClient
             /// <summary>
             /// Atributy prisluchajucej property
             /// </summary>
-            private Object[] m_attributes = null;
+            private ColumnAttribute m_columnAttributes = null;
             /// <summary>
             /// Property
             /// </summary>
@@ -103,18 +100,93 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Kolekcia property prisluchajuca konkretnemu objektu
         /// </summary>
-        private sealed class ReflectionPropertyItemCollection : Dictionary<String, ReflectionPropertyItem>
+        private sealed class ReflectionObjectItem : Dictionary<String, ReflectionPropertyItem>
         {
             #region - Constructor -
             /// <summary>
             /// Initialize this class
             /// </summary>
             /// <param name="type">Typ objektu ktoreho property objekt reprezentuje</param>
-            public ReflectionPropertyItemCollection(Type type)
+            public ReflectionObjectItem(Type type)
             {
                 if (type == null)
                     throw new ArgumentNullException("type");
+
+                this.Type = type;
+                this.InternalInitializeProperty(type);
             }
+            #endregion
+
+            #region - Properties -
+            /// <summary>
+            /// Typ objektu
+            /// </summary>
+            public Type Type { get; set; }
+            /// <summary>
+            /// Vrati meno tabulky alebo view ktore je mozne pouzit pre SELECT command
+            /// </summary>
+            public String TableOrViewName
+            {
+                get
+                {
+                    if (this.ViewAttribute != null)
+                    {
+                        return this.ViewAttribute.Name;
+                    }
+                    if (this.TableAttribute != null)
+                    {
+                        return this.TableAttribute.Name;
+                    }
+                    return String.Empty;
+                }
+            }
+            /// <summary>
+            /// Atribut definujuci informacie o view prisluchajucemu k objektu
+            /// </summary>
+            public ViewAttribute ViewAttribute
+            {
+                get
+                {
+                    if (this.m_viewAttribute == null)
+                    {
+                        Object[] attributes = this.Type.GetCustomAttributes(typeof(ViewAttribute), true);
+                        if (attributes != null && attributes.Length == 1)
+                        {
+                            this.m_viewAttribute = attributes[0] as ViewAttribute;
+                        }
+                    }
+                    return this.m_viewAttribute;
+                }
+            }
+            /// <summary>
+            /// Atribut definujuci informacie o tabulke prisluchajucej k objekte
+            /// </summary>
+            public TableAttribute TableAttribute
+            {
+                get
+                {
+                    if (this.m_tableAttribute == null)
+                    {
+                        Object[] attributes = this.Type.GetCustomAttributes(typeof(TableAttribute), true);
+                        if (attributes != null && attributes.Length == 1)
+                        {
+                            this.m_tableAttribute = attributes[0] as TableAttribute;
+                        }
+                    }
+                    return this.m_tableAttribute;
+                }
+            }
+            #endregion
+
+            #region - Variable -
+            /// <summary>
+            /// Atribut definujuci informacie o view prisluchajucemu k objektu
+            /// </summary>
+            private ViewAttribute m_viewAttribute = null;
+            /// <summary>
+            /// Atribut definujuci informacie o tabulke prisluchajucej k objekte
+            /// </summary>
+            private TableAttribute m_tableAttribute = null;
             #endregion
 
             #region - Public Methods -
@@ -154,7 +226,7 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Kolekcia objektov definovanych typom obsahujucich informacie o properties
         /// </summary>
-        private sealed class ReflectionObjectItemCollection : Dictionary<Type, ReflectionPropertyItemCollection>
+        private sealed class ReflectionObjectItemCollection : Dictionary<Type, ReflectionObjectItem>
         {
             #region - Public Methods -
             /// <summary>
@@ -162,7 +234,7 @@ namespace Project858.Data.SqlClient
             /// </summary>
             /// <param name="type">Typ objektu pre ktory chceme informacie vratit</param>
             /// <returns>ReflectionPropertyItemCollection</returns>
-            public ReflectionPropertyItemCollection FindPropertyCollection(Type type)
+            public ReflectionObjectItem FindPropertyCollection(Type type)
             {
                 if (!this.ContainsKey(type))
                 {
@@ -179,7 +251,7 @@ namespace Project858.Data.SqlClient
             /// <param name="type">Type objektu pre ktory chceme property nacitat</param>
             private void InternalCreateType(Type type)
             {
-                ReflectionPropertyItemCollection item = new ReflectionPropertyItemCollection(type);
+                ReflectionObjectItem item = new ReflectionObjectItem(type);
                 this.Add(type, item);
             }
             #endregion
@@ -188,6 +260,10 @@ namespace Project858.Data.SqlClient
 
         #region - Variable -
         /// <summary>
+        /// Pomocny synchronizacny objekt na pristup k pripojeniu
+        /// </summary>
+        private readonly Object m_lockObj = null;
+        /// <summary>
         /// Buffer na ukladanie reglekcii objektov
         /// </summary>
         private ReflectionObjectItemCollection m_reflectionPropertyCollection = null;
@@ -195,11 +271,20 @@ namespace Project858.Data.SqlClient
 
         #region - Public Method -
         /// <summary>
+        /// Vykona pozadovany query prikaz
+        /// </summary>
+        /// <param name="query">Query prikaz</param>
+        /// <returns>Pocet ovplyvnenych riadkov</returns>
+        public int ExecuteNonQuery(String query)
+        {
+            return this.InternalExecuteNonQuery(query);
+        }
+        /// <summary>
         /// Vykona vymazanie objektu
         /// </summary>
         /// <param name="item">Objekt ktory chceme vymazat</param>
         /// <returns>True = objekt bol vymazany, inak false</returns>
-        public Boolean DeleteObject(Object item)
+        public int DeleteObject(Object item)
         {
             try
             {
@@ -207,7 +292,7 @@ namespace Project858.Data.SqlClient
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri vymazavani objektu z SQL {0} [{1}]", ex.Message, item.GetType());
+                this.InternalTrace(TraceTypes.Error, "Chyba pri vymazavani objektu z SQL {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 throw;
             }
         }
@@ -215,10 +300,68 @@ namespace Project858.Data.SqlClient
         /// Vykona select pozadovanych dat
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="whereClause">Where podmienka</param>
+        /// <param name="orderClause">Order klauzula</param>
+        /// <param name="limit">Urcuje maximalne mnozstvo poloziek ktore chceme nacitat</param>
+        /// <param name="page">Stranka dat</param>
         /// <returns>Kolekcia nacitanych dat</returns>
-        public List<T> Select<T>()
+        public List<T> Select<T>(String whereClause = null, String orderClause = null, Nullable<UInt32> limit = null, Nullable<UInt32> page = null)
         {
-            return this.InternalSelect<T>();
+            if (limit != null && limit.Value < 1)
+            {
+                throw new ArgumentException("Value 'limit' cannot be less than the minimum value 1");
+            }
+            return this.InternalSelect<T>(whereClause, orderClause, limit, page);
+        }
+        /// <summary>
+        /// Nacita pocet dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="whereClause">Where podmienka</param>
+        /// <returns>Pocet dat</returns>
+        public Int32 SelectCount<T>(String whereClause = null)
+        {
+            return this.InternalSelectCount<T>(whereClause);
+        }
+        /// <summary>
+        /// Vykona select s nacitanim dat do dynamic objektu
+        /// </summary>
+        /// <param name="query">Query na vykonanie selectu</param>
+        /// <returns>Kolekcia dynamic objektov</returns>
+        public List<dynamic> SelectDynamicFromQuery(String query)
+        {
+            return this.InternalSelectDynamicFromQuery(query);
+        }
+        /// <summary>
+        /// Vykona select pozadovanych dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="query">Query ktorym chceme nacitat data</param>
+        /// <returns>Kolekcia nacitanych dat</returns>
+        public List<T> SelectFromQuery<T>(String query)
+        {
+            return this.InternalSelectFromQuery<T>(query);
+        }
+        /// <summary>
+        /// Vykona select pozadovanych dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="whereClause">Where podmienka</param>
+        /// <param name="orderClause">Order klauzula</param>
+        /// <returns>Kolekcia nacitanych dat</returns>
+        public T SelectFirstObject<T>(String whereClause = null, String orderClause = null)
+        {
+            return this.InternalSelectFirstObject<T>(whereClause, orderClause);
+        }
+        /// <summary>
+        /// Vykona select pozadovanych dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="query">Query ktorym chceme nacitat data</param>
+        /// <returns>Kolekcia nacitanych dat</returns>
+        public T SelectFirstObjectFromQuery<T>(String query)
+        {
+            return this.InternalSelectFirstObjectFromQuery<T>(query);
         }
         /// <summary>
         /// Vlozi pozadovany objekt do SQL
@@ -229,29 +372,61 @@ namespace Project858.Data.SqlClient
         {
             try
             {
-                this.InternalInsertObject(item);
-                return true;
+                var result = this.InternalInsertObject(item);
+                return result == 1;
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL {0} [{1}]", ex.Message, item.GetType());
-                throw;
+                this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL. {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
+                this.InternalException(ex);
+                return false;
             }
         }
         /// <summary>
         /// Vlozi pozadovany objekt do SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme vlozit</param>
-        public void InsertObject(Object item)
+        public int InsertObject(Object item)
         {
             try
             {
-                this.InternalInsertObject(item);
+                return this.InternalInsertObject(item);
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL {0} [{1}]", ex.Message, item.GetType());
+                this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 throw;
+            }
+        }
+        /// <summary>
+        /// Insertne kolekciu dat do DB
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme insertnut</typeparam>
+        /// <param name="collection">Kolekcia dat</param>
+        /// <returns>Pocet riadkov ovplyvnenych insertom</returns>
+        public int InsertCollection<T>(List<T> collection)
+        {
+            return this.InternalInsertCollection<T>(collection);
+        }
+        /// <summary>
+        /// Aktualizuje pozadovany objekt v SQL
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
+        /// <param name="item">objekt ktorych chceme aktualizovat</param>
+        /// <param name="whereClause">Podmienka na aktualizaciu objektu</param>
+        /// <returns>True = objekt bol uspesne aktualizovany</returns>
+        public Boolean TryUpdateObject(Object item, String whereClause = null)
+        {
+            try
+            {
+                var result = this.InternalUpdateObject(item, whereClause);
+                return result == 1;
+            }
+            catch (Exception ex)
+            {
+                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1}: {2}]", ex.Message, item.GetType(), item.ToJsonString());
+                this.InternalException(ex);
+                return false;
             }
         }
         /// <summary>
@@ -259,33 +434,16 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        /// <returns>True = objekt bol uspesne aktualizovany</returns>
-        public Boolean TryUpdateObject(Object item)
+        /// <param name="whereClause">Podmienka na aktualizaciu objektu</param>
+        public int UpdateObject(Object item, String whereClause = null)
         {
             try
             {
-                this.InternalUpdateObject(item);
-                return true;
+                return this.InternalUpdateObject(item, whereClause);
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1}]", ex.Message, item.GetType());
-                throw;
-            }
-        }
-        /// <summary>
-        /// Aktualizuje pozadovany objekt v SQL
-        /// </summary>
-        /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        public void UpdateObject(Object item) 
-        {
-            try
-            {
-               this.InternalUpdateObject(item);
-            }
-            catch (Exception ex)
-            {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1}]", ex.Message, item.GetType());
+                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 throw;
             }
         }
@@ -302,9 +460,18 @@ namespace Project858.Data.SqlClient
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii a obnove objektu v / z SQL {0} [{1}]", ex.Message, item.GetType());
+                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii a obnove objektu v / z SQL {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 throw;
             }
+        }
+        /// <summary>
+        /// Nacita dynamic z sql readera
+        /// </summary>
+        /// <param name="reader">Reader pomocou ktoreho citame data</param>
+        /// <returns>Dynamic ktory nacitame</returns>
+        public dynamic GetDynamic(SQLiteDataReader reader)
+        {
+            return this.InternalGetDynamic(reader, new ExpandoObject());
         }
         /// <summary>
         /// Nacita objekt z sql readera
@@ -317,42 +484,111 @@ namespace Project858.Data.SqlClient
             return this.InternalGetObject<T>(reader, Activator.CreateInstance<T>());
         }
         /// <summary>
+        /// Nacita kolekciu dynamic objektov
+        /// </summary>
+        /// <param name="command">SQLiteCommand</param>
+        /// <returns>Kolekcia objektov alebo null</returns>
+        public List<dynamic> ReadDynamicCollection(SQLiteCommand command)
+        {
+            //inicializujeme
+            List<dynamic> collection = new List<dynamic>();
+
+            //synchronizacia
+            lock (this.m_lockObj)
+            {
+                using (SQLiteDataReader reader = this.ExecuteReader(command))
+                {
+                    while (reader.Read())
+                    {
+                        dynamic item = this.GetDynamic(reader);
+                        collection.Add(item);
+                    }
+                }
+            }
+
+            //vratime nacitanu kolekciu
+            return collection;
+        }
+        /// <summary>
         /// Nacita objekty z pozadovaneho commandu
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
-        /// <param name="command">SqlCommand</param>
+        /// <param name="command">SQLiteCommand</param>
         /// <returns>Kolekcia objektov alebo null</returns>
         public List<T> ReadObjectCollection<T>(SQLiteCommand command)
         {
+            //inicializujeme
             List<T> collection = new List<T>();
-            using (SQLiteDataReader reader = this.ExecuteReader(command))
+
+            //synchronizacia
+            lock (this.m_lockObj)
             {
-                while (reader.Read())
+                using (SQLiteDataReader reader = this.ExecuteReader(command))
                 {
-                    T item = this.GetObject<T>(reader);
-                    collection.Add(item);
+                    while (reader.Read())
+                    {
+                        T item = this.GetObject<T>(reader);
+                        collection.Add(item);
+                    }
                 }
             }
+
+            //vratime nacitanu kolekciu
             return collection;
         }
         /// <summary>
         /// Nacita prvy objekt alebo vrati null
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
-        /// <param name="command">SqlCommand</param>
+        /// <param name="command">SQLiteCommand</param>
         /// <returns>Object alebo null</returns>
         public T ReadFirstObject<T>(SQLiteCommand command)
         {
+            //inicializujeme
             List<T> collection = new List<T>();
-            using (SQLiteDataReader reader = this.ExecuteReader(command))
+
+            //synchronizacia
+            lock (this.m_lockObj)
             {
-                while (reader.Read())
+                using (SQLiteDataReader reader = this.ExecuteReader(command))
                 {
-                    T item = this.GetObject<T>(reader);
-                    return item;
+                    while (reader.Read())
+                    {
+                        T item = this.GetObject<T>(reader);
+                        return item;
+                    }
                 }
             }
+
+            //vratime default
             return default(T);
+        }
+        /// <summary>
+        /// Vykona aktualizaciu objektu
+        /// </summary>
+        /// <param name="command">Command na zaklade ktoreho chceme ziskat dat</param>
+        /// <returns>Aktualizovana kolekcia objektov</returns>
+        public List<SqlObject> ReadSqlObjectCollection(SQLiteCommand command)
+        {
+            return this.InternalReadSqlObjectCollection(command);
+        }
+        /// <summary>
+        /// Vykona aktualizaciu objektu
+        /// </summary>
+        /// <param name="command">Command na zaklade ktoreho chceme ziskat dat</param>
+        /// <returns>Aktualizovany objekt</returns>
+        public SqlObject ReadSqlObject(SQLiteCommand command)
+        {
+            return this.InternalReadSqlObject(command);
+        }
+        /// <summary>
+        /// Vrati pocet data
+        /// </summary>
+        /// <param name="whereClause">Podmienka pre ziskanie poctu</param>
+        /// <returns>Pocet dat</returns>
+        public int GetCount<T>(String whereClause = null)
+        {
+            return this.InternalGetCount<T>(whereClause);
         }
         /// <summary>
         /// Vrati meno, popis triedy
@@ -360,7 +596,7 @@ namespace Project858.Data.SqlClient
         /// <returns>Meno</returns>
         public override string ToString()
         {
-            return String.Format("SqlClient");
+            return String.Format("SQLiteClient");
         }
         #endregion
 
@@ -401,6 +637,57 @@ namespace Project858.Data.SqlClient
 
         #region - Private Method -
         /// <summary>
+        /// Vrati pocet data
+        /// </summary>
+        /// <param name="whereClause">Podmienka pre ziskanie poctu</param>
+        /// <returns>Pocet dat</returns>
+        public int InternalGetCount<T>(String whereClause = null)
+        {
+            //premapujeme datovy objekt
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
+
+            //objekt musi obsahovat definiciu tabulky
+            if (properties.TableAttribute == null)
+            {
+                throw new Exception("Missing attribute TableAttribute");
+            }
+
+            //ziskame meno
+            String name = properties.ViewAttribute != null ? properties.ViewAttribute.Name : properties.TableAttribute.Name;
+
+            //vytvorime command
+            String query = String.Format("SELECT COUNT(*) FROM [{0}]{1}", name,
+                 (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)));
+
+            //spracujeme command do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vykoname prikaz
+                command.CommandText = query;
+                Object value = this.ExecuteScalar(command);
+                if (value is int)
+                {
+                    return (int)value;
+                }
+                return 0;
+            }
+        }
+        /// <summary>
+        /// Vykona pozadovany query prikaz
+        /// </summary>
+        /// <param name="query">Query prikaz</param>
+        /// <returns>Pocet ovplyvnenych riadkov</returns>
+        public int InternalExecuteNonQuery(String query)
+        {
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vykoname prikad
+                command.CommandText = query;
+                return this.ExecuteNonQuery(command);
+            }
+        }
+        /// <summary>
         /// Aktualizuje a nacita pozadovany objekt v / z SQL
         /// </summary>
         /// <param name="item">Objekt ktory chceme aktualizovat</param>
@@ -415,96 +702,205 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme vymazat</param>
         /// <returns>True = objekt bol vymazany, inak false</returns>
-        private Boolean InternalDeleteObject(Object item)
+        private int InternalDeleteObject(Object item)
         {
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
+
             //objekt musi obsahovat definiciu tabulky
-            Type type = item.GetType();
-            object[] tableAttributes = type.GetCustomAttributes(typeof(TableAttribute), true);
-            if (tableAttributes.Length != 1)
+            if (properties.TableAttribute == null)
             {
                 throw new Exception("Missing attribute TableAttribute");
             }
 
             //overime primarny kluc
-            PropertyInfo[] propertyInfo = type.GetProperties();
-            propertyInfo = this.InternalFindPropertiesWithColumnAttribute(propertyInfo);
-            PropertyInfo[] primaryKeyPropertyInfo = this.InternalFindPropertiesWithPrimaryKeyState(propertyInfo);
-            if (primaryKeyPropertyInfo.Length == 0)
+            List<ReflectionPropertyItem> primaryKeyPropertyInfo = this.InternalFindPropertiesWithPrimaryKeyState(properties);
+            if (primaryKeyPropertyInfo.Count == 0)
             {
                 throw new MissingPrimaryKeyException();
+            }
+            if (primaryKeyPropertyInfo.Count > 1)
+            {
+                throw new Exception("Duplicate PrimaryKey state");
             }
 
             //vytvorime command
             using (SQLiteCommand command = new SQLiteCommand())
             {
                 //vytvorime jednotlive polozky commandu
-                command.CommandText = String.Format("DELETE FROM [{0}] WHERE [{1}] = @{1}", ((TableAttribute)tableAttributes[0]).Name,
-                    primaryKeyPropertyInfo[0].Name);
-                SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Name, ((ColumnAttribute)primaryKeyPropertyInfo[0].GetCustomAttributes(typeof(ColumnAttribute), true)[0]).Type);
-                primaryKeyParameter.Value = this.InternalValidateValue(primaryKeyPropertyInfo[0].GetValue(item, null));
+                command.CommandText = String.Format("DELETE FROM [{0}] WHERE [{1}] = @{1}", properties.TableAttribute.Name, primaryKeyPropertyInfo[0].Property.Name);
+                SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
+                primaryKeyParameter.Value = this.InternalPrepareValue(primaryKeyPropertyInfo[0].Property.GetValue(item, null), primaryKeyPropertyInfo[0].ColumnAttribute);
                 command.Parameters.Add(primaryKeyParameter);
 
                 //vykoname priklad do DB
-                int count = this.ExecuteNonQuery(command);
-                return count == 1;
+                return this.ExecuteNonQuery(command);
             }
         }
         /// <summary>
         /// Vykona aktualizaciu objektu
         /// </summary>
-        /// <param name="item">Objekt ktory chceme aktualizovat</param>
+        /// <param name="command">Command na zaklade ktoreho chceme ziskat dat</param>
         /// <returns>Aktualizovany objekt</returns>
-        private Object InternalReloadObject(Object item) 
+        private List<SqlObject> InternalReadSqlObjectCollection(SQLiteCommand command)
         {
-            //objekt musi obsahovat definiciu tabulky
-            Type type = item.GetType();
-            object[] tableAttributes = type.GetCustomAttributes(typeof(TableAttribute), true);
-            if (tableAttributes.Length != 1)
-            {
-                throw new Exception("Missing attribute TableAttribute");
-            }
+            //initializujeme kolekciu
+            List<SqlObject> collection = new List<SqlObject>();
 
-            //informacie o properties
-            PropertyInfo[] propertyInfo = type.GetProperties();
-            propertyInfo = this.InternalFindPropertiesWithColumnAttribute(propertyInfo);
-            if (propertyInfo.Length == 0)
+            //synchronizacia
+            lock (this.m_lockObj)
             {
-                throw new Exception("Missing attribute ColumnAttribute");
-            }
-            if (propertyInfo.Length == 1)
-            {
-                throw new Exception("Too little attribute ColumnAttribute");
-            }
-
-            //overime primarny kluc
-            PropertyInfo[] primaryKeyPropertyInfo = this.InternalFindPropertiesWithPrimaryKeyState(propertyInfo);
-            if (primaryKeyPropertyInfo.Length == 0)
-            {
-                throw new MissingPrimaryKeyException();
-            }
-
-            //vytvorime command
-            using (SQLiteCommand command = new SQLiteCommand())
-            {
-                //vytvorime jednotlive polozky commandu
-                command.CommandText = String.Format("SELECT * FROM [{0}] WHERE [{1}] = @{1}", ((TableAttribute)tableAttributes[0]).Name,
-                    primaryKeyPropertyInfo[0].Name);
-                SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Name, ((ColumnAttribute)primaryKeyPropertyInfo[0].GetCustomAttributes(typeof(ColumnAttribute), true)[0]).Type);
-                primaryKeyParameter.Value = this.InternalValidateValue(primaryKeyPropertyInfo[0].GetValue(item, null));
-                command.Parameters.Add(primaryKeyParameter);
-
                 //nacitame data
                 using (SQLiteDataReader reader = this.ExecuteReader(command))
                 {
                     while (reader.Read())
                     {
-                        return this.InternalGetObject(reader, item);
+                        collection.Add(this.InternalGetSqlObject(reader));
+                    }
+                }
+            }
+
+            //vratime data
+            return collection;
+        }
+        /// <summary>
+        /// Vykona aktualizaciu objektu
+        /// </summary>
+        /// <param name="command">Command na zaklade ktoreho chceme ziskat dat</param>
+        /// <returns>Aktualizovany objekt</returns>
+        private SqlObject InternalReadSqlObject(SQLiteCommand command)
+        {
+            //synchronizacia
+            lock (this.m_lockObj)
+            {
+                //nacitame data
+                using (SQLiteDataReader reader = this.ExecuteReader(command))
+                {
+                    while (reader.Read())
+                    {
+                        return this.InternalGetSqlObject(reader);
                     }
                 }
             }
 
             //vratime aktualnu hodnotu
             throw new InvalidOperationException("Object is not available !");
+        }
+        /// <summary>
+        /// Vykona aktualizaciu objektu
+        /// </summary>
+        /// <param name="item">Objekt ktory chceme aktualizovat</param>
+        /// <returns>Aktualizovany objekt</returns>
+        private Object InternalReloadObject(Object item)
+        {
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
+
+            //objekt musi obsahovat definiciu tabulky
+            if (properties.TableAttribute == null)
+            {
+                throw new Exception("Missing attribute TableAttribute");
+            }
+            //informacie o properties
+            if (properties.Count == 0)
+            {
+                throw new Exception("Missing attribute ColumnAttribute");
+            }
+
+            //overime primarny kluc
+            List<ReflectionPropertyItem> primaryKeyPropertyInfo = this.InternalFindPropertiesWithPrimaryKeyState(properties);
+            if (primaryKeyPropertyInfo.Count == 0)
+            {
+                throw new MissingPrimaryKeyException();
+            }
+            if (primaryKeyPropertyInfo.Count > 1)
+            {
+                throw new Exception("Duplicate PrimaryKey state");
+            }
+
+            //synchronizacia
+            lock (this.m_lockObj)
+            {
+                //vytvorime command
+                using (SQLiteCommand command = new SQLiteCommand())
+                {
+                    //vytvorime jednotlive polozky commandu
+                    command.CommandText = String.Format("SELECT * FROM [{0}] WHERE [{1}] = @{1}", properties.TableOrViewName, primaryKeyPropertyInfo[0].Property.Name);
+                    SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
+                    primaryKeyParameter.Value = this.InternalPrepareValue(primaryKeyPropertyInfo[0].Property.GetValue(item, null), primaryKeyPropertyInfo[0].ColumnAttribute);
+                    command.Parameters.Add(primaryKeyParameter);
+
+                    //nacitame data
+                    using (SQLiteDataReader reader = this.ExecuteReader(command))
+                    {
+                        while (reader.Read())
+                        {
+                            return this.InternalGetObject(reader, item);
+                        }
+                    }
+                }
+            }
+
+            //vratime aktualnu hodnotu
+            throw new InvalidOperationException("Object is not available !");
+        }
+        /// <summary>
+        /// Nacita objekt z sql readera
+        /// </summary>
+        /// <param name="reader">Reader pomocou ktoreho citame data</param>
+        /// <returns>Objekt ktory necitavame</returns>
+        private SqlObject InternalGetSqlObject(SQLiteDataReader reader)
+        {
+            String name = String.Empty;
+            dynamic item = new SqlObject();
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                name = reader.GetName(i);
+                ((SqlObject)item).SetMember(name, reader[name]);
+            }
+            return item;
+        }
+        /// <summary>
+        /// Nacita dynamic z sql readera
+        /// </summary>
+        /// <param name="reader">Reader pomocou ktoreho citame data</param>
+        /// <param name="item">Dynamc ktory chceme aktualizovat</param>
+        /// <returns>Dynamic ktory nacitame</returns>
+        private dynamic InternalGetDynamic(SQLiteDataReader reader, dynamic item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+            if (reader == null)
+            {
+                throw new ArgumentNullException("reader");
+            }
+            var dynamicItem = item as IDictionary<String, Object>;
+            if (dynamicItem == null)
+            {
+                throw new ArgumentNullException("dynamicItem");
+            }
+            String name = String.Empty;
+            Object value = null;
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                name = reader.GetName(i);
+                value = reader[name];
+                try
+                {
+                    value = ((value == null || value == DBNull.Value) ? null : value);
+                    dynamicItem.Add(name, value);
+                }
+                catch (Exception ex)
+                {
+                    this.InternalTrace(TraceTypes.Error, "Chyba pri citani dynamic z SQL. {0} [{1}]", ex.Message, name);
+                    throw;
+                }
+            }
+
+            return dynamicItem;
         }
         /// <summary>
         /// Nacita objekt z sql readera
@@ -516,7 +912,7 @@ namespace Project858.Data.SqlClient
         private T InternalGetObject<T>(SQLiteDataReader reader, T item)
         {
             String name = String.Empty;
-            ReflectionPropertyItemCollection properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
             if (properties != null)
             {
                 Object value = null;
@@ -524,19 +920,20 @@ namespace Project858.Data.SqlClient
                 {
                     name = reader.GetName(i);
                     ReflectionPropertyItem property = properties.FindProperty(name);
-                    if (property != null && property.Property.CanWrite)
+                    if (property != null && property.Property.CanRead)
                     {
-                        if (property.Attributes.Length == 1)
+                        if (property.ColumnAttribute != null)
                         {
                             value = reader[name];
                             try
                             {
                                 value = ((value == null || value == DBNull.Value) ? null : value);
-                                if (value == null && !((ColumnAttribute)property.Attributes[0]).CanBeNull)
+                                if (value == null && !property.ColumnAttribute.CanBeNull)
                                 {
-                                    throw new InvalidCastException();
+                                    throw new InvalidCastException(String.Format("Specified cast is not valid. [{0} - {1} - {2}]", item.GetType().Name, property.Property.Name, property.Property.PropertyType));
                                 }
-                                property.Property.SetValue(item, ((value == null || value == DBNull.Value) ? null : value), null);
+                                value = this.InternalUpdateValue(value);
+                                property.Property.SetValue(item, value, null);
                             }
                             catch (Exception ex)
                             {
@@ -550,32 +947,276 @@ namespace Project858.Data.SqlClient
             return item;
         }
         /// <summary>
+        /// Aktualizuje hodnotu skor ako dojde k jej spracovaniu
+        /// </summary>
+        /// <param name="value">Hodnota ktoru chceme aktualizovat</param>
+        /// <returns>Aktualizovana hodnota alebo povodna hodnota</returns>
+        private Object InternalUpdateValue(Object value)
+        {
+            if (value != null)
+            {
+                if (value is String)
+                {
+                    return ((String)value).Trim();
+                }
+            }
+            return value;
+        }
+        /// <summary>
         /// Vykona select pozadovanych dat
         /// </summary>
         /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="whereClause">Where podmienka</param>
+        /// <param name="orderClause">Order klauzula</param>
         /// <returns>Kolekcia nacitanych dat</returns>
-        private List<T> InternalSelect<T>()
+        private T InternalSelectFirstObject<T>(String whereClause, String orderClause)
         {
-            Type type = typeof(T);
-            object[] tableAttributes = type.GetCustomAttributes(typeof(TableAttribute), true);
-            if (tableAttributes.Length != 1)
+            //ziskame informacie o objekte
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
+
+            //overime whereClause 
+            if (!String.IsNullOrWhiteSpace(whereClause))
+            {
+                //overime obsah
+                if (whereClause.IndexOf("ORDER BY", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    whereClause.IndexOf(" ASC ", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    whereClause.IndexOf(" DESC ", StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    throw new Exception(String.Format("Whereclause can't contains order by part. [{0}]", whereClause));
+                }
+            }
+            //overime orderClause 
+            if (!String.IsNullOrWhiteSpace(orderClause))
+            {
+                //overime obsah
+                if (orderClause.IndexOf("WHERE", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    orderClause.IndexOf(">", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    orderClause.IndexOf("<", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    orderClause.IndexOf("=", StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    throw new Exception(String.Format("OrderClause can't contains where part. [{0}]", orderClause));
+                }
+            }
+            //overime povinny atribut pre tuto metodu
+            if (properties.TableAttribute == null)
             {
                 throw new Exception("Missing attribute TableAttribute");
+            }
+            //informacie o properties
+            if (properties.Count == 0)
+            {
+                throw new Exception("Missing attribute ColumnAttribute");
             }
 
             //spracujeme dommand do SQL
             using (SQLiteCommand command = new SQLiteCommand())
             {
-                command.CommandText = String.Format("SELECT * FROM [{0}]", ((TableAttribute)tableAttributes[0]).Name);
+                //vytvorime command
+                String commandText = String.Format("SELECT TOP 1 * FROM [{0}]{1}{2}", properties.TableOrViewName, (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)), (String.IsNullOrWhiteSpace(orderClause) ? String.Empty : String.Format(" ORDER BY {0}", orderClause)));
+                //vykoname prikad
+                command.CommandText = commandText;
+                return this.ReadFirstObject<T>(command);
+            }
+        }
+        /// <summary>
+        /// Vykona select pozadovanych dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="query">Query ktorym chceme nacitat data</param>
+        /// <returns>Kolekcia nacitanych dat</returns>
+        private T InternalSelectFirstObjectFromQuery<T>(String query)
+        {
+            //overime query
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vykoname prikad
+                command.CommandText = query;
+                return this.ReadFirstObject<T>(command);
+            }
+        }
+        /// <summary>
+        /// Vykona select s nacitanim dat do dynamic objektu
+        /// </summary>
+        /// <param name="query">Query na vykonanie selectu</param>
+        /// <returns>Kolekcia dynamic objektov</returns>
+        private List<dynamic> InternalSelectDynamicFromQuery(String query)
+        {
+            //overime query
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vykoname prikad
+                command.CommandText = query;
+                return this.ReadDynamicCollection(command);
+            }
+        }
+        /// <summary>
+        /// Vykona select pozadovanych dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="query">Query ktorym chceme nacitat data</param>
+        /// <returns>Kolekcia nacitanych dat</returns>
+        private List<T> InternalSelectFromQuery<T>(String query)
+        {
+            //overime query
+            if (String.IsNullOrWhiteSpace(query))
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vykoname prikad
+                command.CommandText = query;
                 return this.ReadObjectCollection<T>(command);
             }
         }
         /// <summary>
-        /// Aktualizuje pozadovany objekt v SQL
+        /// Nacita pocet dat
         /// </summary>
-        /// <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
-        /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        private void InternalInsertObject(Object item)
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="whereClause">Where podmienka</param>
+        /// <returns>Pocet dat alebo null</returns>
+        private Int32 InternalSelectCount<T>(String whereClause)
+        {
+            //ziskame informacie o objekte
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
+
+            //overime whereClause 
+            if (!String.IsNullOrWhiteSpace(whereClause))
+            {
+                //overime obsah
+                if (whereClause.IndexOf("ORDER BY", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    whereClause.IndexOf(" ASC ", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    whereClause.IndexOf(" DESC ", StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    throw new Exception("Whereclause can't contains order by part");
+                }
+            }
+
+            //overime povinny atribut pre tuto metodu
+            if (properties.TableAttribute == null && properties.ViewAttribute == null)
+            {
+                throw new Exception("Missing attribute TableAttribute or ViewAttribute");
+            }
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vytvorime command
+                String commandText = String.Format("SELECT COUNT(*) FROM [{0}]{1}", properties.TableOrViewName,
+                    (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)));
+
+                //vykoname prikad
+                command.CommandText = commandText;
+                return (Int32)this.ExecuteScalar(command);
+            }
+        }
+        /// <summary>
+        /// Vykona select pozadovanych dat
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
+        /// <param name="whereClause">Where podmienka</param>
+        /// <param name="orderClause">Order klauzula</param>
+        /// <returns>Kolekcia nacitanych dat</returns>
+        private List<T> InternalSelect<T>(String whereClause, String orderClause, Nullable<UInt32> limit, Nullable<UInt32> page)
+        {
+            //ziskame informacie o objekte
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
+
+            //overime whereClause 
+            if (!String.IsNullOrWhiteSpace(whereClause))
+            {
+                //overime obsah
+                if (whereClause.IndexOf("ORDER BY", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    whereClause.IndexOf(" ASC ", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    whereClause.IndexOf(" DESC ", StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    throw new Exception("Whereclause can't contains order by part");
+                }
+            }
+            //overime orderClause 
+            if (!String.IsNullOrWhiteSpace(orderClause))
+            {
+                //overime obsah
+                if (orderClause.IndexOf("WHERE", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    orderClause.IndexOf(">", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    orderClause.IndexOf("<", StringComparison.CurrentCultureIgnoreCase) > 0 ||
+                    orderClause.IndexOf("=", StringComparison.CurrentCultureIgnoreCase) > 0)
+                {
+                    throw new Exception("OrderClause can't contains where part");
+                }
+            }
+            //overime povinny atribut pre tuto metodu
+            if (properties.TableAttribute == null && properties.ViewAttribute == null)
+            {
+                throw new Exception("Missing attribute TableAttribute or ViewAttribute");
+            }
+            //informacie o properties
+            if (properties.Count == 0)
+            {
+                throw new Exception("Missing attribute ColumnAttribute");
+            }
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                //vykoname prikad
+                command.CommandText = this.InternalCreateCommandText(properties, whereClause, orderClause, limit, page);
+                return this.ReadObjectCollection<T>(command);
+            }
+        }
+        /// <summary>
+        /// Vytvori command pre select podla parametrov
+        /// </summary>
+        /// <param name="properties">Property reflector na objekt</param>
+        /// <param name="whereClause">Podmiebja</param>
+        /// <param name="orderClause">Zoradenie</param>
+        /// <param name="limit">Limit</param>
+        /// <param name="page">Stranka</param>
+        /// <returns>Command text</returns>
+        private String InternalCreateCommandText(ReflectionObjectItem properties, String whereClause, String orderClause, Nullable<UInt32> limit, Nullable<UInt32> page)
+        {
+            StringBuilder commandTextBuilder = new StringBuilder();
+            commandTextBuilder.Append("SELECT");
+            if (!page.HasValue && limit.HasValue)
+            {
+                commandTextBuilder.AppendFormat(" TOP {0}", limit.Value);
+            }
+            commandTextBuilder.AppendFormat(" * FROM [{0}]", properties.TableOrViewName);
+            if (!String.IsNullOrWhiteSpace(whereClause))
+            {
+                commandTextBuilder.AppendFormat(" WHERE {0}", whereClause);
+            }
+            if (!String.IsNullOrWhiteSpace(orderClause))
+            {
+                commandTextBuilder.AppendFormat(" ORDER BY {0}", orderClause);
+            }
+            if (page.HasValue && limit.HasValue)
+            {
+                commandTextBuilder.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", ((page.Value - 1) * limit.Value), limit.Value);
+            }
+            return commandTextBuilder.ToString();
+        }
+        /*
+        /// <summary>
+        /// Vlozi pozadovany objekt do SQL
+        /// </summary>
+        /// <param name="item">objekt ktorych chceme vlozit</param>
+        /// <returns>Kod navratovej hodnoty</returns>
+        private int InternalInsertObjectWithProcedure(Object item)
         {
             //objekt musi byt zadany
             if (item == null)
@@ -583,18 +1224,82 @@ namespace Project858.Data.SqlClient
                 throw new ArgumentNullException("item");
             }
 
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
+
             //objekt musi obsahovat definiciu tabulky
-            Type type = item.GetType();
-            object[] tableAttributes = type.GetCustomAttributes(typeof(TableAttribute), true);
-            if (tableAttributes.Length != 1)
+            if (properties.TableAttribute == null)
             {
                 throw new Exception("Missing attribute TableAttribute");
             }
 
+            //overime nazov procedury
+            if (String.IsNullOrWhiteSpace(((TableAttribute)properties.Attributes[0]).InsertProcedureName))
+            {
+                throw new Exception("InsertProcedureName is empty or null");
+            }
+
             //informacie o properties
-            PropertyInfo[] propertyInfo = type.GetProperties();
-            propertyInfo = this.InternalFindPropertiesWithColumnAttribute(propertyInfo);
-            if (propertyInfo.Length == 0)
+            if (properties.Count == 0)
+            {
+                throw new Exception("Missing attribute ColumnAttribute");
+            }
+  
+            //vytvorime command
+            List<SQLiteParameter> parameterCollection = new List<SQLiteParameter>();
+            foreach (var value in properties.Values)
+            {
+                if (value.Attributes.Length == 1)
+                {
+                    ColumnAttribute attribude = (ColumnAttribute)value.Attributes[0];
+                    if (!attribude.IsDbGenerated && attribude.IsRequiredWhenInserting)
+                    {
+                        SQLiteParameter parameter = new SQLiteParameter(value.Property.Name, attribude.Type);
+                        parameter.Value = this.InternalValidateValue(value.Property.GetValue(item, null));
+                        parameterCollection.Add(parameter);
+                    }
+                }
+            }
+
+            //return values
+            SQLiteParameter returnValueParam = new SQLiteParameter("returnVal", SqlDbType.Int);
+            returnValueParam.Direction = ParameterDirection.ReturnValue;
+            parameterCollection.Add(returnValueParam);
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                command.CommandText = ((TableAttribute)properties.Attributes[0]).InsertProcedureName;
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddRange(parameterCollection.ToArray());
+                this.ExecuteNonQuery(command);
+                return returnValueParam.Value != null ? (int)returnValueParam.Value : -1;
+            }
+        }
+        */
+        /// <summary>
+        /// Vlozi pozadovany objekt do SQL
+        /// </summary>
+        /// <param name="item">objekt ktorych chceme vlozit</param>
+        private int InternalInsertObject(Object item)
+        {
+            //objekt musi byt zadany
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
+
+            //objekt musi obsahovat definiciu tabulky
+            if (properties.TableAttribute == null)
+            {
+                throw new Exception("Missing attribute TableAttribute");
+            }
+
+            //najdeme vsetky property
+            if (properties == null || properties.Count == 0)
             {
                 throw new Exception("Missing attribute ColumnAttribute");
             }
@@ -603,18 +1308,20 @@ namespace Project858.Data.SqlClient
             List<SQLiteParameter> parameterCollection = new List<SQLiteParameter>();
             StringBuilder builder = new StringBuilder();
             StringBuilder values = new StringBuilder();
-            builder.AppendFormat("INSERT INTO [{0}] (", ((TableAttribute)tableAttributes[0]).Name);
-            for (int i = 0; i < propertyInfo.Length; i++)
+            builder.AppendFormat("INSERT INTO [{0}] (", properties.TableAttribute.Name);
+            foreach (var value in properties.Values)
             {
-                PropertyInfo info = propertyInfo[i];
-                ColumnAttribute attribude = (ColumnAttribute)info.GetCustomAttributes(typeof(ColumnAttribute), true)[0];
-                if (!attribude.IsDbGenerated)
+                if (value.ColumnAttribute != null)
                 {
-                    builder.AppendFormat("{0}, ", info.Name);
-                    values.AppendFormat("@{0}, ", info.Name);
-                    SQLiteParameter parameter = new SQLiteParameter(info.Name, attribude.Type);
-                    parameter.Value = this.InternalValidateValue(info.GetValue(item, null));
-                    parameterCollection.Add(parameter);
+                    ColumnAttribute attribude = value.ColumnAttribute;
+                    if (!attribude.IsDbGenerated && attribude.IsRequiredWhenInserting)
+                    {
+                        builder.AppendFormat("[{0}], ", value.Property.Name);
+                        values.AppendFormat("@{0}, ", value.Property.Name);
+                        SQLiteParameter parameter = new SQLiteParameter(value.Property.Name, attribude.Type);
+                        parameter.Value = this.InternalPrepareValue(value.Property.GetValue(item, null), attribude);
+                        parameterCollection.Add(parameter);
+                    }
                 }
             }
             builder.Remove(builder.Length - 2, 2);
@@ -626,14 +1333,89 @@ namespace Project858.Data.SqlClient
             {
                 command.CommandText = builder.ToString();
                 command.Parameters.AddRange(parameterCollection.ToArray());
-                this.ExecuteNonQuery(command);
+                return this.ExecuteNonQuery(command);
+            }
+        }
+        /// <summary>
+        /// Insertne kolekciu dat do DB
+        /// </summary>
+        /// <typeparam name="T">Typ objektu ktory chceme insertnut</typeparam>
+        /// <param name="collection">Kolekcia dat</param>
+        /// <returns>Pocet riadkov ovplyvnenych insertom</returns>
+        private int InternalInsertCollection<T>(List<T> collection)
+        {
+            //objekt musi byt zadany
+            if (collection == null)
+                throw new ArgumentNullException("collection");
+            if (collection.Count == 0)
+                throw new ArgumentException("Collection is empty!");
+
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
+
+            //objekt musi obsahovat definiciu tabulky
+            if (properties.TableAttribute == null)
+                throw new Exception("Missing attribute TableAttribute");
+
+            //najdeme vsetky property
+            if (properties == null || properties.Count == 0)
+                throw new Exception("Missing attribute ColumnAttribute");
+
+            //vytvorime command
+            List<SQLiteParameter> parameterCollection = new List<SQLiteParameter>();
+            StringBuilder builder = new StringBuilder();
+            var count = collection.Count;
+            for (int i = 0; i < count; i++)
+			{
+                //ziskame polozku
+			    T item = collection[i];
+     
+                //vytvorime command pre aktualny objekt
+                StringBuilder values = new StringBuilder();
+                builder.AppendFormat("INSERT INTO [{0}] (", properties.TableAttribute.Name);
+                foreach (var value in properties.Values)
+                {
+                    if (value.ColumnAttribute != null)
+                    {
+                        ColumnAttribute attribude = value.ColumnAttribute;
+                        if (!attribude.IsDbGenerated && attribude.IsRequiredWhenInserting)
+                        {
+                            //ziskame propertyName
+                            var propertyName = value.Property.Name;
+
+                            //vytvorime zaznam
+                            builder.AppendFormat("[{0}], ", propertyName);
+
+                            //upravime meno
+                            propertyName = String.Format("{0}{1}", value.Property.Name, i);
+
+                            //vytvorime parameter
+                            values.AppendFormat("@{0}, ", propertyName);
+                            SQLiteParameter parameter = new SQLiteParameter(propertyName, attribude.Type);
+                            parameter.Value = this.InternalPrepareValue(value.Property.GetValue(item, null), attribude);
+                            parameterCollection.Add(parameter);
+                        }
+                    }
+                }
+                builder.Remove(builder.Length - 2, 2);
+                values.Remove(values.Length - 2, 2);
+                builder.AppendFormat(") VALUES ({0});", values.ToString());
+            }
+
+            //spracujeme dommand do SQL
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                command.CommandText = builder.ToString();
+                command.Parameters.AddRange(parameterCollection.ToArray());
+                return this.ExecuteNonQuery(command);
             }
         }
         /// <summary>
         /// Aktualizuje pozadovany objekt v SQL
         /// </summary>
         /// <param name="item">objekt ktorych chceme aktualizovat</param>
-        private void InternalUpdateObject(Object item)
+        /// <param name="whereClause">Podmienka na aktualizaciu objektu</param>
+        private int InternalUpdateObject(Object item, String whereClause = null)
         {
             //objekt musi byt zadany
             if (item == null)
@@ -641,33 +1423,31 @@ namespace Project858.Data.SqlClient
                 throw new ArgumentNullException("item");
             }
 
+            //najdeme informacie o datovom type
+            ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(item.GetType());
+
             //objekt musi obsahovat definiciu tabulky
-            Type type = item.GetType();
-            object[] tableAttributes = type.GetCustomAttributes(typeof(TableAttribute), true);
-            if (tableAttributes.Length != 1) 
+            if (properties.TableAttribute == null)
             {
                 throw new Exception("Missing attribute TableAttribute");
             }
-
             //informacie o properties
-            PropertyInfo[] propertyInfo = type.GetProperties();
-            propertyInfo = this.InternalFindPropertiesWithColumnAttribute(propertyInfo);
-            if (propertyInfo.Length == 0)
+            if (properties.Count == 0)
             {
                 throw new Exception("Missing attribute ColumnAttribute");
             }
-            if (propertyInfo.Length == 1) 
+            if (properties.Count == 1)
             {
                 throw new Exception("Too little attribute ColumnAttribute");
             }
 
             //overime primarny kluc
-            PropertyInfo[] primaryKeyPropertyInfo = this.InternalFindPropertiesWithPrimaryKeyState(propertyInfo);
-            if (primaryKeyPropertyInfo.Length == 0)
+            List<ReflectionPropertyItem> primaryKeyPropertyInfo = this.InternalFindPropertiesWithPrimaryKeyState(properties);
+            if (primaryKeyPropertyInfo.Count == 0)
             {
                 throw new MissingPrimaryKeyException();
             }
-            if (primaryKeyPropertyInfo.Length > 1)
+            if (primaryKeyPropertyInfo.Count > 1)
             {
                 throw new Exception("Duplicate PrimaryKey state");
             }
@@ -675,26 +1455,36 @@ namespace Project858.Data.SqlClient
             //vytvorime command
             List<SQLiteParameter> parameterCollection = new List<SQLiteParameter>();
             StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("UPDATE [{0}] SET ", ((TableAttribute)tableAttributes[0]).Name);
-            for (int i = 0; i < propertyInfo.Length; i++)
+            builder.AppendFormat("UPDATE [{0}] SET ", properties.TableAttribute.Name);
+            foreach (var property in properties.Values)
             {
-                PropertyInfo info = propertyInfo[i];
-                if (!primaryKeyPropertyInfo[0].Equals(info))
+                if (property.ColumnAttribute != null)
                 {
-                    ColumnAttribute attribude = (ColumnAttribute)info.GetCustomAttributes(typeof(ColumnAttribute), true)[0];
-                    if (!attribude.IsDbGenerated)
+                    ColumnAttribute attribude = property.ColumnAttribute;
+                    if (!attribude.IsDbGenerated && attribude.IsRequiredWhenUpdating && !attribude.IsPrimaryKey)
                     {
-                        builder.AppendFormat("[{0}] = @{0}, ", info.Name);
-                        SQLiteParameter parameter = new SQLiteParameter(info.Name, attribude.Type);
-                        parameter.Value = this.InternalValidateValue(info.GetValue(item, null));
+                        builder.AppendFormat("[{0}] = @{0}, ", property.Property.Name);
+                        SQLiteParameter parameter = new SQLiteParameter(property.Property.Name, attribude.Type);
+                        parameter.Value = this.InternalPrepareValue(property.Property.GetValue(item, null), attribude);
                         parameterCollection.Add(parameter);
                     }
                 }
             }
+
+            //chyba, nie su ziadne SET parametre
+            if (parameterCollection == null || parameterCollection.Count == 0)
+            {
+                throw new Exception("Too little attribute ColumnAttribute with update ");
+            }
             builder.Remove(builder.Length - 2, 2);
-            builder.AppendFormat(" WHERE [{0}] = @{0}", primaryKeyPropertyInfo[0].Name);
-            SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Name, ((ColumnAttribute)primaryKeyPropertyInfo[0].GetCustomAttributes(typeof(ColumnAttribute), true)[0]).Type);
-            primaryKeyParameter.Value = primaryKeyPropertyInfo[0].GetValue(item, null);
+            builder.AppendFormat(" WHERE [{0}] = @{0}", primaryKeyPropertyInfo[0].Property.Name);
+            //ak je zadana podmienka
+            if (!String.IsNullOrWhiteSpace(whereClause))
+            {
+                builder.AppendFormat(" AND {0}", whereClause);
+            }
+            SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
+            primaryKeyParameter.Value = primaryKeyPropertyInfo[0].Property.GetValue(item, null);
             parameterCollection.Add(primaryKeyParameter);
 
             //vykoname command
@@ -702,36 +1492,70 @@ namespace Project858.Data.SqlClient
             {
                 command.CommandText = builder.ToString();
                 command.Parameters.AddRange(parameterCollection.ToArray());
-                this.ExecuteNonQuery(command);
+                return this.ExecuteNonQuery(command);
             }
         }
         /// <summary>
         /// Overi hodnotu a vrati jej spravny format
         /// </summary>
         /// <param name="value">Hodnota ktoru chceme overit</param>
+        /// <param name="attribute">Atributy stlpca v tabulke</param>
         /// <returns>Hodnota</returns>
-        private Object InternalValidateValue(Object value)
+        private Object InternalPrepareValue(Object value, ColumnAttribute attribute)
         {
-            return value == null ? DBNull.Value : value;
+            if (value != null)
+            {
+                switch (attribute.Type)
+                { 
+                    case SqlDbType.Date:
+                        if (value is DateTime)
+                        {
+                            return ((DateTime)value).ToLocalTime();
+                        }
+                        return value;
+                    case SqlDbType.VarChar:
+                    case SqlDbType.NVarChar:
+                    case SqlDbType.Text:
+                        return this.InternalTruncateValue(value, attribute);
+                    default:
+                        return value;
+                }
+            }
+            return DBNull.Value;
+        }
+        /// <summary>
+        /// Vykona skratenie hodnoty ak je dostupna a je to povolene
+        /// </summary>
+        /// <param name="value">Hodnota ktoru chceme skratit</param>
+        /// <param name="attribute">Atributy stlpca v tabulke</param>
+        /// <returns>Skratena hodnota alebo povodna</returns>
+        public Object InternalTruncateValue(Object value, ColumnAttribute attribute)
+        {
+            if (value != null && this.TruncateValue && attribute.Size != int.MaxValue)
+            {
+                if (value is String)
+                {
+                    value = ((String)value).TruncateLongString(attribute.Size);
+                }
+            }
+            return value;
         }
         /// <summary>
         /// Vyhlada property ktore su nastavene ako primarny kluc objektu
         /// </summary>
         /// <param name="propertyInfo">Kolekcia v ktorej chceme vyhladat</param>
         /// <returns>Property ktore obsahuju nastaveny stav primarneho kluca</returns>
-        private PropertyInfo[] InternalFindPropertiesWithPrimaryKeyState(PropertyInfo[] propertyInfo)
+        private List<ReflectionPropertyItem> InternalFindPropertiesWithPrimaryKeyState(ReflectionObjectItem properties)
         {
-            List<PropertyInfo> collection = new List<PropertyInfo>();
-            for (int i = 0; i < propertyInfo.Length; i++)
+            List<ReflectionPropertyItem> collection = new List<ReflectionPropertyItem>();
+            foreach (var property in properties.Values)
             {
-                PropertyInfo info = propertyInfo[i];
-                Object[] attributes = info.GetCustomAttributes(typeof(ColumnAttribute), true);
-                if (attributes.Length == 1 && ((ColumnAttribute)attributes[0]).IsPrimaryKey)
+                if (property.ColumnAttribute != null && property.ColumnAttribute.IsPrimaryKey)
                 {
-                    collection.Add(info);
+                    collection.Add(property);
                 }
             }
-            return collection.ToArray();
+            return collection;
         }
         /// <summary>
         /// Vyhlada property ktore obsahuju pozadovany typ atributu
@@ -741,7 +1565,7 @@ namespace Project858.Data.SqlClient
         private PropertyInfo[] InternalFindPropertiesWithColumnAttribute(PropertyInfo[] propertyInfo)
         {
             List<PropertyInfo> collection = new List<PropertyInfo>();
-            for (int i = 0; i < propertyInfo.Length; i++) 
+            for (int i = 0; i < propertyInfo.Length; i++)
             {
                 PropertyInfo info = propertyInfo[i];
                 if (info.GetCustomAttributes(typeof(ColumnAttribute), true).Length == 1)

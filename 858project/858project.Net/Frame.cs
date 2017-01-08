@@ -169,6 +169,22 @@ namespace Project858.Net
             return this.InternalToByteArray();
         }
         /// <summary>
+        /// This function returns frame item with address
+        /// </summary>
+        /// <param name="address">Address</param>
+        /// <returns>Item | null</returns>
+        public IFrameItem GetFrameItem(UInt16 address)
+        {
+            foreach (IFrameItem item in this.m_items)
+            {
+                if (item.Address == address)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+        /// <summary>
         /// This function returns value 
         /// </summary>
         /// <typeparam name="T">Type of value</typeparam>

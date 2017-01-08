@@ -34,6 +34,7 @@ using System.Data;
 using System.Web.Script.Serialization;
 using System.Data.SqlClient;
 using Microsoft.Win32;
+using System.Data.SQLite;
 
 namespace Project858
 {
@@ -102,6 +103,25 @@ namespace Project858
             RegistryKey key = Registry.ClassesRoot.OpenSubKey(@"MIME\Database\Content Type\" + type, false);
             Object value = key != null ? key.GetValue("Extension", null) : null;
             return value != null ? value.ToString() : string.Empty;
+        }
+        /// <summary>
+        /// Zaloguje sql parametre
+        /// </summary>
+        /// <param name="command">Command ktory chceme zalogovat</param>
+        public static String GetTraceString(SQLiteCommand command)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("SQL Command: '{0}'", command.CommandText);
+            if (command.Parameters != null && command.Parameters.Count > 0)
+            {
+                foreach (SqlParameter parameter in command.Parameters)
+                {
+                    builder.Append(Environment.NewLine);
+                    Object value = parameter.Value == null ? DBNull.Value : parameter.Value;
+                    builder.AppendFormat("SQL Parameter: {0} = '{1}' [{2}]", parameter.ParameterName, value, parameter.SqlDbType);
+                }
+            }
+            return builder.ToString();
         }
         /// <summary>
         /// Zaloguje sql parametre

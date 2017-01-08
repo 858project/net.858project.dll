@@ -125,9 +125,9 @@
     <Compile Include="858project.ComponentModel\ISqlComponent.cs" />
     <Compile Include="858project.ComponentModel\IntegerAttribute.cs" />
     <Compile Include="858project.Data.SqlClient\ColumnAttribute.cs" />
-    <Compile Include="858project.Data.SqlClient\ViewAttribute.cs" />
     <Compile Include="858project.Data.SqlClient\SQLiteClient.cs" />
     <Compile Include="858project.Data.SqlClient\SQLiteClientBase.cs" />
+    <Compile Include="858project.Data.SqlClient\ViewAttribute.cs" />
     <Compile Include="858project.Data.SqlClient\SqlClientBase.cs" />
     <Compile Include="858project.Data.SqlClient\TableAttribute.cs" />
     <Compile Include="858project.Diagnostics\ConsoleLogger.cs" />

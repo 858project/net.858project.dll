@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Project858.Diagnostics;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -204,12 +206,30 @@ namespace Project858.Net
                 //add data to buffer
                 this.m_buffer.AddRange(e.Data);
 
-                //find frame
-                Frame frame = this.internalFindFrame(this.m_buffer);
-                if (frame != null)
+                //loop
+                while (true)
                 {
-                    //send receive event
-                    this.OnReceivedFrame(new FrameEventArgs(frame, e.RemoteEndPoint));
+                    //find frame
+                    Frame frame = this.internalFindFrame(this.m_buffer);
+                    if (frame != null)
+                    {
+                        //send receive event
+                        this.OnReceivedFrame(new FrameEventArgs(frame, e.RemoteEndPoint));
+                    }
+                    else
+                    {
+                        //any data for frame
+                        break;
+                    }
+                }
+
+                if (this.m_buffer != null && this.m_buffer.Count > 0)
+                {
+                    TraceLogger.Info(BitConverter.ToString(this.m_buffer.ToArray()));
+                }
+                else
+                {
+                    TraceLogger.Info("data NULL");
                 }
             }
         }
@@ -236,7 +256,7 @@ namespace Project858.Net
                     UInt16 commandAddress = (UInt16)(array[index + 4] << 8 | array[index + 3]);
 
                     //overime ci je dostatok dat na vytvorenie package
-                    if (length <= (count - 1))
+                    if (count >= (length - 1))
                     {
                         Frame frame = internalConstructFrame(array, index + 5, length - 5, commandAddress);
                         if (frame != null)

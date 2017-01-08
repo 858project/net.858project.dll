@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Project858.ComponentModel.Client;
 using System.Data;
-using System.Data.SQLite;
-using System.Net.Mail;
-using System.Diagnostics;
 using Project858.Diagnostics;
-using System.Threading;
-using Project858;
-using System.Text.RegularExpressions;
 using System.ComponentModel;
-using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Data.SQLite;
 
 namespace Project858.Data.SqlClient
 {
@@ -26,26 +19,23 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="builder">Strng builder na vytvorenie SQL connection stringu</param>
         public SQLiteClientBase(SQLiteConnectionStringBuilder builder)
-            : this(builder.DataSource, builder.Password)
         {
-
+            //nastavime pozadovane hodnoty
+            this.InternalChange(builder);
+            this.m_lockObj = new Object();
         }
         /// <summary>
         /// Initialize this class
         /// </summary>
-        /// <exception cref="ArgumentNullException">
-        /// Vstupny argument nie je inicializovany
-        /// </exception>
-        /// <param name="database">Databaza do ktorej pristupujeme</param>
-        /// <param name="password">Heslo k SQL serveru</param>
-        public SQLiteClientBase(String database, String password)
-            : base()
+        /// <param name="dataSource">Data source database</param>
+        /// <param name="password">Password fort sqlite database</param>
+        public SQLiteClientBase(String dataSource, String password)
+            : this(new SQLiteConnectionStringBuilder()
+            {
+                DataSource = dataSource,
+                Password = password
+            })
         {
-            //nastavime pozadovane hodnoty
-            this.InternalChange(database, password);
-
-            this._lockObj = new Object();
-            this._autoConnectingTimeout = new TimeSpan(0, 1, 0);
         }
         #endregion
 
@@ -87,20 +77,22 @@ namespace Project858.Data.SqlClient
         /// </summary>
         public event EventHandler ConnectionStateChangeEvent
         {
-            add {
+            add
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this.m_eventLock) 
+                lock (this.m_eventLock)
                     this._connectionStateChangeEvent += value;
             }
-            remove {
+            remove
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
 
-                lock (this.m_eventLock) 
+                lock (this.m_eventLock)
                     this._connectionStateChangeEvent -= value;
             }
         }
@@ -110,6 +102,8 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Definuje ci dojde k skracovaniu hodnot pri vlozeni do DB
         /// </summary>
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public Boolean TruncateValue
         {
             get
@@ -184,35 +178,20 @@ namespace Project858.Data.SqlClient
             }
         }
         /// <summary>
-        /// (Get) Databaza do ktorej pristupujeme
+        /// (Get) String builder na vytvoreie connection stringu
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>
-        public string Database
+        public SQLiteConnectionStringBuilder ConnectionStringBuilder
         {
-            get {
+            get
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
-                return this.m_database;
-            }
-        }
-        /// <summary>
-        /// (Get) Heslo k SQL serveru
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">
-        /// Ak je object v stave _disposed
-        /// </exception>
-        public string Password
-        {
-            get {
-                //je objekt _disposed ?
-                if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
-                return this.m_password;
+
+                return this.m_connectionStringBuilder;
             }
         }
         /// <summary>
@@ -223,7 +202,8 @@ namespace Project858.Data.SqlClient
         /// </exception>
         public ConnectionStates ConnectionState
         {
-            get {
+            get
+            {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
@@ -231,39 +211,13 @@ namespace Project858.Data.SqlClient
                 return this._state;
             }
         }
-        /// <summary>
-        /// (Get / Set) Timeout aky sa ma najdlhsie pokusat pripojit k sql serveru
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">
-        /// Ak je object v stave _disposed
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Minimalna hodnota timeoutu je 00:00:30
-        /// </exception>
-        public TimeSpan AutoConnectingTimeout
-        {
-            get {
-                //je objekt _disposed ?
-                if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-                
-                return _autoConnectingTimeout;
-            }
-            set {
-                //je objekt _disposed ?
-                if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
-
-                //osetrenie minimalnej hodnoty
-                if (value < new TimeSpan(0, 0, 30))
-                    throw new ArgumentOutOfRangeException("value");
-
-                _autoConnectingTimeout = value;
-            }
-        }
         #endregion
 
         #region - Variable -
+        /// <summary>
+        /// Sql transakcia ktora prebieha
+        /// </summary>
+        private SQLiteTransaction m_transaction = null;
         /// <summary>
         /// Definuje ci dojde k skracovaniu hodnot pri vlozeni do DB
         /// </summary>
@@ -277,10 +231,6 @@ namespace Project858.Data.SqlClient
         /// </summary>
         private Boolean _connectingFaultEventAsync = false;
         /// <summary>
-        /// Timeout aky sa ma najdlhsie pokusat pripojit k sql serveru
-        /// </summary>
-        private TimeSpan _autoConnectingTimeout = TimeSpan.MinValue;
-        /// <summary>
         /// Stav spojenia v aktualnom stave
         /// </summary>
         private volatile ConnectionStates _state = ConnectionStates.Closed;
@@ -291,29 +241,68 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Pomocny synchronizacny objekt na pristup k pripojeniu
         /// </summary>
-        private readonly Object _lockObj = null;
+        private readonly Object m_lockObj = null;
         /// <summary>
         /// Sql pripojenie k serveru
         /// </summary>
         private SQLiteConnection m_connection = null;
         /// <summary>
-        /// Databaza do ktorej pristupujeme
+        /// String builder na vytvorenie SQL connection stringu
         /// </summary>
-        private String m_database = String.Empty;
-        /// <summary>
-        /// Heslo k SQL serveru
-        /// </summary>
-        private String m_password = String.Empty;
+        private SQLiteConnectionStringBuilder m_connectionStringBuilder = null;
         #endregion
 
         #region - Public Method -
+        /// <summary>
+        /// Zaciatok transakcie
+        /// </summary>
+        /// <param name="level">The isolation level under which the transaction should run.</param>
+        /// <exception cref="InvalidOperationException">
+        /// Chyba vyvolana v pripade ze konekcia nie je aktivna
+        /// </exception>
+        public void BeginTransaction(IsolationLevel level)
+        {
+            if (this.m_connection == null || this.m_connection.State != System.Data.ConnectionState.Open)
+            {
+                throw new InvalidOperationException("Connection is not valid!");
+            }
+            this.m_transaction = this.m_connection.BeginTransaction(level);
+        }
+        /// <summary>
+        /// Koniec transakcie
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Chyba vyvolana v pripade ze nie je aktivna ziadna transakcia
+        /// </exception>
+        public void EndTransaction()
+        {
+            if (this.m_transaction == null)
+            {
+                throw new InvalidOperationException("Transaction is not valid!");
+            }
+            this.m_transaction.Commit();
+        }
+        /// <summary>
+        /// Vratenie zmien transakcie
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Chyba vyvolana v pripade ze nie je aktivna ziadna transakcia
+        /// </exception>
+        public void RollbackTransaction()
+        {
+            if (this.m_transaction == null)
+            {
+                throw new InvalidOperationException("Transaction is not valid!");
+            }
+            this.m_transaction.Rollback();
+        }
         /// <summary>
         /// Vykona pozadovany prikaz na aktivne pripojenie k SQL serveru
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>
-        /// <exception cref="SqlException">
+        /// <exception cref="SQLiteException">
         /// Chyba tykajuca sa SQL servera alebo commandu
         /// </exception>
         /// <exception cref="Exception">
@@ -330,10 +319,11 @@ namespace Project858.Data.SqlClient
         /// </exception>
         /// <param name="command">Prikaz ktory chceme vykonat</param>
         /// <returns>The first column of the first row in the result set, or a null reference</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public SQLiteDataReader ExecuteReader(SQLiteCommand command)
         {
             //overime stav klienta
-            this.CheckClientState();
+            this.InternalCheckClientState();
 
             //osetrenie vstupneho argumentu
             if (command == null)
@@ -343,15 +333,18 @@ namespace Project858.Data.SqlClient
 
             try
             {
-                //synchronizujeme pristup
-                lock (this._lockObj)
-                {
-                    //pridame aktivne spojenie do priakzu
-                    command.Connection = this.m_connection;
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, "SQL Command: '{0}'", command.CommandText);
 
-                    //vykoname pozadovany prikaz
-                    return command.ExecuteReader();
+                //pridame aktivne spojenie do priakzu
+                command.Connection = this.m_connection;
+                if (this.m_transaction != null)
+                {
+                    command.Transaction = this.m_transaction;
                 }
+
+                //vykoname pozadovany prikaz
+                return command.ExecuteReader();
             }
             catch (SQLiteException ex)
             {
@@ -393,10 +386,11 @@ namespace Project858.Data.SqlClient
         /// </exception>
         /// <param name="command">Prikaz ktory chceme vykonat</param>
         /// <returns>The number of rows affected.</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int ExecuteNonQuery(SQLiteCommand command)
         {
             //overime stav klienta
-            this.CheckClientState();
+            this.InternalCheckClientState();
 
             //osetrenie vstupneho argumentu
             if (command == null)
@@ -406,15 +400,18 @@ namespace Project858.Data.SqlClient
 
             try
             {
-                //synchronizujeme pristup
-                lock (this._lockObj)
-                {
-                    //pridame aktivne spojenie do priakzu
-                    command.Connection = this.m_connection;
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, command.ToTraceString());
 
-                    //vykoname pozadovany prikaz
-                    return command.ExecuteNonQuery();
+                //pridame aktivne spojenie do priakzu
+                command.Connection = this.m_connection;
+                if (this.m_transaction != null)
+                {
+                    command.Transaction = this.m_transaction;
                 }
+
+                //vykoname pozadovany prikaz
+                return command.ExecuteNonQuery();
             }
             catch (SQLiteException ex)
             {
@@ -434,12 +431,32 @@ namespace Project858.Data.SqlClient
             }
         }
         /// <summary>
+        /// Vykona vstupnu query a vrati scalarnu hodnotu
+        /// </summary>
+        /// <param name="query">Query na vykonanie prikazu</param>
+        /// <exception cref="ArgumentNullException">
+        /// Vstupny argument nie je inicializovany
+        /// </exception>
+        /// <returns>The first column of the first row in the result set, or a null reference</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public object ExecuteScalarWithQuery(String query)
+        {
+            if (String.IsNullOrWhiteSpace(query))
+                throw new ArgumentNullException("query");
+
+            using (SQLiteCommand command = new SQLiteCommand())
+            {
+                command.CommandText = query;
+                return this.ExecuteScalar(command);
+            }
+        }
+        /// <summary>
         /// Vykona pozadovany prikaz na aktivne pripojenie k SQL serveru
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>
-        /// <exception cref="SqlException">
+        /// <exception cref="SQLiteException">
         /// Chyba tykajuca sa SQL servera alebo commandu
         /// </exception>
         /// <exception cref="Exception">
@@ -456,10 +473,11 @@ namespace Project858.Data.SqlClient
         /// </exception>
         /// <param name="command">Prikaz ktory chceme vykonat</param>
         /// <returns>The first column of the first row in the result set, or a null reference</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public object ExecuteScalar(SQLiteCommand command)
         {
             //overime stav klienta
-            this.CheckClientState();
+            this.InternalCheckClientState();
 
             //osetrenie vstupneho argumentu
             if (command == null)
@@ -469,15 +487,18 @@ namespace Project858.Data.SqlClient
 
             try
             {
-                //synchronizujeme pristup
-                lock (this._lockObj)
-                {
-                    //pridame aktivne spojenie do priakzu
-                    command.Connection = this.m_connection;
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, "SQL Command: '{0}'", command.ToTraceString());
 
-                    //vykoname pozadovany prikaz
-                    return command.ExecuteScalar();
+                //pridame aktivne spojenie do priakzu
+                command.Connection = this.m_connection;
+                if (this.m_transaction != null)
+                {
+                    command.Transaction = this.m_transaction;
                 }
+
+                //vykoname pozadovany prikaz
+                return command.ExecuteScalar();
             }
             catch (SQLiteException ex)
             {
@@ -502,7 +523,7 @@ namespace Project858.Data.SqlClient
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>
-        /// <exception cref="SqlException">
+        /// <exception cref="SQLiteException">
         /// Chyba tykajuca sa SQL servera alebo commandu
         /// </exception>
         /// <exception cref="Exception">
@@ -519,10 +540,11 @@ namespace Project858.Data.SqlClient
         /// </exception>
         /// <param name="command">prikaz na nacitanie dat</param>
         /// <returns>Data ktore boli nacitane z databazy</returns>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DataTable DataFill(SQLiteCommand command)
         {
             //overime stav klienta
-            this.CheckClientState();
+            this.InternalCheckClientState();
 
             //osetrenie vstupneho argumentu
             if (command == null)
@@ -532,24 +554,24 @@ namespace Project858.Data.SqlClient
 
             try
             {
-                //synchronizujeme pristup
-                lock (this._lockObj)
+                //pridame aktivne spojenie do priakzu
+                command.Connection = this.m_connection;
+                if (this.m_transaction != null)
                 {
-                    //pridame aktivne spojenie do priakzu
-                    command.Connection = this.m_connection;
-
-                    //inicializujeme adpater data
-                    SQLiteDataAdapter adapter = new SQLiteDataAdapter(command);
-
-                    //pomocna tabulka na nacitanie data
-                    DataTable table = new DataTable();
-
-                    //nacitame data
-                    adapter.Fill(table);
-
-                    //vratime nacitane data
-                    return table;
+                    command.Transaction = this.m_transaction;
                 }
+
+                //inicializujeme adpater data
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(command);
+
+                //pomocna tabulka na nacitanie data
+                DataTable table = new DataTable();
+
+                //nacitame data
+                adapter.Fill(table);
+
+                //vratime nacitane data
+                return table;
             }
             catch (SQLiteException ex)
             {
@@ -574,7 +596,7 @@ namespace Project858.Data.SqlClient
         /// <returns>Meno</returns>
         public override string ToString()
         {
-            return String.Format("SqlClientBase");
+            return this.GetType().Name;
         }
         #endregion
 
@@ -609,8 +631,8 @@ namespace Project858.Data.SqlClient
         /// </summary>
         protected override void InternalDispose()
         {
-            //ukoncime komunikaciu
-            this.InternalDisconnect();
+            //ukoncime klienta
+            this.InternalStop();
         }
         #endregion
 
@@ -618,26 +640,19 @@ namespace Project858.Data.SqlClient
         /// <summary>
         /// Initialize this class
         /// </summary>
-        /// <param name="database">Databaza ku ktorej sa pripajame</param>
-        /// <param name="password">Prihlasovacie heslo k serveru</param>
-        private void InternalChange(String database , String password)
+        /// <param name="builder">Builder na vytvorenie SQL connection stringu</param>
+        private void InternalChange(SQLiteConnectionStringBuilder builder)
         {
             //regex na overenie
-            Regex regex = new Regex(Constants.REGEX_LENGTH.Replace("LENGTH", "2"));
+            if (builder == null)
+                throw new ArgumentNullException("builder");
 
-            //overime vstupnedata
-            if (!regex.IsMatch(database))
-                throw new ArgumentException("Database is not valid !");
-            if (!regex.IsMatch(password))
-                throw new ArgumentException("Password is not valid !");
-
-            this.m_database = database;
-            this.m_password = password;
+            this.m_connectionStringBuilder = builder;
         }
         /// <summary>
         /// Overi stav klienta a komunikaciu pri volani public metody
         /// </summary>
-        private void CheckClientState()
+        private void InternalCheckClientState()
         {
             //je objekt _disposed ?
             if (this.IsDisposed)
@@ -663,7 +678,7 @@ namespace Project858.Data.SqlClient
             if (this.m_connection != null && this.m_connection.State == System.Data.ConnectionState.Open)
                 return true;
 
-            //ak je nejake spojenie tak ho zatvorime
+            //zatvorime existujuce spojenie
             this.InternalCloseConnection();
 
             //spustime nove pripajanie k sql serveru
@@ -679,7 +694,7 @@ namespace Project858.Data.SqlClient
         private bool InternalConnect()
         {
             //zalogujeme
-            this.InternalTrace(TraceTypes.Verbose, "Spustenie automatickeho pripajania k SQL serveru.");
+            this.InternalTrace(TraceTypes.Verbose, "Vytvaranie spojenia so serverom....");
 
             //zmena stavu
             this._state = ConnectionStates.Connecting;
@@ -708,7 +723,7 @@ namespace Project858.Data.SqlClient
                 this.InternalTrace(TraceTypes.Error, "Spojenie so serverom sa nepodarilo vytvorit.");
 
                 //zmena stavu spojenia
-                this._state = ConnectionStates.Connected;
+                this._state = ConnectionStates.Closed;
 
                 //oznamenie o zmene stavu
                 this.OnConnectionStateChange(EventArgs.Empty);
@@ -723,7 +738,7 @@ namespace Project858.Data.SqlClient
         private void InternalDisconnect()
         {
             //zalogujeme
-            this.InternalTrace(TraceTypes.Verbose, "Ukoncenie spojenia, alebo automatickeho pripajania k SQL serveru.");
+            this.InternalTrace(TraceTypes.Verbose, "Ukoncenie spojenia k SQL serveru.");
 
             //ukoncime komunikaciu
             this.InternalCloseConnection();
@@ -740,14 +755,14 @@ namespace Project858.Data.SqlClient
         /// <returns>True = connect bol uspesny</returns>
         private Boolean InternalOpenConnection()
         {
-            //zalogujeme
-            this.InternalTrace(TraceTypes.Verbose, "Obnova spojenia k SQL serveru.");
-
             try
             {
                 //inicializujeme spojenie
                 this.m_connection = new SQLiteConnection();
                 this.m_connection.ConnectionString = this.GetConnectionString();
+
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, this.m_connection.ConnectionString);
 
                 //otvorime spojenie
                 this.m_connection.Open();
@@ -758,7 +773,7 @@ namespace Project858.Data.SqlClient
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Chyba pri obnove spojenia k SQL serveru. {0}", ex.Message);
+                this.InternalTrace(TraceTypes.Error, "Chyba pri vytvarani spojenia k SQL serveru. {0}", ex.Message);
 
                 //chuba
                 return false;
@@ -775,6 +790,7 @@ namespace Project858.Data.SqlClient
                 {
                     this.m_connection.Close();
                     this.m_connection.Dispose();
+                    this.m_connection = null;
                 }
         }
         /// <summary>
@@ -783,11 +799,7 @@ namespace Project858.Data.SqlClient
         /// <returns>ConnectionString</returns>
         private String GetConnectionString()
         {
-            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder();
-            builder.DataSource = this.m_database;
-            builder.Password = this.m_password;
-            builder.DateTimeFormat = SQLiteDateFormats.Ticks;
-            return builder.ToString();
+            return this.m_connectionStringBuilder.ToString();
         }
         #endregion
 
