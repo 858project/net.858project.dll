@@ -222,15 +222,6 @@ namespace Project858.Net
                         break;
                     }
                 }
-
-                if (this.m_buffer != null && this.m_buffer.Count > 0)
-                {
-                    TraceLogger.Info(BitConverter.ToString(this.m_buffer.ToArray()));
-                }
-                else
-                {
-                    TraceLogger.Info("data NULL");
-                }
             }
         }
         /// <summary>
