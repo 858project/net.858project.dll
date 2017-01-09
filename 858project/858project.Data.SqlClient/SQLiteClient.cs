@@ -729,7 +729,7 @@ namespace Project858.Data.SqlClient
             {
                 //vytvorime jednotlive polozky commandu
                 command.CommandText = String.Format("DELETE FROM [{0}] WHERE [{1}] = @{1}", properties.TableAttribute.Name, primaryKeyPropertyInfo[0].Property.Name);
-                SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
+                SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, this.InternalConvertDbType(primaryKeyPropertyInfo[0].ColumnAttribute.Type));
                 primaryKeyParameter.Value = this.InternalPrepareValue(primaryKeyPropertyInfo[0].Property.GetValue(item, null), primaryKeyPropertyInfo[0].ColumnAttribute);
                 command.Parameters.Add(primaryKeyParameter);
 
@@ -826,7 +826,7 @@ namespace Project858.Data.SqlClient
                 {
                     //vytvorime jednotlive polozky commandu
                     command.CommandText = String.Format("SELECT * FROM [{0}] WHERE [{1}] = @{1}", properties.TableOrViewName, primaryKeyPropertyInfo[0].Property.Name);
-                    SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
+                    SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, this.InternalConvertDbType(primaryKeyPropertyInfo[0].ColumnAttribute.Type));
                     primaryKeyParameter.Value = this.InternalPrepareValue(primaryKeyPropertyInfo[0].Property.GetValue(item, null), primaryKeyPropertyInfo[0].ColumnAttribute);
                     command.Parameters.Add(primaryKeyParameter);
 
@@ -1308,7 +1308,7 @@ namespace Project858.Data.SqlClient
             List<SQLiteParameter> parameterCollection = new List<SQLiteParameter>();
             StringBuilder builder = new StringBuilder();
             StringBuilder values = new StringBuilder();
-            builder.AppendFormat("INSERT INTO [{0}] (", properties.TableAttribute.Name);
+            builder.AppendFormat("INSERT OR REPLACE INTO [{0}] (", properties.TableAttribute.Name);
             foreach (var value in properties.Values)
             {
                 if (value.ColumnAttribute != null)
@@ -1318,7 +1318,7 @@ namespace Project858.Data.SqlClient
                     {
                         builder.AppendFormat("[{0}], ", value.Property.Name);
                         values.AppendFormat("@{0}, ", value.Property.Name);
-                        SQLiteParameter parameter = new SQLiteParameter(value.Property.Name, attribude.Type);
+                        SQLiteParameter parameter = new SQLiteParameter(value.Property.Name, this.InternalConvertDbType(attribude.Type));
                         parameter.Value = this.InternalPrepareValue(value.Property.GetValue(item, null), attribude);
                         parameterCollection.Add(parameter);
                     }
@@ -1334,6 +1334,27 @@ namespace Project858.Data.SqlClient
                 command.CommandText = builder.ToString();
                 command.Parameters.AddRange(parameterCollection.ToArray());
                 return this.ExecuteNonQuery(command);
+            }
+        }
+        /// <summary>
+        /// Convert SqlDbType to DbType
+        /// </summary>
+        private DbType InternalConvertDbType(SqlDbType type)
+        {
+            switch (type)
+            {
+                case SqlDbType.BigInt:
+                    return DbType.Int64;
+                case SqlDbType.NChar:
+                    return DbType.String;
+                case SqlDbType.VarChar:
+                    return DbType.String;
+                case SqlDbType.Int:
+                    return DbType.Int32;
+                case SqlDbType.Bit:
+                    return DbType.Boolean;
+                default:
+                    return DbType.Object;
             }
         }
         /// <summary>
@@ -1391,7 +1412,7 @@ namespace Project858.Data.SqlClient
 
                             //vytvorime parameter
                             values.AppendFormat("@{0}, ", propertyName);
-                            SQLiteParameter parameter = new SQLiteParameter(propertyName, attribude.Type);
+                            SQLiteParameter parameter = new SQLiteParameter(propertyName, this.InternalConvertDbType(attribude.Type));
                             parameter.Value = this.InternalPrepareValue(value.Property.GetValue(item, null), attribude);
                             parameterCollection.Add(parameter);
                         }
@@ -1464,7 +1485,7 @@ namespace Project858.Data.SqlClient
                     if (!attribude.IsDbGenerated && attribude.IsRequiredWhenUpdating && !attribude.IsPrimaryKey)
                     {
                         builder.AppendFormat("[{0}] = @{0}, ", property.Property.Name);
-                        SQLiteParameter parameter = new SQLiteParameter(property.Property.Name, attribude.Type);
+                        SQLiteParameter parameter = new SQLiteParameter(property.Property.Name, this.InternalConvertDbType(attribude.Type));
                         parameter.Value = this.InternalPrepareValue(property.Property.GetValue(item, null), attribude);
                         parameterCollection.Add(parameter);
                     }
@@ -1483,7 +1504,7 @@ namespace Project858.Data.SqlClient
             {
                 builder.AppendFormat(" AND {0}", whereClause);
             }
-            SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, primaryKeyPropertyInfo[0].ColumnAttribute.Type);
+            SQLiteParameter primaryKeyParameter = new SQLiteParameter(primaryKeyPropertyInfo[0].Property.Name, this.InternalConvertDbType(primaryKeyPropertyInfo[0].ColumnAttribute.Type));
             primaryKeyParameter.Value = primaryKeyPropertyInfo[0].Property.GetValue(item, null);
             parameterCollection.Add(primaryKeyParameter);
 

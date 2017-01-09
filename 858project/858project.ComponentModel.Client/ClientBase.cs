@@ -677,7 +677,7 @@ namespace Project858.ComponentModel.Client
             try
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Info, "Inicializacia '{0}'...", this.ToString());
+                this.InternalTrace(TraceTypes.Verbose, "Inicializacia '{0}'...", this.ToString());
 
                 //interny start klienta
                 if (!this.InternalStart())
@@ -687,7 +687,7 @@ namespace Project858.ComponentModel.Client
                 this._clientState = ClientStates.Start;
 
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Info, "'{0}' bol uspesne inicializovany.", this.ToString());
+                this.InternalTrace(TraceTypes.Verbose, "'{0}' bol uspesne inicializovany.", this.ToString());
 
                 //event oznamujuci uspesny start klienta
                 this.OnClientStart(EventArgs.Empty);
@@ -725,7 +725,7 @@ namespace Project858.ComponentModel.Client
                 if (this._clientState != ClientStates.Stop)
                 {
                     //zalogujeme
-                    this.InternalTrace(TraceTypes.Info, "Ukoncovanie... '{0}'...", this.ToString());
+                    this.InternalTrace(TraceTypes.Verbose, "Ukoncovanie... '{0}'...", this.ToString());
                 }
 
                 //interny stop klienta
@@ -738,7 +738,7 @@ namespace Project858.ComponentModel.Client
                     this._clientState = ClientStates.Stop;
 
                     //zalogujeme
-                    this.InternalTrace(TraceTypes.Info, "'{0}' bol uspesne ukonceny.", this.ToString());
+                    this.InternalTrace(TraceTypes.Verbose, "'{0}' bol uspesne ukonceny.", this.ToString());
 
                     //event o ukonceni klienta
                     this.OnClientStop(EventArgs.Empty);
@@ -823,7 +823,7 @@ namespace Project858.ComponentModel.Client
 
         #region - Private Method -
         /// <summary>
-        /// NotImplementedException
+        /// This function is raised when client is starting
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// Metoda nie je implementovana
@@ -834,7 +834,7 @@ namespace Project858.ComponentModel.Client
             throw new NotImplementedException();
         }
         /// <summary>
-        /// NotImplementedException
+        /// This function is raised when client is stoping
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// Metoda nie je implementovana
@@ -844,7 +844,7 @@ namespace Project858.ComponentModel.Client
             throw new NotImplementedException();
         }
         /// <summary>
-        /// NotImplementedException
+        /// This function is raised when client is pausing
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// Metoda nie je implementovana
@@ -854,7 +854,7 @@ namespace Project858.ComponentModel.Client
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Metoda volana pred Dispose objektu
+        /// This function is raised when client is disposing
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// Metoda nie je implementovana

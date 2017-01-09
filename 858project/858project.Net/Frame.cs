@@ -22,11 +22,11 @@ namespace Project858.Net
         /// <summary>
         /// Initialize this class
         /// </summary>
-        /// <param name="commandAddress">Command address</param>
+        /// <param name="address">Command address</param>
         /// <param name="data">Frame data</param>
-        public Frame(UInt16 commandAddress, List<Byte> data, Func<UInt16, FrameItemTypes> action)
+        public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt16, FrameItemTypes> action)
         {
-            this.Address = commandAddress;
+            this.Address = address;
             this.m_items = new List<IFrameItem>();
             if (data != null)
             {
@@ -283,7 +283,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Data to parse</param>
         /// <param name="action">Function to get frame item type</param>
-        private void InternalParseFrame(Byte[] data, Func<UInt16, FrameItemTypes> action)
+        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt16, FrameItemTypes> action)
         {
             //vriables
             UInt16 address = 0x00;
@@ -300,7 +300,7 @@ namespace Project858.Net
                 length = (UInt16)(data[i + 3] << 8 | data[i + 2]);
 
                 //read frame item type
-                type = action != null ? action(address) : FrameItemTypes.Unkown;
+                type = action != null ? action(this.Address, address) : FrameItemTypes.Unkown;
  
                 //read data
                 dataItem = new Byte[length];

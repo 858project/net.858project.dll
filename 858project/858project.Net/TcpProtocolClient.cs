@@ -332,9 +332,10 @@ namespace Project858.Net
         /// <summary>
         /// This function returns frame item type from address
         /// </summary>
-        /// <param name="address">Address to detect type</param>
+        /// <param name="address">Frame address</param>
+        /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected abstract FrameItemTypes InternalGetFrameItemType(UInt16 address);
+        protected abstract FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt16 itemAddress);
         #endregion
 
         #region - Call Event Method -

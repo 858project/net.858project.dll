@@ -114,11 +114,11 @@ namespace Project858
             builder.AppendFormat("SQL Command: '{0}'", command.CommandText);
             if (command.Parameters != null && command.Parameters.Count > 0)
             {
-                foreach (SqlParameter parameter in command.Parameters)
+                foreach (SQLiteParameter parameter in command.Parameters)
                 {
                     builder.Append(Environment.NewLine);
                     Object value = parameter.Value == null ? DBNull.Value : parameter.Value;
-                    builder.AppendFormat("SQL Parameter: {0} = '{1}' [{2}]", parameter.ParameterName, value, parameter.SqlDbType);
+                    builder.AppendFormat("SQL Parameter: {0} = '{1}' [{2}]", parameter.ParameterName, value, parameter.DbType);
                 }
             }
             return builder.ToString();
