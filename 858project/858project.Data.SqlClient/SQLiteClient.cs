@@ -1012,7 +1012,7 @@ namespace Project858.Data.SqlClient
             using (SQLiteCommand command = new SQLiteCommand())
             {
                 //vytvorime command
-                String commandText = String.Format("SELECT TOP 1 * FROM [{0}]{1}{2}", properties.TableOrViewName, (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)), (String.IsNullOrWhiteSpace(orderClause) ? String.Empty : String.Format(" ORDER BY {0}", orderClause)));
+                String commandText = String.Format("SELECT * FROM [{0}]{1}{2} LIMIT 1", properties.TableOrViewName, (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)), (String.IsNullOrWhiteSpace(orderClause) ? String.Empty : String.Format(" ORDER BY {0}", orderClause)));
                 //vykoname prikad
                 command.CommandText = commandText;
                 return this.ReadFirstObject<T>(command);

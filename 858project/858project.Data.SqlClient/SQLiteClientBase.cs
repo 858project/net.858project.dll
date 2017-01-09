@@ -439,7 +439,7 @@ namespace Project858.Data.SqlClient
         /// </exception>
         /// <returns>The first column of the first row in the result set, or a null reference</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public object ExecuteScalarWithQuery(String query)
+        public Object ExecuteScalarWithQuery(String query)
         {
             if (String.IsNullOrWhiteSpace(query))
                 throw new ArgumentNullException("query");
