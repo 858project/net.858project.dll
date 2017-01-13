@@ -24,7 +24,23 @@ namespace Project858.Net
             if (obj == null)
                 throw new ArgumentNullException("obj");
 
-            return InternalSerialize<T>(obj, commandAddress);
+            //intiailize object
+            Frame result = new Frame(commandAddress);
+
+            //serialize
+            return Serialize<T>(obj, result);
+        }
+        /// <summary>
+        /// Serializes the specified object to a Frame.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to serialize to.</typeparam>
+        /// <param name="obj">The object to serialize.</param>
+        /// <param name="frame">Frame</param>
+        /// <returns>Frame | null</returns>
+        public static Frame Serialize<T>(T obj, Frame frame)
+        {
+            //intiailize object
+            return InternalSerialize<T>(obj, frame);
         }
         /// <summary>
         /// Deserializes the Frame to a .NET object.
@@ -47,15 +63,15 @@ namespace Project858.Net
         /// </summary>
         /// <typeparam name="T">The type of the object to serialize to.</typeparam>
         /// <param name="obj">The object to serialize.</param>
-        /// <param name="commandAddress">Frame command address</param>
+        /// <param name="frame">Frame</param>
         /// <returns>Frame | null</returns>
-        private static Frame InternalSerialize<T>(T obj, UInt16 commandAddress)
+        private static Frame InternalSerialize<T>(T obj, Frame frame)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalSerialize<T>(obj, commandAddress, reflection);
+                return FrameHelper.InternalSerialize<T>(obj, frame, reflection);
             }
             return null;
         }
@@ -80,14 +96,11 @@ namespace Project858.Net
         /// </summary>
         /// <typeparam name="T">The type of the object to serialize to.</typeparam>
         /// <param name="obj">The object to serialize.</param>
-        /// <param name="commandAddress">Frame command address</param>
+        /// <param name="frame">Frame</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>Frame | null</returns>
-        private static Frame InternalSerialize<T>(T obj, UInt16 commandAddress, ReflectionType reflection)
+        private static Frame InternalSerialize<T>(T obj, Frame frame, ReflectionType reflection)
         {
-            //intiailize object
-            Frame result = new Frame(commandAddress);
-
             //set property
             foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
             {
@@ -107,7 +120,7 @@ namespace Project858.Net
                                 IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
-                                    result.AddItem(frameItem);
+                                    frame.AddItem(frameItem);
                                 }
                             }
                         }
@@ -120,7 +133,7 @@ namespace Project858.Net
             }
 
             //return result
-            return result;
+            return frame;
         }
         /// <summary>
         /// Deserializes the Frame to a .NET object.

@@ -34,6 +34,17 @@ namespace Project858.Net
         }
         #endregion
 
+        #region - Public Methods -
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return String.Format("[Int64] : 0x{0:X4} = {1}", this.Address, this.Value);
+        }
+        #endregion
+
         #region - Private Methods -
         /// <summary>
         /// This function parse value from byt array
