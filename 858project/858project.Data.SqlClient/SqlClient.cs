@@ -705,7 +705,7 @@ namespace Project858.Data.SqlClient
         /// </summary>
         /// <param name="item">Objekt ktory chceme aktualizovat</param>
         /// <returns>Aktualizovany objekt</returns>
-        public Object InternalUpdateAndReloadObject(Object item)
+        private Object InternalUpdateAndReloadObject(Object item)
         {
             this.InternalUpdateObject(item);
             return this.InternalReloadObject(item);
@@ -1544,7 +1544,7 @@ namespace Project858.Data.SqlClient
         /// <param name="value">Hodnota ktoru chceme skratit</param>
         /// <param name="attribute">Atributy stlpca v tabulke</param>
         /// <returns>Skratena hodnota alebo povodna</returns>
-        public Object InternalTruncateValue(Object value, ColumnAttribute attribute)
+        private Object InternalTruncateValue(Object value, ColumnAttribute attribute)
         {
             if (value != null && this.TruncateValue && attribute.Size != int.MaxValue)
             {
