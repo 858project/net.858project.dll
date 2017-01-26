@@ -133,6 +133,24 @@ namespace Project858.Diagnostics
         /// <summary>
         /// Zaloguje spravu do SQLite databazy
         /// </summary>
+        /// <exception cref="ArgumentNullException">
+        /// Argument nie je inicializovany
+        /// </exception>
+        /// <param name="traceType">Typ logovacej spravy</param>
+        /// <param name="message">Text logovacej spravy</param>
+        /// <returns>True = logovanie spravy bolo uspesne</returns>
+        public static bool Trace(TraceTypes traceType, String message)
+        {
+            //overime vstupne data
+            if (String.IsNullOrEmpty(message))
+                throw new ArgumentNullException("message");
+
+            //zalogujeme spravu
+            return Trace(DateTime.Now, traceType, null, message);
+        }
+        /// <summary>
+        /// Zaloguje spravu do SQLite databazy
+        /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _disposed
         /// </exception>

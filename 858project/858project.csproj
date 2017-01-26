@@ -95,6 +95,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SQLite">
@@ -137,6 +138,12 @@
     <Compile Include="858project.Drawing\UseGraphicsAntiAlias.cs" />
     <Compile Include="858project.Drawing\UseGraphicsClearTypeGridFit.cs" />
     <Compile Include="858project.Globalization\CalendarNames.cs" />
+    <Compile Include="858project.IO.Ports\SerialPortClient.cs" />
+    <Compile Include="858project.IO.Ports\DataEventArgs.cs" />
+    <Compile Include="858project.IO.Ports\DataEventHandler.cs" />
+    <Compile Include="858project.IO.Ports\ExceptionEventArgs.cs" />
+    <Compile Include="858project.IO.Ports\ExceptionEventHandler.cs" />
+    <Compile Include="858project.IO.Ports\SerialPortProtocolClient.cs" />
     <Compile Include="858project.Net\FrameEventHandler.cs" />
     <Compile Include="858project.Net\FrameEventArgs.cs" />
     <Compile Include="858project.Net\DataEventHandler.cs" />
@@ -300,9 +307,7 @@
     <Compile Include="858project.Win32\NativeMethods.cs" />
     <Compile Include="858project.Win32\NativeMethodsNet.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="858project.IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>

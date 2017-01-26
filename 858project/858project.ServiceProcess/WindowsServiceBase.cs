@@ -224,7 +224,7 @@ namespace Project858.ServiceProcess
                             (client as ClientBase).TraceType = TraceTypes.Error;
                             (client as ClientBase).TraceEvent += (sender, e) =>
                             {
-                                this.InternalTrace(e.Message);
+                                this.InternalTrace(e.TraceType, e.Message);
                             };
                         }
 
@@ -346,7 +346,22 @@ namespace Project858.ServiceProcess
         /// <param name="args">String.Format argumenty pre spravu</param>
         private void InternalTrace(String message, params Object[] args)
         {
-            TraceLogger.Info(message, args);
+            //trace
+            this.InternalTrace(TraceTypes.Verbose, message);
+        }
+        /// <summary>
+        /// Zaloguje spravu do suboru
+        /// </summary>
+        /// <param name="type">Trace type for log</param>
+        /// <param name="message">Sprava</param>
+        /// <param name="args">String.Format argumenty pre spravu</param>
+        private void InternalTrace(TraceTypes type, String message, params Object[] args)
+        {
+            //update message
+            message = String.Format(message, args);
+
+            //trace
+            TraceLogger.Trace(type, message);
         }
         /// <summary>
         /// Zaloguje chybu do log suboru
@@ -395,6 +410,14 @@ namespace Project858.ServiceProcess
             //vratime dostupne instancie
             return clients;
         }
+        #endregion
+
+        #region - Protected Method -
+        /// <summary>
+        /// This function return trace type for all clients
+        /// </summary>
+        /// <returns>TraceType</returns>
+        protected abstract TraceTypes InternalGetTraceType();
         #endregion
     }
 }

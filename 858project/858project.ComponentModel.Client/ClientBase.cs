@@ -870,8 +870,6 @@ namespace Project858.ComponentModel.Client
         protected virtual void InternalException(Exception exception)
         {
             this.AddInternalExceptionToLog(exception);
-            //this.AddInternalExceptionToMail(exception);
-            //this.AddInternalExceptionToSql(exception);
         }
         /// <summary>
         /// Spracuje emailovu spravu ktora sa ma odoslat
