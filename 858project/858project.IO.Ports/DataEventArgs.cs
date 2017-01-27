@@ -15,13 +15,23 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <param name="data">Prijate data</param>
-        public DataEventArgs(Byte[] data)
+        /// <param name="comPortName">Com port from which data are received</param>
+        public DataEventArgs(Byte[] data, String comPortName)
         {
             this.Data = data;
+            this.ComPortName = comPortName;
         }
         #endregion
  
-        #region - Get -
+        #region - Properties -
+        /// <summary>
+        /// Com port from which data are received
+        /// </summary>
+        public String ComPortName
+        {
+            get;
+            private set;
+        }
         /// <summary>
         /// (Get) Prijate data
         /// </summary>

@@ -529,7 +529,7 @@ namespace Project858.IO.Ports
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave disposed
         /// </exception>
-        public string PortName
+        public String PortName
         {
             get
             {
@@ -933,7 +933,7 @@ namespace Project858.IO.Ports
                             //vytvorime udalost a posleme data
                             if (this.IsRun)
                             {
-                                this.OnDataReceived(new DataEventArgs(data));
+                                this.OnReceivedData(new DataEventArgs(data, this.PortName));
                             }
                         }
                     }
@@ -990,20 +990,12 @@ namespace Project858.IO.Ports
         /// Virtualna metoda na obsluhu eventu (posielanie dat do vyssej urovne)
         /// </summary>
         /// <param name="e">EventArgs obsahujuci data</param>
-        private void OnDataReceived(DataEventArgs e)
+        protected virtual void OnReceivedData(DataEventArgs e)
         {
-            try
-            {
-                DataEventHandler handler = this.transportDataReceived;
+            DataEventHandler handler = this.transportDataReceived;
 
-                if (handler != null)
-                    handler.BeginInvoke(this, e, null, null);
-            }
-            catch (Exception ex)
-            {
-                TraceLogger.Info(ex.ToString());
-                throw;
-            }
+            if (handler != null)
+                handler.BeginInvoke(this, e, null, null);
         }
         /// <summary>
         /// Trieda generujuca event na oznamenie vytvorenia spojenia
@@ -1011,18 +1003,10 @@ namespace Project858.IO.Ports
         /// <param name="e">EventArgs</param>
         private void OnConnected(EventArgs e)
         {
-            try
-            {
-                EventHandler handler = this.transportConnected;
+            EventHandler handler = this.transportConnected;
 
-                if (handler != null)
-                    handler.BeginInvoke(this, e, null, null);
-            }
-            catch (Exception ex)
-            {
-                TraceLogger.Info(ex.ToString());
-                throw;
-            }
+            if (handler != null)
+                handler.BeginInvoke(this, e, null, null);
         }
         /// <summary>
         /// Trieda generujuca event na oznamenie padu spojenia
@@ -1030,18 +1014,10 @@ namespace Project858.IO.Ports
         /// <param name="e">EventArgs</param>
         private void OnDisconnected(EventArgs e)
         {
-            try
-            {
-                EventHandler handler = this.transportDisconnected;
+            EventHandler handler = this.transportDisconnected;
 
-                if (handler != null)
-                    handler.BeginInvoke(this, e, null, null);
-            }
-            catch (Exception ex)
-            {
-                TraceLogger.Info(ex.ToString());
-                throw;
-            }
+            if (handler != null)
+                handler.BeginInvoke(this, e, null, null);
         }
         #endregion
 
