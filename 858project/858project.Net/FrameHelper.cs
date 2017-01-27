@@ -120,7 +120,7 @@ namespace Project858.Net
                                 IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
-                                    frame.AddItem(frameItem);
+                                    frame.Add(frameItem);
                                 }
                             }
                         }

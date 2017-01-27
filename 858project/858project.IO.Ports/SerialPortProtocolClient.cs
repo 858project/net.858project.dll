@@ -230,6 +230,18 @@ namespace Project858.IO.Ports
         private List<Byte> m_buffer = null;
         #endregion
 
+        #region - Public Methods -
+        /// <summary>
+        /// This function sends frame to transport layer
+        /// </summary>
+        /// <param name="frame">Frame to send</param>
+        /// <returns>True | false</returns>
+        public Boolean Send(Frame frame)
+        {
+            return this.Write(frame.ToByteArray());
+        }
+        #endregion
+
         #region - Private Methods -
         /// <summary>
         /// Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu

@@ -12,7 +12,7 @@ namespace Project858.Net
     /// <summary>
     /// Implement TCP client with custom protocol
     /// </summary>
-    public abstract class TcpProtocolClient : TcpTransportClient
+    public class TcpProtocolClient : TcpTransportClient
     {
         #region - Constructors -
         /// <summary>
@@ -335,7 +335,10 @@ namespace Project858.Net
         /// <param name="address">Frame address</param>
         /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected abstract FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt16 itemAddress);
+        protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt16 itemAddress)
+        {
+            return FrameItemTypes.Unkown;
+        }
         #endregion
 
         #region - Call Event Method -

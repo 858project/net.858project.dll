@@ -35,6 +35,49 @@ namespace Project858.Net
         }
         #endregion
 
+        #region - Public Class -
+        /// <summary>
+        /// Define base value for frame
+        /// </summary>
+        public static class Defines
+        {
+            ///
+            /// State tag
+            ///
+            public const UInt16 TAG_STATE = 0xFF01;
+            /// <summary>
+            /// 
+            /// </summary>
+            public const UInt16 TAG_AUTHENTICATION = 0xFF08;
+
+            /// <summary>
+            /// State OK
+            /// </summary>
+            public const Byte STATE_OK = 0x00;
+            /// <summary>
+            /// Frame contains data
+            /// </summary>
+            public const Byte STATE_DATA = 0x01;
+            /// <summary>
+            /// In the target system has experienced an internal error
+            /// </summary>
+            public const Byte STATE_INTERNAL_ERROR = 0x02;
+            public const Byte STATE_NOT_AVAILABLE = 0x03;
+            public const Byte STATE_BUSY = 0x04;
+            public const Byte STATE_DENIED = 0x05;
+            public const Byte STATE_BAD_TID = 0x06;
+            public const Byte STATE_BAD_MID = 0x07;
+            public const Byte STATE_BAD_AMOUNT = 0x08;
+            public const Byte STATE_BAD_DATE = 0x09;
+            public const Byte STATE_BAD_STAN = 0x0A;
+            public const Byte STATE_START_SEQUENCE = 0x0B;
+            public const Byte STATE_END_SEQUENCE = 0x0C;
+            public const Byte STATE_MESSAGE = 0x0D;
+            public const Byte STATE_CANCELED = 0x0E;
+            public const Byte STATE_AUTHENTICATION = 0x0F;
+        }
+        #endregion
+
         #region - Properties -
         /// <summary>
         /// Command address
@@ -64,14 +107,14 @@ namespace Project858.Net
         /// <summary>
         /// Create frame from Byte value
         /// </summary>
-        /// <param name="commandAddress">Frame command address</param>
+        /// <param name="frameAddress">Frame address</param>
         /// <param name="address">Tag address for value</param>
         /// <param name="value">Value as Byte</param>
         /// <returns>New frame</returns>
-        public static Frame CreateFrame(UInt16 commandAddress, UInt16 address, Byte value)
+        public static Frame CreateFrame(UInt16 frameAddress, UInt16 address, Byte value)
         {
-            Frame frame = new Frame(commandAddress);
-            frame.AddItem(new FrameItemByte(address, value));
+            Frame frame = new Frame(frameAddress);
+            frame.Add(new FrameItemByte(address, value));
             return frame;
         }
         /// <summary>
@@ -156,9 +199,18 @@ namespace Project858.Net
         /// Adds an item to the end of the Frame
         /// </summary>
         /// <param name="item">The item to be added to the end of the Frame</param>
-        public void AddItem(IFrameItem item)
+        public void Add(IFrameItem item)
         {
             this.m_items.Add(item);
+        }
+        /// <summary>
+        /// Inserts an item into the Frame at the specified index.
+        /// </summary>
+        /// <param name="item">The object to insert. The value can be null for reference types.</param>
+        /// <param name="index">The zero-based index at which item should be inserted.</param>
+        public void Add(IFrameItem item, int index)
+        {
+            this.m_items.Insert(index, item);
         }
         /// <summary>
         /// This finction converts frame to byte array
