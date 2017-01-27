@@ -125,29 +125,38 @@ namespace Project858.ServiceProcess
                 if (this.m_clients.Count == 0)
                 {
                     //ukoncime
-                    this.InternalTrace("K dispozicii nie su ziadne instancie na spustenie.");
+                    this.InternalTrace(TraceTypes.Warning, "K dispozicii nie su ziadne instancie na spustenie.");
 
                     //start sluzby sa nepodaril
                     return false;
                 }
 
                 //spustime klientov
-                this.InternalClientStart();
+                Boolean result = this.InternalClientStart();
 
-                //zalogujeme
-                this.InternalTrace("Inicializacia sluzby bola uspesna.");
+                //check result
+                if (result)
+                {
+                    //zalogujeme
+                    this.InternalTrace("Inicializacia sluzby bola uspesna.");
+                }
+                else
+                {
+                    //zalogujeme
+                    this.InternalTrace("Inicializacia sluzby bola neuspesna.");
+                }
 
                 //inicializacia bola uspesna
-                return true;
+                return result;
             }
             catch (Exception ex)
             {
                 //zalogujeme
                 this.InternalTrace("Inicializacia sluzby zlyhala. {0}", ex);
+                this.InternalTrace(ex);
 
                 //start sluzby sa nepodaril
                 return false;
-
             }
         }
         /// <summary>
@@ -205,43 +214,53 @@ namespace Project858.ServiceProcess
         /// <summary>
         /// Spusti vsetky instancie ktore su dostupne
         /// </summary>
-        private void InternalClientStart()
+        private Boolean InternalClientStart()
         {
             //ak su dostupne nejake instancie
-            if (this.m_clients != null && this.m_clients.Count > 0)
+            if (this.m_clients == null || this.m_clients.Count == 0)
             {
-                //prejdeme vsetky instancie
-                foreach (IWindowsServiceClient client in this.m_clients)
+                return false;
+            }
+
+            //prejdeme vsetky instancie
+            foreach (IWindowsServiceClient client in this.m_clients)
+            {
+                try
                 {
-                    try
+                    //zalogujeme
+                    this.InternalTrace("Spustanie instancie. [{0}]", client.GetType());
+
+                    //overime ci ide o klienta
+                    if (client is ClientBase)
                     {
-                        //zalogujeme
-                        this.InternalTrace("Spustanie instancie. [{0}]", client.GetType());
-
-                        //overime ci ide o klienta
-                        if (client is ClientBase)
+                        (client as ClientBase).TraceType = this.InternalGetTraceType();
+                        (client as ClientBase).TraceEvent += (sender, e) =>
                         {
-                            (client as ClientBase).TraceType = TraceTypes.Error;
-                            (client as ClientBase).TraceEvent += (sender, e) =>
-                            {
-                                this.InternalTrace(e.TraceType, e.Message);
-                            };
-                        }
+                            this.InternalTrace(e.TraceType, e.Message);
+                        };
+                    }
 
-                        //start klienta
-                        client.Start();
-
+                    //start klienta
+                    if (client.Start())
+                    {
                         //zalogujeme
                         this.InternalTrace("Spustanie instancie bolo uspesne.");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        //zalogujeme chybu
-                        this.InternalTrace("Spustanie instancie sa nepodarilo. [{0}]", client.GetType());
-                        this.InternalTrace(ex);
+                        //zalogujeme
+                        this.InternalTrace("Spustanie instancie bolo neuspesne.");
                     }
                 }
+                catch (Exception ex)
+                {
+                    //zalogujeme chybu
+                    this.InternalTrace("Spustanie instancie sa nepodarilo. [{0}]", client.GetType());
+                    this.InternalTrace(ex);
+                    return false;
+                }
             }
+            return true;
         }
         /// <summary>
         /// Vrati cestu k aktualnemu priecinku odkial je aplikacia spustena
@@ -347,7 +366,7 @@ namespace Project858.ServiceProcess
         private void InternalTrace(String message, params Object[] args)
         {
             //trace
-            this.InternalTrace(TraceTypes.Verbose, message);
+            this.InternalTrace(TraceTypes.Verbose, message, args);
         }
         /// <summary>
         /// Zaloguje spravu do suboru

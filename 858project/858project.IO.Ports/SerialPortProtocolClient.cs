@@ -396,7 +396,15 @@ namespace Project858.IO.Ports
         /// <returns>Frame item type</returns>
         protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt16 itemAddress)
         {
-            return FrameItemTypes.Unkown;
+            switch (itemAddress)
+            {
+                case Frame.Defines.TAG_STATE:
+                    return FrameItemTypes.Byte;
+                case Frame.Defines.TAG_AUTHENTICATION:
+                    return FrameItemTypes.String;
+                default:
+                    return FrameItemTypes.Unkown;
+            }
         }
         #endregion
 
