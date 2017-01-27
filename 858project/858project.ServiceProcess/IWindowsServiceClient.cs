@@ -11,6 +11,11 @@ namespace Project858.ServiceProcess
     /// </summary>
     public interface IWindowsServiceClient : IClient
     {
-
+        #region - Properties -
+        /// <summary>
+        /// Priority for starting clients
+        /// </summary>
+        UInt16 ServiceClientPriority { get; }
+        #endregion
     }
 }

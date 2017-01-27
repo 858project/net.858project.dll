@@ -250,6 +250,7 @@ namespace Project858.ServiceProcess
                     {
                         //zalogujeme
                         this.InternalTrace("Spustanie instancie bolo neuspesne.");
+                        return false;
                     }
                 }
                 catch (Exception ex)
@@ -425,6 +426,9 @@ namespace Project858.ServiceProcess
 
             //zalogujeme
             this.InternalTrace("Pocet dostupnych instancii: {0}", clients == null ? 0 : clients.Count);
+
+            //sort clients
+            clients.Sort((a, b) => a.ServiceClientPriority.CompareTo(b.ServiceClientPriority));
 
             //vratime dostupne instancie
             return clients;
