@@ -41,16 +41,14 @@ namespace Project858.Net
         /// </summary>
         public static class Defines
         {
-            public const UInt16 CP_AUTHENTICATION = 0xFF01;
+            public const UInt16 CP_TEST = 0x0000;
+            public const UInt16 CP_STATE = 0x0001;
+            //public const UInt16 CP_AUTHENTICATION = 0xFF01;
 
             ///
             /// State tag
             ///
             public const UInt16 TAG_STATE = 0xFF01;
-            /// <summary>
-            /// 
-            /// </summary>
-            public const UInt16 TAG_AUTHENTICATION = 0xFF08;
 
             /// <summary>
             /// State OK
@@ -76,7 +74,6 @@ namespace Project858.Net
             public const Byte STATE_END_SEQUENCE = 0x0C;
             public const Byte STATE_MESSAGE = 0x0D;
             public const Byte STATE_CANCELED = 0x0E;
-            public const Byte STATE_AUTHENTICATION = 0x0F;
         }
         #endregion
 
@@ -196,6 +193,30 @@ namespace Project858.Net
         public void ChangeAddress(UInt16 address)
         {
             this.Address = address;
+        }
+        /// <summary>
+        ///  Removes the first occurrence of a specific object with address
+        /// </summary>
+        /// <param name="address">Specific address</param>
+        public void Remove(UInt16 address)
+        {
+            for (int i = 0; i < this.m_items.Count; i++) 
+            {
+                IFrameItem item = this.m_items[i];
+                if (item.Address == address)
+                {
+                    this.Remove(item);
+                    return;
+                }
+            }
+        }
+        /// <summary>
+        ///  Removes the first occurrence of a specific object
+        /// </summary>
+        /// <param name="item">The object to remove</param>
+        public void Remove(IFrameItem item)
+        {
+            this.m_items.Remove(item);
         }
         /// <summary>
         /// Adds an item to the end of the Frame

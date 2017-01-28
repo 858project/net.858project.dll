@@ -341,8 +341,6 @@ namespace Project858.Net
             {
                 case Frame.Defines.TAG_STATE:
                     return FrameItemTypes.Byte;
-                case Frame.Defines.TAG_AUTHENTICATION:
-                    return FrameItemTypes.String;
                 default:
                     return FrameItemTypes.Unkown;
             }

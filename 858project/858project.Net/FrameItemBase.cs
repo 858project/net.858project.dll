@@ -52,6 +52,17 @@ namespace Project858.Net
 
         #region - Public Methods -
         /// <summary>
+        /// This method changes value to other
+        /// </summary>
+        /// <param name="value">New value</param>
+        public void ChangeValue(T value)
+        {
+            if (value != null)
+            {
+                this.Value = value;
+            }
+        }
+        /// <summary>
         /// This function returns value
         /// </summary>
         /// <returns></returns>

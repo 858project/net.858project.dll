@@ -400,8 +400,6 @@ namespace Project858.IO.Ports
             {
                 case Frame.Defines.TAG_STATE:
                     return FrameItemTypes.Byte;
-                case Frame.Defines.TAG_AUTHENTICATION:
-                    return FrameItemTypes.String;
                 default:
                     return FrameItemTypes.Unkown;
             }
