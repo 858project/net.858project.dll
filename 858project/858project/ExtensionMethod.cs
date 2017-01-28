@@ -107,6 +107,32 @@ namespace Project858
 
         #region - Public Static String Methods -
         /// <summary>
+        /// This method converts list of bytes to hexa string
+        /// </summary>
+        /// <param name="value">List with data</param>
+        /// <returns>Hexa string | null</returns>
+        public static String ToHexaString(this Byte[] value)
+        {
+            if (value != null && value.Length > 0)
+            {
+                return Utility.ConvertByteArrayToHexString(value);
+            }
+            return null;
+        }
+        /// <summary>
+        /// This method converts list of bytes to hexa string
+        /// </summary>
+        /// <param name="value">List with data</param>
+        /// <returns>Hexa string | null</returns>
+        public static String ToHexaString(this List<Byte> value)
+        {
+            if (value != null)
+            {
+                return Utility.ConvertByteArrayToHexString(value.ToArray());
+            }
+            return null;
+        }
+        /// <summary>
         /// Vytvori log zaznam z commandu
         /// </summary>
         /// <param name="command">Command ktory chceme zalogovat</param>

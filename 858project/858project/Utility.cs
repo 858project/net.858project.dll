@@ -81,6 +81,31 @@ namespace Project858
 
         #region - Public Static Method -
         /// <summary>
+        /// Vrati string dat ktore sa prijali alebo odoslali
+        /// </summary>
+        /// <param name="data">Data ktore chceme spracovat</param>
+        /// <returns>String dat</returns>
+        public static String ConvertByteArrayToHexString(Byte[] data)
+        {
+            //pomocny string na ulozenie obrazu dat
+            StringBuilder builder = new StringBuilder();
+
+            if (data != null)
+            {
+                //prejdeme vsetky byty a urobime z nich string
+                foreach (Byte b in data)
+                {
+                    builder.AppendFormat("0x{0:X2} ", b);
+                }
+
+                //odstranime posledny prazdny znak
+                builder.Remove(builder.Length - 1, 1);
+            }
+
+            //vratime data
+            return builder.ToString();
+        }
+        /// <summary>
         /// This function returns bit value from position
         /// </summary>
         /// <param name="data">byte</param>

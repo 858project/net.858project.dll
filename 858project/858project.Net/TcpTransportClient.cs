@@ -965,8 +965,6 @@ namespace Project858.Net
 		/// <param name="ar">IAsyncResult</param>
 		private void DataReceived(IAsyncResult ar)
 		{
-            this.InternalTrace(TraceTypes.Verbose, "trace 1");
-
 			lock (this)
 			{
 				//inicializacia

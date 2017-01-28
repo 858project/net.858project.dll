@@ -41,7 +41,7 @@ namespace Project858.Net
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return String.Format("[Unkown] : 0x{0:X4} = {1}", this.Address, this.Value);
+            return String.Format("[Unkown] : 0x{0:X4} = {1}", this.Address, this.Value.ToHexaString());
         }
         #endregion
 

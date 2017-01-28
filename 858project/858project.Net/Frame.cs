@@ -41,6 +41,8 @@ namespace Project858.Net
         /// </summary>
         public static class Defines
         {
+            public const UInt16 CP_AUTHENTICATION = 0xFF01;
+
             ///
             /// State tag
             ///
