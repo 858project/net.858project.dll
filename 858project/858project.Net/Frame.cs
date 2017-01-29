@@ -41,12 +41,17 @@ namespace Project858.Net
         /// </summary>
         public static class Defines
         {
-            public const UInt16 CP_TEST = 0x0000;
+            /// <summary>
+            /// Command for testing connection
+            /// </summary>
+            public const UInt16 CP_TEST = 0xFFFF;
+            /// <summary>
+            /// Command for sending state
+            /// </summary>
             public const UInt16 CP_STATE = 0x0001;
-            //public const UInt16 CP_AUTHENTICATION = 0xFF01;
 
             ///
-            /// State tag
+            /// State tag, see STATE* constants
             ///
             public const UInt16 TAG_STATE = 0xFF01;
 
@@ -62,17 +67,33 @@ namespace Project858.Net
             /// In the target system has experienced an internal error
             /// </summary>
             public const Byte STATE_INTERNAL_ERROR = 0x02;
+            /// <summary>
+            /// Required data or operation are not available
+            /// </summary>
             public const Byte STATE_NOT_AVAILABLE = 0x03;
+            /// <summary>
+            /// The target system is busy
+            /// </summary>
             public const Byte STATE_BUSY = 0x04;
+            /// <summary>
+            /// Command was denied
+            /// </summary>
             public const Byte STATE_DENIED = 0x05;
-            public const Byte STATE_BAD_TID = 0x06;
-            public const Byte STATE_BAD_MID = 0x07;
-            public const Byte STATE_BAD_AMOUNT = 0x08;
-            public const Byte STATE_BAD_DATE = 0x09;
-            public const Byte STATE_BAD_STAN = 0x0A;
+            /// <summary>
+            /// Start sequence, after this response continues frames with data, see STATE_START_SEQUENCE
+            /// </summary>
             public const Byte STATE_START_SEQUENCE = 0x0B;
+            /// <summary>
+            /// End sequence, see STATE_START_SEQUENCE
+            /// </summary>
             public const Byte STATE_END_SEQUENCE = 0x0C;
+            /// <summary>
+            /// Frame contains message
+            /// </summary>
             public const Byte STATE_MESSAGE = 0x0D;
+            /// <summary>
+            /// Command was canceled
+            /// </summary>
             public const Byte STATE_CANCELED = 0x0E;
         }
         #endregion

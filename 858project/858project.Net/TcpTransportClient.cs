@@ -627,7 +627,7 @@ namespace Project858.Net
 				//this.InternalTrace(TraceTypes.Verbose, "Odosielanie dat: [{0}]", BitConverter.ToString(_data));
 				this.InternalTrace(TraceTypes.Verbose, "Odosielanie dat: [{0}]", data.Length);
 
-				//zapiseme _data
+				//zapiseme data
 				this.m_networkStream.Write(data, 0, data.Length);
 				this.m_networkStream.Flush();
 
@@ -1044,7 +1044,8 @@ namespace Project858.Net
 		/// </summary>
 		private void StartReconnect()
 		{
-            if (this.IsRun)
+            //check reconnect mode
+            if (this.IsRun && this.CanAutoReconnect)
             {
                 //zalogujeme
                 this.InternalTrace(TraceTypes.Verbose, "Spustanie obsluhy automtickeho reconnectu...");
@@ -1064,18 +1065,22 @@ namespace Project858.Net
 		/// </summary>
 		private void StopReconnect()
 		{
-			//zalogujeme
-			this.InternalTrace(TraceTypes.Verbose, "Ukoncovanie obsluhy automtickeho reconnectu...");
+            //check reconnect mode
+            if (this.CanAutoReconnect)
+            {
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, "Ukoncovanie obsluhy automtickeho reconnectu...");
 
-			//ukoncime timer
-			if (this.m_autoReconnectTimer != null)
-				this.m_autoReconnectTimer.Dispose();
+                //ukoncime timer
+                if (this.m_autoReconnectTimer != null)
+                    this.m_autoReconnectTimer.Dispose();
 
-			//zrusime objekt
-			this.m_autoReconnectTimer = null;
+                //zrusime objekt
+                this.m_autoReconnectTimer = null;
 
-			//zalogujeme
-			this.InternalTrace(TraceTypes.Verbose, "Obsluha bola ukoncena.");
+                //zalogujeme
+                this.InternalTrace(TraceTypes.Verbose, "Obsluha bola ukoncena.");
+            }
 		}
 		/// <summary>
 		/// Obsluha pre timer vykonavajuci automatiky recconnect
