@@ -57,7 +57,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
 					this.m_tcpClientReceivedEvent += value;
@@ -66,7 +66,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
 					this.m_tcpClientReceivedEvent -= value;
@@ -87,7 +87,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.m_isListened;
             }
@@ -95,7 +95,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //nastavime hodnotu
                 m_isListened = value;

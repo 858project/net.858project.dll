@@ -81,7 +81,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return smtpServer;
             }
@@ -98,7 +98,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return smtpPort;
             }
@@ -115,7 +115,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return smtpLogin;
             }
@@ -132,7 +132,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return smtpPassword;
             }
@@ -149,7 +149,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return smtpSsl;
             }
@@ -157,7 +157,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 smtpSsl = value;
             }
@@ -174,7 +174,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.recipients;
             }
@@ -191,7 +191,7 @@ namespace Project858.Net.Mail
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return sender;
             }

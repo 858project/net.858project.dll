@@ -15,21 +15,25 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         public SerialPortClient(String portName) :
             this(portName, 9600, Parity.None, 8, StopBits.One)
         {
+
         }
         /// <summary>
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov readTimeout, writeTimeout
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="readTimeout">Timeout na citanie</param>
@@ -42,10 +46,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentu baudRate
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -57,10 +61,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov baudRate, readTimeout, writeTimeout
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -74,10 +78,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentu baudRate 
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -90,10 +94,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov baudRate, readTimeout, writeTimeout
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -108,10 +112,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov baudRate, dataBits
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -125,10 +129,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov baudRate, dataBits, readTimeout, writeTimeout
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -144,10 +148,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov baudRate, dataBits
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -162,10 +166,10 @@ namespace Project858.IO.Ports
         /// Initialize this class
         /// </summary>
         /// <exception cref="ArgumentException">
-        /// Chybna argumentu portName
+        /// Arguments provided to a method is not valid.
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Chybna argumentov baudRate, dataBits, readTimeout, writeTimeout
+        /// The value of an argument is outside the allowable range of values.
         /// </exception>
         /// <param name="portName">Meno COM portu</param>
         /// <param name="baudRate">Prenosova rychlost</param>
@@ -208,6 +212,12 @@ namespace Project858.IO.Ports
         /// <summary>
         /// Initialize this class
         /// </summary>
+        /// <exception cref="ArgumentException">
+        /// Arguments provided to a method is not valid.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// The value of an argument is outside the allowable range of values.
+        /// </exception>
         /// <param name="port">Port, cez ktory sa bude komunikovat</param>
         public SerialPortClient(SerialPort port)
         {
@@ -255,7 +265,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     lock (this.eventLock)
                         this.transportConnected += value;
@@ -272,7 +282,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     lock (this.eventLock)
                         this.transportConnected -= value;
@@ -302,7 +312,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     lock (this.eventLock)
                         this.transportDisconnected += value;
@@ -319,7 +329,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     lock (this.eventLock)
                         this.transportDisconnected -= value;
@@ -349,7 +359,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     lock (this.eventLock)
                         this.transportDataReceived += value;
@@ -366,7 +376,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     //netusim preco ale to mi zvykne zamrznut thread a ja fakt neviem preco
                     lock (this.eventLock)
@@ -396,7 +406,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.isConnected;
                 }
@@ -421,7 +431,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.baudRate;
                 }
@@ -446,7 +456,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.dataBits;
                 }
@@ -471,7 +481,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.handshake;
                 }
@@ -487,7 +497,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     this.handshake = value;
                 }
@@ -512,7 +522,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.parity;
                 }
@@ -537,7 +547,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.portName;
                 }
@@ -562,7 +572,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.readTimeout;
                 }
@@ -587,7 +597,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.stopBits;
                 }
@@ -612,7 +622,7 @@ namespace Project858.IO.Ports
                 {
                     //je objekt disposed ?
                     if (this.disposed)
-                        throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                        throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                     return this.writeTimeout;
                 }
@@ -742,8 +752,8 @@ namespace Project858.IO.Ports
         /// <returns>True = uspesne otvorene spojenie, False = chyba pri otvarani spojenia</returns>
         private Boolean InternalInitialize()
         {
-            //zalogujeme
-            this.InternalTrace(TraceTypes.Info, "Inicializacia ComPortClient....");
+            //trace message
+            this.InternalTrace(TraceTypes.Info, "Initializing {0}...", this);
 
             try
             {
@@ -780,7 +790,8 @@ namespace Project858.IO.Ports
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Chyba pri inicializacii ComPortClient. {0}", ex.Message);
+                this.InternalTrace(TraceTypes.Error, "Error during initializing {0}. {1}", this, ex.Message);
+                this.InternalException(ex);
 
                 //nastavime detekciu spjenia
                 this.isConnected = false;
@@ -799,10 +810,11 @@ namespace Project858.IO.Ports
         /// <returns>True = uspesne zatvorene spojenie, False = chyba pri zatvarani spojenia</returns>
         public void InternalDeinitialize()
         {
+            //trace message
+            this.InternalTrace(TraceTypes.Info, "Deinitializing {0}...", this);
 
             try
             {
-
                 //toto volanie eventu len ak je volana metoda stupo pocas behu
                 if (this.isConnected)
                 {
@@ -825,8 +837,9 @@ namespace Project858.IO.Ports
             }
             catch (Exception ex)
             {
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Error, ex.ToString());
+                //trace message
+                this.InternalTrace(TraceTypes.Error, "Error during deinitializing {0}. {1}", this, ex.Message);
+                this.InternalException(ex);
             }
         }
         /// <summary>
@@ -845,11 +858,11 @@ namespace Project858.IO.Ports
             {
                 //je objekt disposed ?
                 if (this.disposed)
-                    throw new ObjectDisposedException("ComPortClient", "Object was disposed.");
+                    throw new ObjectDisposedException("ComPortClient", "Object was disposed");
 
                 //otvorenie nie je mozne ak je connection == true
                 if (!this.isConnected)
-                    throw new InvalidOperationException("Zapis dat nie je mozny ! Spojenie nie je !");
+                    throw new InvalidOperationException("Writing data is not possible! The client is not connected!");
 
                 try
                 {
@@ -860,12 +873,12 @@ namespace Project858.IO.Ports
                         this.port.Write(data, 0, data.Length);
 
                         //zalogujeme prijate dat
-                        this.InternalTrace(TraceTypes.Verbose, "Send data: [{0}]", this.GetStringData(data));
+                        this.InternalTrace(TraceTypes.Verbose, "Send data: [{0}]", data.ToHexaString());
                     }
                     else
                     {
                         //vynimka
-                        throw new Exception("Chyba pri zapise na port. SerialPort nie je !");
+                        throw new Exception("Error writing to port. SerialPort is not available!");
                     }
 
                     //uspesne ukoncenie metody
@@ -906,12 +919,12 @@ namespace Project858.IO.Ports
                     if (this.port == null)
                     {
                         //vynimka oznamujuca nedostupnost portu
-                        throw new Exception("SerialPort uz nie je dostupny");
+                        throw new Exception("SerialPort is not available!");
                     }
                     else if (!this.port.IsOpen)
                     {
                         //vynimka oznamujuca nedostupnost portu
-                        throw new Exception("SerialPort je zatvoreny");
+                        throw new Exception("SerialPort is closed!");
                     }
                     else
                     {
@@ -928,7 +941,7 @@ namespace Project858.IO.Ports
                             this.port.Read(data, 0, count);
 
                             //zalogujeme prijate dat
-                            this.InternalTrace(TraceTypes.Verbose, "Received data: [{0}]", this.GetStringData(data));
+                            this.InternalTrace(TraceTypes.Verbose, "Received data: [{0}]", data.ToHexaString());
 
                             //vytvorime udalost a posleme data
                             if (this.IsRun)
@@ -945,42 +958,12 @@ namespace Project858.IO.Ports
                     this.isConnected = false;
 
                     //zalogujeme prijate dat
-                    this.InternalTrace(TraceTypes.Error, "Chyba pri citani dat z portu. {0}", ex.Message);
+                    this.InternalTrace(TraceTypes.Error, "Error during reading data from SerialPort {0}", ex.Message);
+                    this.InternalException(ex);
 
                     //error comunication
                     this.OnDisconnected(EventArgs.Empty);
                 }
-            }
-        }
-        /// <summary>
-        /// Vrati string dat ktore sa prijali alebo odoslali
-        /// </summary>
-        /// <param name="data">Data ktore chceme spracovat</param>
-        /// <returns>String dat</returns>
-        private String GetStringData(Byte[] data)
-        {
-            try
-            {
-                //pomocny string na ulozenie obrazu dat
-                String str = String.Empty;
-
-                if (data != null)
-                {
-                    //prejdeme vsetky byty a urobime z nich string
-                    foreach (Byte b in data)
-                        str += String.Format("{0:X2} ", b);
-
-                    //odstranime posledny prazdny znak
-                    str = str.Remove(str.Length - 1, 1);
-                }
-
-                //vratime data
-                return str;
-            }
-            catch (Exception ex)
-            {
-                TraceLogger.Info(ex.ToString());
-                throw;
             }
         }
         #endregion
@@ -1028,7 +1011,7 @@ namespace Project858.IO.Ports
         /// <returns>Meno triedy</returns>
         public override string ToString()
         {
-            return "ComPortClient";
+            return "SerialPortClient";
         }
         #endregion
     }

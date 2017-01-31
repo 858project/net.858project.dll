@@ -233,7 +233,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				lock (this.m_eventLock)
 					this._connectedEvent += value;
@@ -242,7 +242,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
 					this._connectedEvent -= value;
@@ -264,7 +264,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
 					this.disconnectedEvent += value;
@@ -273,7 +273,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
 					this.disconnectedEvent -= value;
@@ -296,7 +296,7 @@ namespace Project858.Net
 
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				lock (this.m_eventLock)
 					this.m_receivedDataEvent += value;
@@ -306,7 +306,7 @@ namespace Project858.Net
 
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				//netusim preco ale to mi zvykne zamrznut thread a ja fakt neviem preco
                 lock (this.m_eventLock)
@@ -332,7 +332,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 				//ak je povolena moznost reconnectu
 				if (!this.m_canAutoReconnect)
 					throw new InvalidOperationException();
@@ -344,7 +344,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 				//ak je povolena moznost reconnectu
 				if (!this.m_canAutoReconnect)
 					throw new InvalidOperationException();
@@ -371,7 +371,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				return  (this.m_canAutoReconnect) ? m_autoReconnect : false;
 			}
@@ -379,7 +379,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 				//ak je povolena moznost reconnectu
 				if (!this.m_canAutoReconnect)
 					throw new InvalidOperationException();
@@ -399,7 +399,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				return m_connectionState;
 			}
@@ -422,7 +422,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				return this.m_autoReconnectTimeout;
 			}
@@ -430,7 +430,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 				//ak je povolena moznost reconnectu
 				if (!this.m_canAutoReconnect)
 					throw new InvalidOperationException();
@@ -454,7 +454,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				return this.m_ipEndPoints;
 			}
@@ -471,7 +471,7 @@ namespace Project858.Net
 			{
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 
 				return this.m_isConnectied;
 			}
@@ -487,14 +487,14 @@ namespace Project858.Net
 			get {
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 				
 				return m_canAutoReconnect;
 			}
 			protected set {
 				//je objekt _isDisposed ?
 				if (this.IsDisposed)
-					throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+					throw new ObjectDisposedException("Object was disposed");
 				
 				m_canAutoReconnect = value;
 			}
@@ -510,14 +510,14 @@ namespace Project858.Net
             get {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed."); 
+                    throw new ObjectDisposedException("Object was disposed"); 
                 
                 return m_actualIpEndPoint;
             }
             set {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed."); 
+                    throw new ObjectDisposedException("Object was disposed"); 
                 
                 m_actualIpEndPoint = value;
             }
@@ -615,7 +615,7 @@ namespace Project858.Net
 		{
 			//je objekt _isDisposed ?
 			if (this.IsDisposed)
-				throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+				throw new ObjectDisposedException("Object was disposed");
 
 			//otvorenie nie je mozne ak je connection == true
 			if (!this.m_isConnectied)

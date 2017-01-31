@@ -63,14 +63,14 @@ namespace Project858
 			add {
                 //je objekt _disposed ?
                 if (this.isDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 this.disposed += value;
             }
 			remove {
                 //je objekt _disposed ?
                 if (this.isDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 this.disposed -= value;
             }
@@ -89,7 +89,7 @@ namespace Project858
 			get {
                 //je objekt _disposed ?
                 if (this.isDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 return this.state;
             }
@@ -105,7 +105,7 @@ namespace Project858
 			get {
                 //je objekt _disposed ?
                 if (this.isDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 return this.manualResentEvent;
             }
@@ -121,7 +121,7 @@ namespace Project858
 			get {
                 //je objekt _disposed ?
                 if (this.isDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 return false;
             }
@@ -137,7 +137,7 @@ namespace Project858
 			get {
                 //je objekt _disposed ?
                 if (this.isDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 return this.manualResentEvent.WaitOne(0, false);
             }

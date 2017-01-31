@@ -61,7 +61,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.m_connectedEvent += value;
@@ -70,7 +70,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.m_connectedEvent -= value;
@@ -92,7 +92,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.disconnectedEvent += value;
@@ -101,7 +101,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.disconnectedEvent -= value;
@@ -124,7 +124,7 @@ namespace Project858.Net
 
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.m_receivedDataEvent += value;
@@ -134,7 +134,7 @@ namespace Project858.Net
 
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //netusim preco ale to mi zvykne zamrznut thread a ja fakt neviem preco
                 lock (this.m_eventLock)
@@ -160,7 +160,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.m_changeConnectionStateEvent += value;
@@ -169,7 +169,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.m_changeConnectionStateEvent -= value;
@@ -190,7 +190,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.m_connectionState;
             }
@@ -207,7 +207,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.m_isConnectied;
             }
@@ -220,7 +220,7 @@ namespace Project858.Net
             get {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
                 
                 return m_remoteIpEndPoint;
             }
@@ -233,7 +233,7 @@ namespace Project858.Net
             get {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return m_localIpEndPoint; }
         }
@@ -289,7 +289,7 @@ namespace Project858.Net
         {
             //je objekt _isDisposed ?
             if (this.IsDisposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             //otvorenie nie je mozne ak je connection == true
             if (!this.m_isConnectied)

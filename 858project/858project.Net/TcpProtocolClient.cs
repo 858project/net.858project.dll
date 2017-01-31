@@ -141,7 +141,7 @@ namespace Project858.Net
 
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.m_receivedFrameEvent += value;
@@ -151,7 +151,7 @@ namespace Project858.Net
 
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //netusim preco ale to mi zvykne zamrznut thread a ja fakt neviem preco
                 lock (this.m_eventLock)

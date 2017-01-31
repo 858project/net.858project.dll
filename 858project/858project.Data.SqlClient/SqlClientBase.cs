@@ -75,7 +75,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this._connectingFaultEvent += value;
@@ -84,7 +84,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this._connectingFaultEvent -= value;
@@ -103,7 +103,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this._connectionStateChangeEvent += value;
@@ -112,7 +112,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this._connectionStateChangeEvent -= value;
@@ -132,7 +132,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.m_truncateValue;
             }
@@ -140,7 +140,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this.m_truncateValue = value;
             }
@@ -159,7 +159,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._connectionStateChangeEventAsync;
             }
@@ -167,7 +167,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._connectionStateChangeEventAsync = value;
             }
@@ -186,7 +186,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._connectingFaultEventAsync;
             }
@@ -194,7 +194,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._connectingFaultEventAsync = value;
             }
@@ -211,7 +211,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.m_connectionStringBuilder;
             }
@@ -228,7 +228,7 @@ namespace Project858.Data.SqlClient
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._state;
             }
@@ -678,7 +678,7 @@ namespace Project858.Data.SqlClient
         {
             //je objekt _disposed ?
             if (this.IsDisposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             //overime stav klienta
             if (this.ClientState != ClientStates.Start)

@@ -49,7 +49,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this._mailEvent += value;
@@ -58,7 +58,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this._mailEvent -= value;
@@ -82,7 +82,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.clientStartEvent += value;
@@ -91,7 +91,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.clientStartEvent -= value;
@@ -115,7 +115,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.clientPauseEvent += value;
@@ -124,7 +124,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.clientPauseEvent -= value;
@@ -148,7 +148,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.clientStopEvent += value;
@@ -157,7 +157,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.clientStopEvent -= value;
@@ -181,7 +181,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.traceEvent += value;
@@ -190,7 +190,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
                     this.traceEvent -= value;
@@ -213,7 +213,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._sqlClient;
             }
@@ -221,7 +221,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 _sqlClient = value;
             }
@@ -240,7 +240,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._mailEventAsync;
             }
@@ -248,7 +248,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._mailEventAsync = value;
             }
@@ -264,7 +264,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //ak nie je nastaveny ziadny klient na logovanie
                 if (this._mailClient == null)
@@ -276,7 +276,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 _mailMessageInternalProcess = value;
             }
@@ -295,7 +295,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._mailClient;
             }
@@ -303,7 +303,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //ak klient nie je inicializovany
                 if (value == null)
@@ -326,7 +326,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return _traceClient;
             }
@@ -334,7 +334,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //ak klient nie je inicializovany
                 if (value == null)
@@ -357,7 +357,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._traceEventAsync;
             }
@@ -365,7 +365,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._traceEventAsync = value;
             }
@@ -384,7 +384,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._traceType;
             }
@@ -392,7 +392,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._traceType = value;
             }
@@ -411,7 +411,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._traceErrorAlways;
             }
@@ -419,7 +419,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._traceErrorAlways = value;
             }
@@ -438,7 +438,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //ak nie je dostupny klient tak nie ani interne logovanie
                 if (this._traceClient == null)
@@ -451,7 +451,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //ak nie je nastaveny ziadny klient na logovanie
                 if (this._traceClient == null && value == true)
@@ -483,7 +483,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._clientState != ClientStates.Stop;
             }
@@ -502,7 +502,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return _clientState;
             }
@@ -521,7 +521,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._clientStartEventAsync;
             }
@@ -529,7 +529,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._clientStartEventAsync = value;
             }
@@ -548,7 +548,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._clientPauseEventAsync;
             }
@@ -556,7 +556,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._clientPauseEventAsync = value;
             }
@@ -575,7 +575,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this._clientStopEventAsync;
             }
@@ -583,7 +583,7 @@ namespace Project858.ComponentModel.Client
             {
                 //je objekt _disposed ?
                 if (this._disposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 this._clientStopEventAsync = value;
             }
@@ -668,16 +668,16 @@ namespace Project858.ComponentModel.Client
         {
             //je objekt _disposed ?
             if (this._disposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             //ak je klient spusteny
             if (this._clientState == ClientStates.Start)
-                throw new InvalidOperationException(String.Format("'{0}' is already running.", this.ToString()));
+                throw new InvalidOperationException(String.Format("{0} is already running.", this));
 
             try
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Verbose, "Inicializacia '{0}'...", this.ToString());
+                this.InternalTrace(TraceTypes.Verbose, "Initializing {0}...", this);
 
                 //interny start klienta
                 if (!this.InternalStart())
@@ -687,7 +687,7 @@ namespace Project858.ComponentModel.Client
                 this._clientState = ClientStates.Start;
 
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Verbose, "'{0}' bol uspesne inicializovany.", this.ToString());
+                this.InternalTrace(TraceTypes.Verbose, "{0} was initialized successfully", this);
 
                 //event oznamujuci uspesny start klienta
                 this.OnClientStart(EventArgs.Empty);
@@ -697,10 +697,8 @@ namespace Project858.ComponentModel.Client
             }
             catch (Exception ex)
             {
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Chyba pri inicializacii klienta '{0}'. {1}", this.ToString(), ex);
-
-                //interna chyba
+                //trace message
+                this.InternalTrace(TraceTypes.Error, "Error during initializing {0}. {1}", this, ex.Message);
                 this.InternalException(ex);
 
                 //chybna
@@ -717,7 +715,7 @@ namespace Project858.ComponentModel.Client
         {
             //je objekt _disposed ?
             if (this._disposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             try
             {
@@ -725,7 +723,7 @@ namespace Project858.ComponentModel.Client
                 if (this._clientState != ClientStates.Stop)
                 {
                     //zalogujeme
-                    this.InternalTrace(TraceTypes.Verbose, "Ukoncovanie... '{0}'...", this.ToString());
+                    this.InternalTrace(TraceTypes.Verbose, "Exiting {0}...", this);
                 }
 
                 //interny stop klienta
@@ -738,7 +736,7 @@ namespace Project858.ComponentModel.Client
                     this._clientState = ClientStates.Stop;
 
                     //zalogujeme
-                    this.InternalTrace(TraceTypes.Verbose, "'{0}' bol uspesne ukonceny.", this.ToString());
+                    this.InternalTrace(TraceTypes.Verbose, "{0} was exited successfully", this);
 
                     //event o ukonceni klienta
                     this.OnClientStop(EventArgs.Empty);
@@ -747,10 +745,7 @@ namespace Project858.ComponentModel.Client
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Chyba pri ukoncovani klienta '{0}'. {1}",
-                    this.ToString(), ex);
-
-                //interna chyba
+                this.InternalTrace(TraceTypes.Error, "Error during exiting the client {0}. {1}", this, ex);
                 this.InternalException(ex);
             }
         }
@@ -767,16 +762,16 @@ namespace Project858.ComponentModel.Client
         {
             //je objekt _disposed ?
             if (this._disposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             //ak je klient spusteny
             if (this._clientState != ClientStates.Start)
-                throw new InvalidOperationException(String.Format("'{0}' is not already running.", this));
+                throw new InvalidOperationException(String.Format("{0} is not already running.", this));
 
             try
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Info, "Pozastavenie '{0}'...", this);
+                this.InternalTrace(TraceTypes.Info, "Pausing {0}...", this);
 
                 //interny stop klienta
                 this.InternalPause();
@@ -785,17 +780,15 @@ namespace Project858.ComponentModel.Client
                 this._clientState = ClientStates.Pause;
 
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Info, "'{0}' bol uspesne pozastaveny.", this);
+                this.InternalTrace(TraceTypes.Info, "{0} has been successfully paused", this);
 
                 //event o ukonceni klienta
                 this.OnClientPause(EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Chyba pri pozastaveni klienta '{0}'. {1}", this, ex);
-
-                //interna chyba
+                //trace message
+                this.InternalTrace(TraceTypes.Error, "Error during pausing the client {0}. {1}", this, ex);
                 this.InternalException(ex);
             }
         }
@@ -869,7 +862,7 @@ namespace Project858.ComponentModel.Client
         /// <param name="exception">Chyba ktora vznikla</param>
         protected virtual void InternalException(Exception exception)
         {
-            this.AddInternalExceptionToLog(exception);
+            this.InternalTraceExceptionToLog(exception);
         }
         /// <summary>
         /// Spracuje emailovu spravu ktora sa ma odoslat
@@ -984,8 +977,7 @@ namespace Project858.ComponentModel.Client
                         if (this._traceClient.IsRun)
                         {
                             //zalogujeme
-                            this._traceClient.TraceAsync(time, type, this.ToString(),
-                                String.Format(message, msgArgs));
+                            this._traceClient.TraceAsync(time, type, this.ToString(), String.Format(message, msgArgs));
                         }
             }
 
@@ -996,7 +988,7 @@ namespace Project858.ComponentModel.Client
         /// Zaloguje chybu do log suboru
         /// </summary>
         /// <param name="exception">Exception</param>
-        private void AddInternalExceptionToLog(Exception exception)
+        private void InternalTraceExceptionToLog(Exception exception)
         {
             try
             {
@@ -1005,7 +997,8 @@ namespace Project858.ComponentModel.Client
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Interna chyba systemu. {0}", ex);
+                this.InternalTrace(TraceTypes.Error, "Internal system error. {0}", ex.Message);
+                this.InternalException(ex);
             }
         }
         #endregion
@@ -1089,50 +1082,6 @@ namespace Project858.ComponentModel.Client
                     handler.BeginInvoke(this, e, null, null);
                 else
                     handler(this, e);
-            }
-        }
-        #endregion
-
-        #region - Mail Method -
-        /// <summary>
-        /// Vytvori a odosle email o chybe pri vykonavani comanndu do SQL
-        /// </summary>
-        /// <param name="exception">Vzniknuta chyba</param>
-        private void AddInternalExceptionToMail(Exception exception)
-        {
-            try
-            {
-                //telo spravy
-                String body = String.Format("<html><body><div align=\"center\">");
-                body += String.Format("<b><font color=\"silver\" size=\"1\">[This e-mail has been automatically generated.]</font></b>");
-                body += String.Format("</div><br><br>");
-                body += String.Format("<b><font color=\"red\" size=\"3\">Interná chyba systému.</font></b>");
-                body += String.Format("<br><br>");
-
-                //stack trace
-                body += String.Format("<font color=\"red\" size=\"2\">{0}</font>", exception);
-
-                //ukoncenie spravy
-                body += String.Format("<br><br><br>");
-                body += String.Format("<font size=\"1\">{0}<font><br>", DateTime.Now.ToString("HH:mm:ss dd:MM:yyyy"));
-                body += String.Format("<font size=\"3\">-------------<font><br>");
-                body += String.Format("<b><i><font size=\"4\">PeopleCounting<font></i></b>");
-                body += String.Format("<br><font size=\"1\">Copyright © PL Technology s.r.o 2011<font></body></html>");
-
-                //vytvorime spravu na odoslanie
-                MailMessage mailMessage = new MailMessage();
-                mailMessage.Subject = String.Format("{0} {1}", TraceTypes.Error, this.ToString());
-                mailMessage.Body = body;
-                mailMessage.Priority = MailPriority.High;
-                mailMessage.IsBodyHtml = true;
-
-                //odosleme email
-                this.InternalMailMessage(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Interna chyba systemu. {0}", ex);
             }
         }
         #endregion

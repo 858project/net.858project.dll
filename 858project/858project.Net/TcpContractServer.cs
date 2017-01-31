@@ -54,7 +54,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return this.m_maxConnection;
             }
@@ -62,7 +62,7 @@ namespace Project858.Net
             {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //osetrenie rozsahu
                 if (value < 1 || value > 100)

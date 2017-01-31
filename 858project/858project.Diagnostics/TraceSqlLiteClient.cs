@@ -142,7 +142,7 @@ namespace Project858.Diagnostics
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return _deleteOlderThan;
             }
@@ -150,7 +150,7 @@ namespace Project858.Diagnostics
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 _deleteOlderThan = value;
             }
@@ -171,7 +171,7 @@ namespace Project858.Diagnostics
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return _deleteOlderThanTimeout;
             }
@@ -179,7 +179,7 @@ namespace Project858.Diagnostics
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 //osetrime rozsah
                 if (value < (new TimeSpan(1, 0, 0)) ||
@@ -201,7 +201,7 @@ namespace Project858.Diagnostics
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 return _databasePassword;
             }
@@ -209,7 +209,7 @@ namespace Project858.Diagnostics
             {
                 //je objekt _disposed ?
                 if (this.IsDisposed)
-                    throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                    throw new ObjectDisposedException("Object was disposed");
 
                 _databasePassword = value;
             }
@@ -277,11 +277,11 @@ namespace Project858.Diagnostics
         {
             //je objekt _disposed ?
             if (this.IsDisposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             //klient musi byt spusteny aby sa dalo logovat
             if (this.ClientState != ClientStates.Start)
-                throw new InvalidOperationException(String.Format("'{0}' is not running.", this.ToString()));
+                throw new InvalidOperationException(String.Format("'{0}' is not running.", this));
 
             //overime vstupne data
             if (String.IsNullOrEmpty(modulName))
@@ -312,11 +312,11 @@ namespace Project858.Diagnostics
         {
             //je objekt _disposed ?
             if (this.IsDisposed)
-                throw new ObjectDisposedException(this.ToString(), "Object was disposed.");
+                throw new ObjectDisposedException("Object was disposed");
 
             //klient musi byt spusteny aby sa dalo logovat
             if (this.ClientState != ClientStates.Start)
-                throw new InvalidOperationException(String.Format("'{0}' is not running.", this.ToString()));
+                throw new InvalidOperationException(String.Format("'{0}' is not running.", this));
 
             //overime vstupne data
             if (String.IsNullOrEmpty(modulName))
@@ -575,8 +575,7 @@ namespace Project858.Diagnostics
                 ConsoleLogger.WriteLine("SQLite chyba pri zapise logu do SQLite databazy [{0}]. {1}", ex.ErrorCode, ex);
 
                 //zalogujeme
-                TraceLogger.Trace(DateTime.Now, TraceTypes.Error, this.ToString(),
-                    String.Format("Interna chyba pri ukladani trace itemu. {0}", ex));
+                TraceLogger.Trace(DateTime.Now, TraceTypes.Error, this.ToString(), String.Format("Interna chyba pri ukladani trace itemu. {0}", ex));
             }
             catch (Exception ex)
             {
@@ -587,8 +586,7 @@ namespace Project858.Diagnostics
                 ConsoleLogger.WriteLine("Chyba pri zapise logu do SQLite databazy. {0}", ex);
 
                 //zalogujeme
-                TraceLogger.Trace(DateTime.Now, TraceTypes.Error, this.ToString(),
-                    String.Format("Interna chyba pri ukladani trace itemu. {0}", ex));
+                TraceLogger.Trace(DateTime.Now, TraceTypes.Error, this.ToString(), String.Format("Interna chyba pri ukladani trace itemu. {0}", ex));
             }
         }
         /// <summary>
