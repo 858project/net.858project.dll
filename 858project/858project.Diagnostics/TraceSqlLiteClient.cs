@@ -375,10 +375,7 @@ namespace Project858.Diagnostics
             catch (Exception ex)
             {
                 //interna chyba
-                this.InternalException(ex);
-
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Interna chyba klienta. {0}", ex);
+                this.InternalException(ex, "Internal system error");
 
                 //zaznam sa nepodarilo pridat
                 return false;
@@ -411,10 +408,7 @@ namespace Project858.Diagnostics
             catch (Exception ex)
             {
                 //interna chyba systemu
-                this.InternalException(ex);
-
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Interna chyba klienta. {0}", ex);
+                this.InternalException(ex, "Internal system error. {0}", ex.Message);
             }
 
             try
@@ -569,24 +563,12 @@ namespace Project858.Diagnostics
             catch (SQLiteException ex)
             {
                 //interna chyba
-                this.InternalException(ex);
-
-                //doslo k chyb, zalogujeme
-                ConsoleLogger.WriteLine("SQLite chyba pri zapise logu do SQLite databazy [{0}]. {1}", ex.ErrorCode, ex);
-
-                //zalogujeme
-                TraceLogger.Trace(DateTime.Now, TraceTypes.Error, this.ToString(), String.Format("Interna chyba pri ukladani trace itemu. {0}", ex));
+                this.InternalException(ex, "Error during tracing data to SQLite [{0}]. {1}", ex.ErrorCode, ex.Message);
             }
             catch (Exception ex)
             {
                 //interna chyba
-                this.InternalException(ex);
-
-                //doslo k chyb, zalogujeme
-                ConsoleLogger.WriteLine("Chyba pri zapise logu do SQLite databazy. {0}", ex);
-
-                //zalogujeme
-                TraceLogger.Trace(DateTime.Now, TraceTypes.Error, this.ToString(), String.Format("Interna chyba pri ukladani trace itemu. {0}", ex));
+                this.InternalException(ex, "Error during tracing data to SQLite. {0}", ex.Message);
             }
         }
         /// <summary>

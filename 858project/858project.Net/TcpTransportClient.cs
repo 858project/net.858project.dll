@@ -618,21 +618,20 @@ namespace Project858.Net
 				throw new ObjectDisposedException("Object was disposed");
 
 			//otvorenie nie je mozne ak je connection == true
-			if (!this.m_isConnectied)
-				throw new InvalidOperationException("Zapis dat nie je mozny ! Spojenie nie je !");
+			if (!this.IsConnected)
+                throw new InvalidOperationException("Writing data is not possible! The client is not connected!");
 
 			try
 			{
-				//zalogujeme
-				//this.InternalTrace(TraceTypes.Verbose, "Odosielanie dat: [{0}]", BitConverter.ToString(_data));
-				this.InternalTrace(TraceTypes.Verbose, "Odosielanie dat: [{0}]", data.Length);
+                //zalogujeme prijate dat
+                this.InternalTrace(TraceTypes.Verbose, "Sending data: [{0}]", data.ToHexaString());
 
 				//zapiseme data
 				this.m_networkStream.Write(data, 0, data.Length);
 				this.m_networkStream.Flush();
 
-				//zalogujeme prijate dat
-				this.InternalTrace(TraceTypes.Verbose, "Data boli uspesne odoslane...");
+                //zalogujeme prijate dat
+                this.InternalTrace(TraceTypes.Verbose, "Sending the data has been successfully");
 
 				//uspesne ukoncenie metody
 				return true;
@@ -640,7 +639,7 @@ namespace Project858.Net
 			catch (Exception ex)
 			{
 				//zalogujeme
-				this.InternalTrace(TraceTypes.Error, "Chyba pri zapise dat. {0}", ex.Message);
+                this.InternalException(ex, "Error during sending data to socket. {0}", ex.Message);
 
 				//ukoncime klienta
 				this.InternalDisconnect(false);
@@ -789,7 +788,7 @@ namespace Project858.Net
 			try
 			{
 				//zalogujeme
-				this.InternalTrace(TraceTypes.Info, "Inicializacia komunikacneho kanala...");
+                this.InternalTrace(TraceTypes.Info, "Initializing socket...");
 
 				//ak inicializujeme triedu na zaklade IP a portu
                 if (this.m_tcpClient == null)
@@ -824,7 +823,7 @@ namespace Project858.Net
                 };
 
 				//zalogujeme
-				this.InternalTrace(TraceTypes.Verbose, "Inicializacia komunikacneho kanala bola uspesna.");
+                this.InternalTrace(TraceTypes.Verbose, "Initialization socket was successful");
 
 				//nastavime detekciu spjenia
 				this.m_isConnectied = true;
@@ -835,7 +834,7 @@ namespace Project858.Net
 			catch (Exception ex)
 			{
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Inicializacia komunikacneho kanala zlyhala. {0}", ex.Message);
+                this.InternalException(ex, "Error during initializing socket. {0}", ex.Message);
 
 				//nastavime detekciu spjenia
 				this.m_isConnectied = false;
@@ -956,7 +955,8 @@ namespace Project858.Net
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri asynchronnom prijimani dat. {0}", ex);
+                //trace message
+                this.InternalException(ex, "Error during receiving asynchronous data. {0}", ex.Message);
             }
 		}
 		/// <summary>
@@ -988,7 +988,8 @@ namespace Project858.Net
 						if (this.IsDisposed == false)
 						{
 							//zalogujeme.
-							this.InternalTrace(TraceTypes.Error, "Pad spojenia na remoteEndPoint, Prechod do stavu disconnected !");
+                            this.InternalTrace(TraceTypes.Error, "Loss connection with the remote end point!");
+
 							//ukoncime komunikaciu
 							this.InternalDisconnect(false);
 						}
@@ -1000,7 +1001,7 @@ namespace Project858.Net
 				catch (Exception ex)
 				{
 					//zalogujeme
-					this.InternalTrace(TraceTypes.Error, "Chyba pri preruseni asynchronneho citania zo streamu. {0}. Prechod do stavu disconnected", ex.Message);
+                    this.InternalException(ex, "Error during exiting asynchronous reading from the stream. {0}.", ex.Message);
 
 					//ukoncime komunikaciu
 					this.InternalDisconnect(false);

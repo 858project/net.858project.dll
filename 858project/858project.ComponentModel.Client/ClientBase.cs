@@ -698,8 +698,7 @@ namespace Project858.ComponentModel.Client
             catch (Exception ex)
             {
                 //trace message
-                this.InternalTrace(TraceTypes.Error, "Error during initializing {0}. {1}", this, ex.Message);
-                this.InternalException(ex);
+                this.InternalException(ex, "Error during initializing {0}. {1}", this, ex.Message);
 
                 //chybna
                 return false;
@@ -745,8 +744,7 @@ namespace Project858.ComponentModel.Client
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Error during exiting the client {0}. {1}", this, ex);
-                this.InternalException(ex);
+                this.InternalException(ex, "Error during exiting the client {0}. {1}", this, ex);
             }
         }
         /// <summary>
@@ -788,8 +786,7 @@ namespace Project858.ComponentModel.Client
             catch (Exception ex)
             {
                 //trace message
-                this.InternalTrace(TraceTypes.Error, "Error during pausing the client {0}. {1}", this, ex);
-                this.InternalException(ex);
+                this.InternalException(ex, "Error during pausing the client {0}. {1}", this, ex);
             }
         }
         /// <summary>
@@ -860,8 +857,12 @@ namespace Project858.ComponentModel.Client
         /// Metoda volana vzdy pri internej chybe klienta
         /// </summary>
         /// <param name="exception">Chyba ktora vznikla</param>
-        protected virtual void InternalException(Exception exception)
+        /// <param name="message">Message to trace</param>
+        /// <param name="args">Arguments for string.format('message', args)</param>
+        protected virtual void InternalException(Exception exception, String message, params Object[] args)
         {
+			//trace error
+            this.InternalTrace(TraceTypes.Error, message, args);
             this.InternalTraceExceptionToLog(exception);
         }
         /// <summary>
@@ -997,8 +998,7 @@ namespace Project858.ComponentModel.Client
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Internal system error. {0}", ex.Message);
-                this.InternalException(ex);
+                this.InternalException(ex, "Internal system error. {0}", ex.Message);
             }
         }
         #endregion

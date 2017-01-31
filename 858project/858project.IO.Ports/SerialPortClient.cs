@@ -790,8 +790,7 @@ namespace Project858.IO.Ports
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace(TraceTypes.Error, "Error during initializing {0}. {1}", this, ex.Message);
-                this.InternalException(ex);
+                this.InternalException(ex, "Error during initializing {0}. {1}", this, ex.Message);
 
                 //nastavime detekciu spjenia
                 this.isConnected = false;
@@ -838,8 +837,7 @@ namespace Project858.IO.Ports
             catch (Exception ex)
             {
                 //trace message
-                this.InternalTrace(TraceTypes.Error, "Error during deinitializing {0}. {1}", this, ex.Message);
-                this.InternalException(ex);
+                this.InternalException(ex, "Error during deinitializing {0}. {1}", this, ex.Message);
             }
         }
         /// <summary>
@@ -869,11 +867,14 @@ namespace Project858.IO.Ports
                     //len ak je port inicializovany a ak je otvoreny
                     if (this.port != null && this.port.IsOpen)
                     {
+                        //zalogujeme prijate dat
+                        this.InternalTrace(TraceTypes.Verbose, "Sending data: [{0}]", data.ToHexaString());
+
                         //zapiseme data na port
                         this.port.Write(data, 0, data.Length);
 
                         //zalogujeme prijate dat
-                        this.InternalTrace(TraceTypes.Verbose, "Send data: [{0}]", data.ToHexaString());
+                        this.InternalTrace(TraceTypes.Verbose, "Sending the data has been successfully");
                     }
                     else
                     {
@@ -953,14 +954,13 @@ namespace Project858.IO.Ports
                 }
                 catch (Exception ex)
                 {
+                    //zalogujeme prijate dat
+                    this.InternalException(ex, "Error during reading data from SerialPort {0}", ex.Message);
+
                     //spojenie je ukoncene
                     this.isRun = false;
                     this.isConnected = false;
-
-                    //zalogujeme prijate dat
-                    this.InternalTrace(TraceTypes.Error, "Error during reading data from SerialPort {0}", ex.Message);
-                    this.InternalException(ex);
-
+ 
                     //error comunication
                     this.OnDisconnected(EventArgs.Empty);
                 }

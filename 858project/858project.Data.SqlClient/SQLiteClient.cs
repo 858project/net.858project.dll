@@ -377,8 +377,8 @@ namespace Project858.Data.SqlClient
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri vkladani objektu do SQL. {0} [{1} : {2}]", ex.Message, item.GetType(), item.ToJsonString());
-                this.InternalException(ex);
+                //trace message
+                this.InternalException(ex, "Error during inserting object in database {0} [{1}: {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 return false;
             }
         }
@@ -424,8 +424,7 @@ namespace Project858.Data.SqlClient
             }
             catch (Exception ex)
             {
-                this.InternalTrace(TraceTypes.Error, "Chyba pri aktualizacii objektu v SQL {0} [{1}: {2}]", ex.Message, item.GetType(), item.ToJsonString());
-                this.InternalException(ex);
+                this.InternalException(ex, "Chyba pri aktualizacii objektu v SQL {0} [{1}: {2}]", ex.Message, item.GetType(), item.ToJsonString());
                 return false;
             }
         }
