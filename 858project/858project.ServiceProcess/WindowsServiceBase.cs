@@ -41,9 +41,30 @@ namespace Project858.ServiceProcess
             base.CanPauseAndContinue = false;
             base.CanShutdown = true;
             base.CanHandlePowerEvent = true;
+            this.TraceType = this.InternalGetTraceType();
+            this.TraceErrorAlways = true;
         }
         #endregion
- 
+
+        #region - Properties -
+        /// <summary>
+        /// (Get / Set) Definuje typ logovania informacii
+        /// </summary>
+        public TraceTypes TraceType
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        /// (Get / Set) Definuje ci je logovanie chyb zapnute za kazdych okolnosti
+        /// </summary>
+        public Boolean TraceErrorAlways
+        {
+            get;
+            set;
+        }
+        #endregion
+
         #region - Service Method -
         /// <summary>
         /// Start service
@@ -228,7 +249,7 @@ namespace Project858.ServiceProcess
                 try
                 {
                     //zalogujeme
-                    this.InternalTrace("Spustanie instancie. [{0}]", client.GetType());
+                    this.InternalTrace("Starting instance {0}", client.GetType());
 
                     //overime ci ide o klienta
                     if (client is ClientBase)
@@ -244,19 +265,19 @@ namespace Project858.ServiceProcess
                     if (client.Start())
                     {
                         //zalogujeme
-                        this.InternalTrace("Spustanie instancie bolo uspesne.");
+                        this.InternalTrace("Starting instance was successful");
                     }
                     else
                     {
                         //zalogujeme
-                        this.InternalTrace("Spustanie instancie bolo neuspesne.");
+                        this.InternalTrace("Starting instance was unsuccessful");
                         return false;
                     }
                 }
                 catch (Exception ex)
                 {
                     //zalogujeme chybu
-                    this.InternalTrace("Spustanie instancie sa nepodarilo. [{0}]", client.GetType());
+                    this.InternalTrace("Starting instance {0} failed", client.GetType());
                     this.InternalTrace(ex);
                     return false;
                 }
@@ -353,7 +374,7 @@ namespace Project858.ServiceProcess
                 catch (Exception ex)
                 {
                     //zalogujeme
-                    this.InternalTrace("Inicializacia pluginu '{0}' sa nepodarila.", type);
+                    this.InternalTrace(TraceTypes.Error, "Initializing plugin {0} failed", type);
                     this.InternalTrace(ex);
                 }
             }
@@ -377,11 +398,15 @@ namespace Project858.ServiceProcess
         /// <param name="args">String.Format argumenty pre spravu</param>
         private void InternalTrace(TraceTypes type, String message, params Object[] args)
         {
-            //update message
-            message = String.Format(message, args);
+            //check type
+            if (type == this.TraceType || (type == TraceTypes.Error && this.TraceErrorAlways))
+            {
+                //update message
+                message = String.Format(message, args);
 
-            //trace
-            TraceLogger.Trace(type, message);
+                //trace
+                TraceLogger.Trace(type, message);
+            }
         }
         /// <summary>
         /// Zaloguje chybu do log suboru
@@ -389,7 +414,11 @@ namespace Project858.ServiceProcess
         /// <param name="exception">Chyba ktoru chceme zalogovat</param>
         private void InternalTrace(Exception exception)
         {
-            TraceLogger.Error(exception);
+            //check type
+            if (this.TraceType == TraceTypes.Error || this.TraceErrorAlways)
+            {
+                TraceLogger.Error(exception);
+            }
         }
         /// <summary>
         /// Vytvori a vrati vsetky instancie pluginov ktore su dostupne
@@ -401,31 +430,31 @@ namespace Project858.ServiceProcess
             String path = this.InternalGetCurrentPath();
 
             //zalogujeme
-            this.InternalTrace("Nacitavanie dostupnych pluginov... [{0}]", path);
+            this.InternalTrace("Loading of available plugins... [{0}]", path);
 
             //nacitame vsetky dostupne kniznice
             String[] files = this.InternalGetAllLibrary(path);
 
             //zalogujeme
-            this.InternalTrace("Pocet dostupnych kniznic: {0}", files == null ? 0 : files.Length);
+            this.InternalTrace("Number of available library: {0}", files == null ? 0 : files.Length);
 
             //nacitame vsetky assemblies
             List<Assembly> assemblies = this.InternalGetAllAssemblyFromFiles(files);
 
             //zalogujeme
-            this.InternalTrace("Pocet dostupnych assemblies: {0}", assemblies == null ? 0 : assemblies.Count);
+            this.InternalTrace("Number of available assemblies: {0}", assemblies == null ? 0 : assemblies.Count);
 
             //nacitame dostupne typy
             List<Type> types = this.InternalGetAllInstanceType(assemblies, typeof(IWindowsServiceClient));
 
             //zalogujeme
-            this.InternalTrace("Pocet dostupnych typov: {0}", types == null ? 0 : types.Count);
+            this.InternalTrace("Number of available type: {0}", types == null ? 0 : types.Count);
 
             //inicializujeme instancie
             List<IWindowsServiceClient> clients = this.InternalCreateInstance(types);
 
             //zalogujeme
-            this.InternalTrace("Pocet dostupnych instancii: {0}", clients == null ? 0 : clients.Count);
+            this.InternalTrace("Number of available instances: {0}", clients == null ? 0 : clients.Count);
 
             //sort clients
             clients.Sort((a, b) => a.ServiceClientPriority.CompareTo(b.ServiceClientPriority));
