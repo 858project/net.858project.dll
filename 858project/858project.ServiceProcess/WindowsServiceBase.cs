@@ -137,7 +137,7 @@ namespace Project858.ServiceProcess
             try
             {
                 //zalogujeme
-                this.InternalTrace("Inicializacia sluzby...");
+                this.InternalTrace("Initializing service...");
 
                 //vytvorime instancie
                 this.m_clients = this.InternalCreateInstance();
@@ -146,7 +146,7 @@ namespace Project858.ServiceProcess
                 if (this.m_clients.Count == 0)
                 {
                     //ukoncime
-                    this.InternalTrace(TraceTypes.Warning, "K dispozicii nie su ziadne instancie na spustenie.");
+                    this.InternalTrace(TraceTypes.Warning, "There are not any instances on starting");
 
                     //start sluzby sa nepodaril
                     return false;
@@ -159,12 +159,12 @@ namespace Project858.ServiceProcess
                 if (result)
                 {
                     //zalogujeme
-                    this.InternalTrace("Inicializacia sluzby bola uspesna.");
+                    this.InternalTrace("Initializing service was successful");
                 }
                 else
                 {
                     //zalogujeme
-                    this.InternalTrace("Inicializacia sluzby bola neuspesna.");
+                    this.InternalTrace("Initializing service was not successful");
                 }
 
                 //inicializacia bola uspesna
@@ -173,7 +173,7 @@ namespace Project858.ServiceProcess
             catch (Exception ex)
             {
                 //zalogujeme
-                this.InternalTrace("Inicializacia sluzby zlyhala. {0}", ex);
+                this.InternalTrace("Initializing service failed. {0}", ex.Message);
                 this.InternalTrace(ex);
 
                 //start sluzby sa nepodaril
@@ -215,18 +215,18 @@ namespace Project858.ServiceProcess
                     try
                     {
                         //zalogujeme
-                        this.InternalTrace("Ukoncovanie instancie. [{0}]", client.GetType());
+                        this.InternalTrace("Ending instance {0}", client.GetType());
 
                         //start klienta
                         client.Stop();
 
                         //zalogujeme
-                        this.InternalTrace("Ukoncenie instancie bolo uspesne.");
+                        this.InternalTrace("Ending instance was successful");
                     }
                     catch (Exception ex)
                     {
                         //zalogujeme chybu
-                        this.InternalTrace("Ukoncenie instancie sa nepodarilo. [{0}]", client.GetType());
+                        this.InternalTrace("Ending instance {0} failed", client.GetType());
                         this.InternalTrace(ex);
                     }
                 }
@@ -270,7 +270,7 @@ namespace Project858.ServiceProcess
                     else
                     {
                         //zalogujeme
-                        this.InternalTrace("Starting instance was unsuccessful");
+                        this.InternalTrace("Starting instance was not successful");
                         return false;
                     }
                 }
