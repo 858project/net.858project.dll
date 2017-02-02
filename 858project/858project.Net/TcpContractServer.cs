@@ -254,7 +254,7 @@ namespace Project858.Net
         private void contract_DisconnectedEvent(object sender, EventArgs e)
         {
             //zalogujeme
-            this.InternalTrace(TraceTypes.Verbose, "Odoberanie ukonceneho klienta.");
+            this.InternalTrace(TraceTypes.Verbose, "Removing the client which was exited.");
 
             //ziskame pristup
             ITransportClient client = sender as ITransportClient;
@@ -266,11 +266,7 @@ namespace Project858.Net
             }
             catch (Exception ex)
             {
-#if DEBUG
-                //chybu ignorujeme
-				ConsoleLogger.WriteLine("Interna chyba pri udalostiach spojenych z odstranovanim ukonceneho klienta. {0}", ex.ToString());
-#endif
-                this.InternalTrace(TraceTypes.Error, "Interna chyba pri udalostiach spojenych z odstranovanim ukonceneho klienta. {0}", ex.Message);
+                this.InternalException(ex, "Removing the client failed. {0}", ex.Message);
             }
         }
         /// <summary>
