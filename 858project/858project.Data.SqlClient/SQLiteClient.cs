@@ -931,7 +931,7 @@ namespace Project858.Data.SqlClient
                                 {
                                     throw new InvalidCastException(String.Format("Specified cast is not valid. [{0} - {1} - {2}]", item.GetType().Name, property.Property.Name, property.Property.PropertyType));
                                 }
-                                value = this.InternalUpdateValue(value);
+                                value = this.InternalUpdateValue(value, property.Property.PropertyType);
                                 property.Property.SetValue(item, value, null);
                             }
                             catch (Exception ex)
@@ -949,14 +949,23 @@ namespace Project858.Data.SqlClient
         /// Aktualizuje hodnotu skor ako dojde k jej spracovaniu
         /// </summary>
         /// <param name="value">Hodnota ktoru chceme aktualizovat</param>
+        /// <param name="destinationType">Destination type</param>
         /// <returns>Aktualizovana hodnota alebo povodna hodnota</returns>
-        private Object InternalUpdateValue(Object value)
+        private Object InternalUpdateValue(Object value, Type destinationType)
         {
             if (value != null)
             {
                 if (value is String)
                 {
                     return ((String)value).Trim();
+                }
+                else if (value is Int64 && destinationType == typeof(UInt64))
+                {
+                    return Convert.ToUInt64(value);
+                }
+                else if (value is Int32 && destinationType == typeof(UInt32))
+                {
+                    return Convert.ToUInt32(value);
                 }
             }
             return value;
