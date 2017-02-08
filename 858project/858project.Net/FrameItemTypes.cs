@@ -47,6 +47,10 @@ namespace Project858.Net
         /// </summary>
         UInt64,
         /// <summary>
+        /// Unsigned int value
+        /// </summary>
+        UInt32,
+        /// <summary>
         /// Unkown type
         /// </summary>
         Unkown,

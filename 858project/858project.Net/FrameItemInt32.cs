@@ -34,6 +34,13 @@ namespace Project858.Net
         }
         #endregion
 
+        #region - Properties -
+        /// <summary>
+        /// Item type
+        /// </summary>
+        public override FrameItemTypes ItemType { get { return FrameItemTypes.Int32; } }
+        #endregion
+
         #region - Public Methods -
         /// <summary>
         /// Returns a string that represents the current object.

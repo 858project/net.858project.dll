@@ -936,8 +936,10 @@ namespace Project858.Data.SqlClient
                             }
                             catch (Exception ex)
                             {
-                                this.InternalTrace(TraceTypes.Error, "Chyba pri citani dat z SQL. {0} [{1} - {2}]", ex.Message, property.Property.Name, property.Property.PropertyType);
-                                throw;
+                                String message = String.Format("Chyba pri citani dat z SQL. {0} [{1} - {2}]", ex.Message, property.Property.Name, property.Property.PropertyType);
+
+                                //this.InternalTrace(TraceTypes.Error, "Chyba pri citani dat z SQL. {0} [{1} - {2}]", ex.Message, property.Property.Name, property.Property.PropertyType);
+                                throw new Exception(message);
                             }
                         }
                     }

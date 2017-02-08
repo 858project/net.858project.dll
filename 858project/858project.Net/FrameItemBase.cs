@@ -18,9 +18,16 @@ namespace Project858.Net
         /// <param name="value">Value</param>
         public FrameItemBase(UInt16 address, T value)
         {
-            this.Address = address;
-            this.Data = this.InternalParseFromValue(value);
-            this.Value = value;
+            try
+            {
+                this.Address = address;
+                this.Data = this.InternalParseFromValue(value);
+                this.Value = value;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(String.Format("Frame item 0x{0:X4} failed [Value: {1}].", address, value), ex);
+            }
         }
         /// <summary>
         /// Initialize this class
@@ -29,13 +36,24 @@ namespace Project858.Net
         /// <param name="data">Byte array</param>
         public FrameItemBase(UInt16 address, Byte[] data)
         {
-            this.Data = data;
-            this.Value = this.InternalParseValue(data);
-            this.Address = address;
+            try
+            {
+                this.Data = data;
+                this.Value = this.InternalParseValue(data);
+                this.Address = address;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(String.Format("Frame item 0x{0:X4} failed [Data Length: {1}].", address, data.Length), ex);
+            }
         }
         #endregion
- 
+
         #region - Properties -
+        /// <summary>
+        /// Item type
+        /// </summary>
+        public abstract FrameItemTypes ItemType { get; }
         /// <summary>
         /// Generics value
         /// </summary>

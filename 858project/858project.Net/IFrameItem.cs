@@ -12,6 +12,10 @@ namespace Project858.Net
     {
         #region - Properties -
         /// <summary>
+        /// Item type
+        /// </summary>
+        FrameItemTypes ItemType { get; }
+        /// <summary>
         /// Item address
         /// </summary>
         UInt16 Address { get; }

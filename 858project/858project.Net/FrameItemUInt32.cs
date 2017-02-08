@@ -7,9 +7,9 @@ using Project858;
 namespace Project858.Net
 {
     /// <summary>
-    /// Frame item with Int64 value
+    /// Frame item with Int32 value
     /// </summary>
-    public sealed class FrameItemUInt64 : FrameItemBase<UInt64>
+    public sealed class FrameItemUInt32 : FrameItemBase<UInt32>
     {
         #region - Constructors -
         /// <summary>
@@ -17,7 +17,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemUInt64(UInt16 address, UInt64 value)
+        public FrameItemUInt32(UInt16 address, UInt32 value)
             : base(address, value)
         {
  
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemUInt64(UInt16 address, Byte[] data)
+        public FrameItemUInt32(UInt16 address, Byte[] data)
             : base(address, data)
         {
  
@@ -38,7 +38,7 @@ namespace Project858.Net
         /// <summary>
         /// Item type
         /// </summary>
-        public override FrameItemTypes ItemType { get { return FrameItemTypes.UInt64; } }
+        public override FrameItemTypes ItemType { get { return FrameItemTypes.Int32; } }
         #endregion
 
         #region - Public Methods -
@@ -48,7 +48,7 @@ namespace Project858.Net
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return String.Format("[Int64] : 0x{0:X4} = {1}", this.Address, this.Value);
+            return String.Format("[Int32] : 0x{0:X4} = {1}", this.Address, this.Value);
         }
         #endregion
 
@@ -58,16 +58,16 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Byte array to parse</param>
         /// <returns>Value</returns>
-        protected override UInt64 InternalParseValue(Byte[] data)
+        protected override UInt32 InternalParseValue(Byte[] data)
         {
-            return BitConverter.ToUInt64(data, 0);
+            return BitConverter.ToUInt32(data, 0);
         }
         /// <summary>
         /// This function parse byt array from value
         /// </summary>
         /// <param name="value">Value to parse</param>
         /// <returns>Byte array</returns>
-        protected override Byte[] InternalParseFromValue(UInt64 value)
+        protected override Byte[] InternalParseFromValue(UInt32 value)
         {
             return BitConverter.GetBytes(value);
         }

@@ -24,6 +24,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Command address</param>
         /// <param name="data">Frame data</param>
+        /// <param name="action">Action for returning frame item type</param>
         public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt16, FrameItemTypes> action)
         {
             this.Address = address;
@@ -169,6 +170,8 @@ namespace Project858.Net
                     return new FrameItemBoolean(address, (Boolean)value);
                 case FrameItemTypes.UInt64:
                     return new FrameItemUInt64(address, (UInt64)value);
+                case FrameItemTypes.UInt32:
+                    return new FrameItemUInt32(address, (UInt32)value);
                 default:
                     return new FrameItemUnkown(address, (List<Byte>)value);
             }
@@ -200,6 +203,8 @@ namespace Project858.Net
                     return typeof(Boolean);
                 case FrameItemTypes.UInt64:
                     return typeof(UInt64);
+                case FrameItemTypes.UInt32:
+                    return typeof(UInt32);
                 default:
                     return typeof(Object);
             }
@@ -443,6 +448,8 @@ namespace Project858.Net
                     return new FrameItemBoolean(address, data);
                 case FrameItemTypes.UInt64:
                     return new FrameItemUInt64(address, data);
+                case FrameItemTypes.UInt32:
+                    return new FrameItemUInt32(address, data);
                 default:
                     return new FrameItemUnkown(address, data);
             }
