@@ -11,7 +11,6 @@ using Project858.Diagnostics;
 using Project858.ComponentModel.Client;
 using Project858.Configuration;
 using Project858.Data.SqlClient;
-using Mail;
 using Microsoft.Win32;
 
 namespace Project858.ServiceProcess
