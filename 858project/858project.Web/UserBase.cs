@@ -400,7 +400,7 @@ namespace Project858.Web
                                 if (UserBase.InternalUserBaseValidateToken(token, UserBase.InternalGetHostAddress())) 
                                 {
                                     Nullable<Guid> userId = UserBase.InternalUserBaseGetUserLoginIdFromToken(token, UserBase.InternalGetHostAddress());
-                                    if (userId != null) 
+                                    if (userId.HasValue)
                                     {
                                         user = UserBase.InternalGetUserFromUserLoginId(userId.Value, UserBase.InternalGetHostAddress());
                                         if (user == null)
