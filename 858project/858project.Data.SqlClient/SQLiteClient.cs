@@ -961,6 +961,14 @@ namespace Project858.Data.SqlClient
                 {
                     return ((String)value).Trim();
                 }
+                else if (value is Double && destinationType == typeof(Int64))
+                {
+                    return Convert.ToInt64(value);
+                }
+                else if (value is Int64 && destinationType == typeof(Int32))
+                {
+                    return (Int32)((Int64)value);
+                }
                 else if (value is Int64 && destinationType == typeof(UInt64))
                 {
                     return Convert.ToUInt64(value);
