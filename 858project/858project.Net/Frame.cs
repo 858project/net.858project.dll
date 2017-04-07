@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project858.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -157,7 +158,16 @@ namespace Project858.Net
                 case FrameItemTypes.Guid:
                     return new FrameItemGuid(address, (Guid)value);
                 case FrameItemTypes.String:
-                    return new FrameItemString(address, (String)value);
+                    {
+                        if (value is Guid)
+                        {
+                            return new FrameItemString(address, ((Guid)value).ToStringWithoutDash());
+                        }
+                        else
+                        {
+                            return new FrameItemString(address, (String)value);
+                        }
+                    }
                 case FrameItemTypes.Int16:
                     return new FrameItemInt16(address, (Int16)value);
                 case FrameItemTypes.Int32:

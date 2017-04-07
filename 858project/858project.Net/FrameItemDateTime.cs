@@ -48,7 +48,7 @@ namespace Project858.Net
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return String.Format("[DateTime] : 0x{0:X4} = {1}", this.Address, this.Value);
+            return String.Format("[DateTime] : 0x{0:X4} = {1}", this.Address, this.Value.ToIso8601String());
         }
         #endregion
 

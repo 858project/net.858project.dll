@@ -160,7 +160,13 @@ namespace Project858.Net
                         Object value = null;
                         try
                         {
+                            //get vale from frame
                             value = frame.GetValue<Object>(attribute.Address);
+
+                            //update value
+                            value = FrameHelper.InternalUpdateValue(attribute.Type, item.Property.PropertyType, value);
+
+                            //set value to property
                             item.Property.SetValue(result, value, null);
                         }
                         catch (Exception ex)
@@ -173,6 +179,27 @@ namespace Project858.Net
 
             //return result
             return result;
+        }
+        /// <summary>
+        /// This method updates or converts value to target type
+        /// </summary>
+        /// <param name="type">Frame item type</param>
+        /// <param name="targetType">Target property type</param>
+        /// <param name="value">Value to convert</param>
+        /// <returns></returns>
+        private static Object InternalUpdateValue(FrameItemTypes type, Type targetType, Object value)
+        {
+            //check value
+            if (value != null)
+            {
+                //check type
+                if (type == FrameItemTypes.String && targetType == typeof(Guid) && value is String)
+                {
+                    Nullable<Guid> guidValue = (value as String).ToGuidWithoutDash();
+                    return guidValue.Value;
+                }
+            }
+            return value;
         }
         #endregion
     }
