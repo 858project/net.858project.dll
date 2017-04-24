@@ -25,6 +25,32 @@ namespace Project858
     /// </summary>
     public static class ExtensionMethod
     {
+        #region - Public Static DateTime Methods -
+        /// <summary>
+        /// This method selects min value from current and MinValue 
+        /// </summary>
+        /// <param name="value">Current value</param>
+        /// <param name="minValue">Min value</param>
+        /// <returns>Min value</returns>
+        public static DateTime Min(this DateTime value, DateTime minValue)
+        {
+            return value < minValue ? minValue : value;
+        }
+        /// <summary>
+        /// This method selects min value from current and new date which is combine current value and days 
+        /// </summary>
+        /// <param name="value">Current value</param>
+        /// <param name="days">
+        /// A number of whole and fractional days. The value parameter can be negative or positive.
+        /// </param>
+        /// <returns>Min value</returns>
+        public static DateTime MinAddDays(this DateTime value, int days)
+        {
+            DateTime minValue = value.AddDays(days);
+            return value.Min(minValue);
+        }
+        #endregion
+
         #region - Public Static Type Methods -
         /// <summary>
         /// Overi ci je typ typu list
