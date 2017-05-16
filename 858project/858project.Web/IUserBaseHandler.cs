@@ -37,8 +37,9 @@ namespace Project858.Web
         /// </summary>
         /// <param name="userId">Id uzivatela</param>
         /// <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
+        /// <param name="expireDate">Expiration date for this session</param>
         /// <returns>Token uzivatela</returns>
-        String UserBaseGetUserToken(Guid userId, String hostAddress);
+        String UserBaseGetUserToken(Guid userId, String hostAddress, DateTime expireDate);
         /// <summary>
         /// Vrati host adress v pripade specialnych pripadov
         /// </summary>

@@ -152,7 +152,7 @@ namespace Project858.Web
             if (current != null)
             {
                 //ziskame token uzivatela
-                String token = this.InternalGetUserToken(id, UserBase.GetHostAddress());
+                String token = this.InternalGetUserToken(id, UserBase.GetHostAddress(), expireDate);
                 if (!String.IsNullOrWhiteSpace(token))
                 {
                     //vratime uzivatelovi cookie
@@ -177,12 +177,13 @@ namespace Project858.Web
         /// </summary>
         /// <param name="userId">Id uzivatela</param>
         /// <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
+        /// <param name="expireDate">Expiration date for this session</param>
         /// <returns>Token uzivatela</returns>
-        private String InternalGetUserToken(Guid userId, String hostAddress)
+        private String InternalGetUserToken(Guid userId, String hostAddress, DateTime expireDate)
         {
             if (UserBase.Handler != null)
             {
-                return UserBase.Handler.UserBaseGetUserToken(userId, hostAddress);
+                return UserBase.Handler.UserBaseGetUserToken(userId, hostAddress, expireDate);
             }
             return null;
         }

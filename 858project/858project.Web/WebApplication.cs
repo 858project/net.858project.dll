@@ -295,7 +295,14 @@ namespace Project858.Web
                                 DateTimeOffset date = DateTimeOffset.MinValue;
                                 if (DateTimeOffset.TryParse(values[2], null, DateTimeStyles.AssumeUniversal, out date)) 
                                 {
-                                    return DateTimeOffset.Compare(date.ToUniversalTime(), DateTimeOffset.UtcNow) >= 0;
+                                    //compare date
+                                    var result = DateTimeOffset.Compare(date.ToUniversalTime(), DateTimeOffset.UtcNow) >= 0;
+
+                                    //trace comapre date
+                                    WebUtility.Trace("UserBaseValidateToken -> {0}--{1}, {2}, {3}", date.ToUniversalTime(), DateTimeOffset.UtcNow, token, result);
+
+                                    //return compare result
+                                    return result;
                                 }
                             }
                         }
@@ -306,6 +313,7 @@ namespace Project858.Web
             {
                 WebApplication.OnException(ex);
             }
+            WebUtility.Trace("UserBaseValidateToken -> return false");
             return false;
         }
         /// <summary>
@@ -349,14 +357,15 @@ namespace Project858.Web
         /// </summary>
         /// <param name="userId">Id uzivatela</param>
         /// <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
+        /// <param name="expireDate">Expiration date for this session</param>
         /// <returns>Token uzivatela</returns>
-        public String UserBaseGetUserToken(Guid userId, String hostAddress)
+        public String UserBaseGetUserToken(Guid userId, String hostAddress, DateTime expireDate)
         {
             if (String.IsNullOrWhiteSpace(WebApplication.AccessTokenKey))
             {
                 return null;
             }
-            String token = String.Format("{0}/{1}/{2}", userId, hostAddress, DateTime.UtcNow.AddHours(24).ToIso8601String());
+            String token = String.Format("{0}/{1}/{2}", userId, hostAddress, expireDate.ToIso8601String());
             token = Utility.EncodeValue(WebApplication.AccessTokenKey, token);
             return token;
         }
