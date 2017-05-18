@@ -317,14 +317,15 @@ namespace Project858.Data.SqlClient
         /// <param name="orderClause">Order klauzula</param>
         /// <param name="limit">Urcuje maximalne mnozstvo poloziek ktore chceme nacitat</param>
         /// <param name="page">Stranka dat</param>
+        /// <param name="excludeColumns">Columns which are not required in this request</param>
         /// <returns>Kolekcia nacitanych dat</returns>
-        public List<T> Select<T>(String whereClause = null, String orderClause = null, Nullable<UInt32> limit = null, Nullable<UInt32> page = null)
+        public List<T> Select<T>(String whereClause = null, String orderClause = null, Nullable<UInt32> limit = null, Nullable<UInt32> page = null, params String[] excludeColumns)
         {
             if (limit != null && limit.Value < 1)
             {
                 throw new ArgumentException("Value 'limit' cannot be less than the minimum value 1");
             }
-            return this.InternalSelect<T>(whereClause, orderClause, limit, page);
+            return this.InternalSelect<T>(whereClause, orderClause, limit, page, excludeColumns);
         }
         /// <summary>
         /// Nacita pocet dat
@@ -1145,8 +1146,11 @@ namespace Project858.Data.SqlClient
         /// <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
         /// <param name="whereClause">Where podmienka</param>
         /// <param name="orderClause">Order klauzula</param>
+        /// <param name="limit">Max limit for reading rows</param>
+        /// <param name="page">offset or page for reading data</param>
+        /// <param name="excludeColumns">Columns which are not required in this request</param>
         /// <returns>Kolekcia nacitanych dat</returns>
-        private List<T> InternalSelect<T>(String whereClause, String orderClause, Nullable<UInt32> limit, Nullable<UInt32> page)
+        private List<T> InternalSelect<T>(String whereClause, String orderClause, Nullable<UInt32> limit, Nullable<UInt32> page, params String[] excludeColumns)
         {
             //ziskame informacie o objekte
             ReflectionObjectItem properties = this.m_reflectionPropertyCollection.FindPropertyCollection(typeof(T));
@@ -1189,9 +1193,72 @@ namespace Project858.Data.SqlClient
             using (SqlCommand command = new SqlCommand())
             {
                 //vykoname prikad
-                command.CommandText = this.InternalCreateCommandText(properties, whereClause, orderClause, limit, page);
+                command.CommandText = this.InternalCreateCommandText(properties, whereClause, orderClause, limit, page, excludeColumns);
                 return this.ReadObjectCollection<T>(command);
             }
+        }
+        /// <summary>
+        /// This function returns columns text for command
+        /// </summary>
+        /// <param name="properties">All columns collection</param>
+        /// <returns>Columns or String.Empty</returns>
+        private String InternalGetColumnNamesForCommandText(List<ReflectionPropertyItem> properties)
+        {
+            //get column count
+            int length = properties.Count;
+            
+            //builder
+            StringBuilder builder = new StringBuilder();
+
+            //create all cokumn
+            for (int i = 0; i < length; i++)
+            {
+                builder.AppendFormat("[{0}]", properties[i].Property.Name);
+                if (i < length - 1)
+                {
+                    builder.Append(",");
+                }
+            }
+
+            //return columns
+            return builder.ToString();
+        }
+        /// <summary>
+        /// This method return filtered columns
+        /// </summary>
+        /// <param name="properties">Object type reflection</param>
+        /// <param name="excludeColumns">Columns which are not required in this request</param>
+        /// <returns>Filtered columns</returns>
+        private List<ReflectionPropertyItem> InternalGetFilteredColumns(ReflectionObjectItem properties, String[] excludeColumns)
+        {
+            List<ReflectionPropertyItem> collection = new List<ReflectionPropertyItem>();
+            if (excludeColumns != null && excludeColumns.Length > 0)
+            {
+                //regex for update
+                Regex startRegex = new Regex(@"^\s*\[?\s*", RegexOptions.Compiled);
+                Regex endRegex = new Regex(@"\s*\]?\s*$", RegexOptions.Compiled);
+
+                //update columns name
+                List<String> columnNames = new List<String>();
+                foreach (String column in excludeColumns)
+                {
+                    String newColumName = startRegex.Replace(column, String.Empty);
+                    newColumName = endRegex.Replace(newColumName, String.Empty);
+
+                    //create new name
+                    columnNames.Add(newColumName);
+                }
+
+                //filtered column
+                foreach (ReflectionPropertyItem property in properties.Values)
+                {
+                    if (!columnNames.Contains(property.Property.Name, true))
+                    {
+                        collection.Add(property);
+                    }
+                }
+            }
+            return collection;
         }
         /// <summary>
         /// Vytvori command pre select podla parametrov
@@ -1201,8 +1268,9 @@ namespace Project858.Data.SqlClient
         /// <param name="orderClause">Zoradenie</param>
         /// <param name="limit">Limit</param>
         /// <param name="page">Stranka</param>
+        /// <param name="excludeColumns">Columns which are not required in this request</param>
         /// <returns>Command text</returns>
-        private String InternalCreateCommandText(ReflectionObjectItem properties, String whereClause, String orderClause, Nullable<UInt32> limit, Nullable<UInt32> page)
+        private String InternalCreateCommandText(ReflectionObjectItem properties, String whereClause, String orderClause, Nullable<UInt32> limit, Nullable<UInt32> page, params String[] excludeColumns)
         {
             StringBuilder commandTextBuilder = new StringBuilder();
             commandTextBuilder.Append("SELECT");
@@ -1210,7 +1278,21 @@ namespace Project858.Data.SqlClient
             {
                 commandTextBuilder.AppendFormat(" TOP {0}", limit.Value);
             }
-            commandTextBuilder.AppendFormat(" * FROM [{0}]", properties.TableOrViewName);
+
+            //create columns
+            List<ReflectionPropertyItem> filteredColumns = this.InternalGetFilteredColumns(properties, excludeColumns);
+ 
+            if (filteredColumns.Count > 0)
+            {
+                //get columns
+                commandTextBuilder.AppendFormat(" {0} ", this.InternalGetColumnNamesForCommandText(filteredColumns));
+            }
+            else
+            {
+                //all columns
+                commandTextBuilder.Append(" * ");
+            }
+            commandTextBuilder.AppendFormat("FROM [{0}]", properties.TableOrViewName);
             if (!String.IsNullOrWhiteSpace(whereClause))
             {
                 commandTextBuilder.AppendFormat(" WHERE {0}", whereClause);

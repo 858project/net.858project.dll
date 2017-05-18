@@ -133,6 +133,60 @@ namespace Project858
 
         #region - Public Static String Methods -
         /// <summary>
+        /// Determines whether an element is in the collection
+        /// </summary>
+        /// <param name="values">
+        /// Collection to check
+        /// </param>
+        /// <param name="value">
+        /// The object to locate in the collection. The value can be null for reference types.
+        /// </param>
+        /// <param name="ignoreCase">
+        /// true to ignore case during the comparison; otherwise, false.
+        /// </param>
+        /// <returns>true | fakse</returns>
+        public static Boolean Contains(this List<String> values, String value, Boolean ignoreCase = false)
+        {
+            if (values != null && value.Length > 0)
+            {
+                foreach (String item in values)
+                {
+                    if (String.Compare(item, value, ignoreCase) == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Determines whether an element is in the array
+        /// </summary>
+        /// <param name="values">
+        /// Array to check
+        /// </param>
+        /// <param name="value">
+        /// The object to locate in the array. The value  can be null for reference types.
+        /// </param>
+        /// <param name="ignoreCase">
+        /// true to ignore case during the comparison; otherwise, false.
+        /// </param>
+        /// <returns>true | fakse</returns>
+        public static Boolean Contains(this String[] values, String value, Boolean ignoreCase = false)
+        {
+            if (values != null && value.Length > 0)
+            {
+                foreach (String item in values)
+                {
+                    if (String.Compare(item, value, ignoreCase) == 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        /// <summary>
         /// This method converts list of bytes to hexa string
         /// </summary>
         /// <param name="value">List with data</param>

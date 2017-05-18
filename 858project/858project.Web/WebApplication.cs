@@ -259,8 +259,6 @@ namespace Project858.Web
             catch (Exception ex)
             {
                 //zalogujeme
-                Project858.Web.WebUtility.Trace("Odoslanie e-mailu zlyhalo. {0}", ex);
-
                 WebApplication.OnException(ex);
                 return false;
             }
@@ -298,9 +296,6 @@ namespace Project858.Web
                                     //compare date
                                     var result = DateTimeOffset.Compare(date.ToUniversalTime(), DateTimeOffset.UtcNow) >= 0;
 
-                                    //trace comapre date
-                                    WebUtility.Trace("UserBaseValidateToken -> {0}--{1}, {2}, {3}", date.ToUniversalTime(), DateTimeOffset.UtcNow, token, result);
-
                                     //return compare result
                                     return result;
                                 }
@@ -313,7 +308,6 @@ namespace Project858.Web
             {
                 WebApplication.OnException(ex);
             }
-            WebUtility.Trace("UserBaseValidateToken -> return false");
             return false;
         }
         /// <summary>
