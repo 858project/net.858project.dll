@@ -756,7 +756,7 @@
         </member>
         <member name="M:Project858.ComponentModel.Client.ClientBase.InternalStart">
             <summary>
-            NotImplementedException
+            This function is raised when client is starting
             </summary>
             <exception cref="T:System.NotImplementedException">
             Metoda nie je implementovana
@@ -765,7 +765,7 @@
         </member>
         <member name="M:Project858.ComponentModel.Client.ClientBase.InternalStop">
             <summary>
-            NotImplementedException
+            This function is raised when client is stoping
             </summary>
             <exception cref="T:System.NotImplementedException">
             Metoda nie je implementovana
@@ -773,7 +773,7 @@
         </member>
         <member name="M:Project858.ComponentModel.Client.ClientBase.InternalPause">
             <summary>
-            NotImplementedException
+            This function is raised when client is pausing
             </summary>
             <exception cref="T:System.NotImplementedException">
             Metoda nie je implementovana
@@ -781,17 +781,19 @@
         </member>
         <member name="M:Project858.ComponentModel.Client.ClientBase.InternalDispose">
             <summary>
-            Metoda volana pred Dispose objektu
+            This function is raised when client is disposing
             </summary>
             <exception cref="T:System.NotImplementedException">
             Metoda nie je implementovana
             </exception>
         </member>
-        <member name="M:Project858.ComponentModel.Client.ClientBase.InternalException(System.Exception)">
+        <member name="M:Project858.ComponentModel.Client.ClientBase.InternalException(System.Exception,System.String,System.Object[])">
             <summary>
             Metoda volana vzdy pri internej chybe klienta
             </summary>
             <param name="exception">Chyba ktora vznikla</param>
+            <param name="message">Message to trace</param>
+            <param name="args">Arguments for string.format('message', args)</param>
         </member>
         <member name="M:Project858.ComponentModel.Client.ClientBase.InternalMailMessage(System.Net.Mail.MailMessage)">
             <summary>
@@ -843,7 +845,7 @@
             <param name="message">Text spravy</param>
             <param name="msgArgs">Dalsie argumenty do String.Format k sprave</param>
         </member>
-        <member name="M:Project858.ComponentModel.Client.ClientBase.AddInternalExceptionToLog(System.Exception)">
+        <member name="M:Project858.ComponentModel.Client.ClientBase.InternalTraceExceptionToLog(System.Exception)">
             <summary>
             Zaloguje chybu do log suboru
             </summary>
@@ -878,12 +880,6 @@
             Vygeneruje event oznamujuci poziadavku na logovanie informacii
             </summary>
             <param name="e">TraceEventArgs</param>
-        </member>
-        <member name="M:Project858.ComponentModel.Client.ClientBase.AddInternalExceptionToMail(System.Exception)">
-            <summary>
-            Vytvori a odosle email o chybe pri vykonavani comanndu do SQL
-            </summary>
-            <param name="exception">Vzniknuta chyba</param>
         </member>
         <member name="M:Project858.ComponentModel.Client.ClientBase.Dispose(System.Boolean)">
             <summary>
@@ -1497,11 +1493,12 @@
             <param name="item">Objekt ktoryc chceme aktualizovat</param>
             <returns>Objekt ktory necitavame</returns>
         </member>
-        <member name="M:Project858.Data.SqlClient.SQLiteClient.InternalUpdateValue(System.Object)">
+        <member name="M:Project858.Data.SqlClient.SQLiteClient.InternalUpdateValue(System.Object,System.Type)">
             <summary>
             Aktualizuje hodnotu skor ako dojde k jej spracovaniu
             </summary>
             <param name="value">Hodnota ktoru chceme aktualizovat</param>
+            <param name="destinationType">Destination type</param>
             <returns>Aktualizovana hodnota alebo povodna hodnota</returns>
         </member>
         <member name="M:Project858.Data.SqlClient.SQLiteClient.InternalSelectFirstObject``1(System.String,System.String)">
@@ -1569,6 +1566,11 @@
             Vlozi pozadovany objekt do SQL
             </summary>
             <param name="item">objekt ktorych chceme vlozit</param>
+        </member>
+        <member name="M:Project858.Data.SqlClient.SQLiteClient.InternalConvertDbType(System.Data.SqlDbType)">
+            <summary>
+            Convert SqlDbType to DbType
+            </summary>
         </member>
         <member name="M:Project858.Data.SqlClient.SQLiteClient.InternalInsertCollection``1(System.Collections.Generic.List{``0})">
             <summary>
@@ -2524,7 +2526,7 @@
             <param name="item">Objekt ktory chceme vymazat</param>
             <returns>True = objekt bol vymazany, inak false</returns>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.Select``1(System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+        <member name="M:Project858.Data.SqlClient.SqlClient.Select``1(System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[])">
             <summary>
             Vykona select pozadovanych dat
             </summary>
@@ -2533,6 +2535,7 @@
             <param name="orderClause">Order klauzula</param>
             <param name="limit">Urcuje maximalne mnozstvo poloziek ktore chceme nacitat</param>
             <param name="page">Stranka dat</param>
+            <param name="excludeColumns">Columns which are not required in this request</param>
             <returns>Kolekcia nacitanych dat</returns>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClient.SelectCount``1(System.String)">
@@ -2828,16 +2831,34 @@
             <param name="whereClause">Where podmienka</param>
             <returns>Pocet dat alebo null</returns>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.InternalSelect``1(System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+        <member name="M:Project858.Data.SqlClient.SqlClient.InternalSelect``1(System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[])">
             <summary>
             Vykona select pozadovanych dat
             </summary>
             <typeparam name="T">Typ objektu ktory chceme nacitat</typeparam>
             <param name="whereClause">Where podmienka</param>
             <param name="orderClause">Order klauzula</param>
+            <param name="limit">Max limit for reading rows</param>
+            <param name="page">offset or page for reading data</param>
+            <param name="excludeColumns">Columns which are not required in this request</param>
             <returns>Kolekcia nacitanych dat</returns>
         </member>
-        <member name="M:Project858.Data.SqlClient.SqlClient.InternalCreateCommandText(Project858.Data.SqlClient.SqlClient.ReflectionObjectItem,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+        <member name="M:Project858.Data.SqlClient.SqlClient.InternalGetColumnNamesForCommandText(System.Collections.Generic.List{Project858.Data.SqlClient.SqlClient.ReflectionPropertyItem})">
+            <summary>
+            This function returns columns text for command
+            </summary>
+            <param name="properties">All columns collection</param>
+            <returns>Columns or String.Empty</returns>
+        </member>
+        <member name="M:Project858.Data.SqlClient.SqlClient.InternalGetFilteredColumns(Project858.Data.SqlClient.SqlClient.ReflectionObjectItem,System.String[])">
+            <summary>
+            This method return filtered columns
+            </summary>
+            <param name="properties">Object type reflection</param>
+            <param name="excludeColumns">Columns which are not required in this request</param>
+            <returns>Filtered columns</returns>
+        </member>
+        <member name="M:Project858.Data.SqlClient.SqlClient.InternalCreateCommandText(Project858.Data.SqlClient.SqlClient.ReflectionObjectItem,System.String,System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String[])">
             <summary>
             Vytvori command pre select podla parametrov
             </summary>
@@ -2846,6 +2867,7 @@
             <param name="orderClause">Zoradenie</param>
             <param name="limit">Limit</param>
             <param name="page">Stranka</param>
+            <param name="excludeColumns">Columns which are not required in this request</param>
             <returns>Command text</returns>
         </member>
         <member name="M:Project858.Data.SqlClient.SqlClient.InternalInsertObject(System.Object)">
@@ -3150,6 +3172,17 @@
             <param name="message">Sprava ktoru chceme zalogovat</param>
             <param name="args">Aegument pre spravu do String.Format()</param>
             <returns>True = logovanie bolo uspesne inak false</returns>
+        </member>
+        <member name="M:Project858.Diagnostics.TraceLogger.Trace(Project858.Diagnostics.TraceTypes,System.String)">
+            <summary>
+            Zaloguje spravu do SQLite databazy
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Argument nie je inicializovany
+            </exception>
+            <param name="traceType">Typ logovacej spravy</param>
+            <param name="message">Text logovacej spravy</param>
+            <returns>True = logovanie spravy bolo uspesne</returns>
         </member>
         <member name="M:Project858.Diagnostics.TraceLogger.Trace(System.DateTime,Project858.Diagnostics.TraceTypes,System.String,System.String)">
             <summary>
@@ -3758,6 +3791,738 @@
             </summary>
             <param name="collection">Kolekcia do ktorej chceme data vlozit</param>
         </member>
+        <member name="T:Project858.IO.Ports.SerialPortClient">
+            <summary>
+            Zakladna komunikacna vrstva, pracujuca na linkovej urovni seriovej linky
+            </summary>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.IO.Ports.StopBits)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+            <param name="stopBits">StopBits</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.IO.Ports.StopBits,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+            <param name="stopBits">StopBits</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.#ctor(System.IO.Ports.SerialPort)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Arguments provided to a method is not valid.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            The value of an argument is outside the allowable range of values.
+            </exception>
+            <param name="port">Port, cez ktory sa bude komunikovat</param>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortClient.transportConnected">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortClient.ConnectedEvent">
+            <summary>
+            Event na oznamenie spustenia spojenia pre vyssu vrstvu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortClient.transportDisconnected">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortClient.TransportDisconnected">
+            <summary>
+            Event na oznamenie ukoncenia spojenia pre vyssu vrstvu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortClient.transportDataReceived">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortClient.TransportDataReceived">
+            <summary>
+            Event na oznamenue prichodu dat na transportnej vrstve
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.IsConnected">
+            <summary>
+            (Get) Detekcia pripojenia
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.BaudRate">
+            <summary>
+            (Get) BaudRate
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.DataBits">
+            <summary>
+            (Get) DataBits
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.Handshake">
+            <summary>
+            (Get / Set) Handshake
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.Parity">
+            <summary>
+            (Get) Parity
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.PortName">
+            <summary>
+            (Get) Meno COM portu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.ReadTimeout">
+            <summary>
+            (Get) Timeout na citanie z portu
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.StopBits">
+            <summary>
+            (Get) StopBits
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="P:Project858.IO.Ports.SerialPortClient.WriteTimeout">
+            <summary>
+            (Get) Timeout na zapis na port
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.handshake">
+            <summary>
+            Handshake
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.writeTimeout">
+            <summary>
+            Timeout na zapis na port
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.readTimeout">
+            <summary>
+            Timeout na citanie z portu
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.stopBits">
+            <summary>
+            StopBits
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.dataBits">
+            <summary>
+            Data Bits
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.parity">
+            <summary>
+            Parity
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.baudRate">
+            <summary>
+            Prenosova rychlost
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.portName">
+            <summary>
+            Meno COM portu cez ktory komunikujeme
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.isRun">
+            <summary>
+            Detekuje ci je funkcia vrstvy spustena
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.traceErrorAlways">
+            <summary>
+            Detekuje ci logovania errorov pozadovane stale
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.traceType">
+            <summary>
+            Typ logovania ktory je nastaveny
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.eventLock">
+            <summary>
+            Pomocny objekt na synchronizaciu pristupu k eventom
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.isConnected">
+            <summary>
+            detekcia pripojenia
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.disposed">
+            <summary>
+            Track if dispose has been called
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortClient.port">
+            <summary>
+            Seriovy port cez ktory komunikujeme
+            </summary>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.InternalStart">
+            <summary>
+            This function is raised when client is starting
+            </summary>
+            <exception cref="T:System.NotImplementedException">
+            Metoda nie je implementovana
+            </exception>
+            <returns>NotImplementedException</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.InternalStop">
+            <summary>
+            This function is raised when client is stoping
+            </summary>
+            <exception cref="T:System.NotImplementedException">
+            Metoda nie je implementovana
+            </exception>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.InternalPause">
+            <summary>
+            This function is raised when client is pausing
+            </summary>
+            <exception cref="T:System.NotImplementedException">
+            Metoda nie je implementovana
+            </exception>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.InternalDispose">
+            <summary>
+            This function is raised when client is disposing
+            </summary>
+            <exception cref="T:System.NotImplementedException">
+            Metoda nie je implementovana
+            </exception>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.InternalInitialize">
+            <summary>
+            Podla inicializacia otvori pozadovany COM port
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+            Osetrenie, pripadu nastavenie spojenia an typ none
+            </exception>
+            <returns>True = uspesne otvorene spojenie, False = chyba pri otvarani spojenia</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.InternalDeinitialize">
+            <summary>
+            Zatvori spojenie
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+            <returns>True = uspesne zatvorene spojenie, False = chyba pri zatvarani spojenia</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.Write(System.Byte[])">
+            <summary>
+            Zapise data na komunikacnu linku
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            Vynimka v pripade ze sa snazime zapisat data, ale spojenie nie je.
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave disposed
+            </exception>
+            <returns>True = data boli uspesne zapisane, False = chyba pri zapise dat</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.port_DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+            <summary>
+            Metoda obsluhujuca event oznamujuci prichod dat na port
+            </summary>
+            <param name="sender">Odosielatel udalosti</param>
+            <param name="e">SerialDataReceivedEventArgs</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.OnReceivedData(Project858.IO.Ports.DataEventArgs)">
+            <summary>
+            Virtualna metoda na obsluhu eventu (posielanie dat do vyssej urovne)
+            </summary>
+            <param name="e">EventArgs obsahujuci data</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.OnConnected(System.EventArgs)">
+            <summary>
+            Trieda generujuca event na oznamenie vytvorenia spojenia
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.OnDisconnected(System.EventArgs)">
+            <summary>
+            Trieda generujuca event na oznamenie padu spojenia
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortClient.ToString">
+            <summary>
+            Vrati meno triedy
+            </summary>
+            <returns>Meno triedy</returns>
+        </member>
+        <member name="T:Project858.IO.Ports.DataEventArgs">
+            <summary>
+            EventArgs pre event na prichod dat
+            </summary>
+        </member>
+        <member name="M:Project858.IO.Ports.DataEventArgs.#ctor(System.Byte[],System.String)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="data">Prijate data</param>
+            <param name="comPortName">Com port from which data are received</param>
+        </member>
+        <member name="P:Project858.IO.Ports.DataEventArgs.ComPortName">
+            <summary>
+            Com port from which data are received
+            </summary>
+        </member>
+        <member name="P:Project858.IO.Ports.DataEventArgs.Data">
+            <summary>
+            (Get) Prijate data
+            </summary>
+        </member>
+        <member name="T:Project858.IO.Ports.DataEventHandler">
+            <summary>
+            Delegat na oznamenie vykonania operacie s datami
+            </summary>
+            <param name="sender">Odosielatel udalosti</param>
+            <param name="e">DataBytesEventArgs</param>
+        </member>
+        <member name="T:Project858.IO.Ports.ExceptionEventArgs">
+            <summary>
+            EventArgs pre event na prichod dat
+            </summary>
+        </member>
+        <member name="M:Project858.IO.Ports.ExceptionEventArgs.#ctor(System.Exception)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="data">Prijate data</param>
+        </member>
+        <member name="P:Project858.IO.Ports.ExceptionEventArgs.Exception">
+            <summary>
+            (Get) Prijate data
+            </summary>
+        </member>
+        <member name="T:Project858.IO.Ports.ExceptionEventHandler">
+            <summary>
+            Delegat na oznamenie vykonania operacie s datami
+            </summary>
+            <param name="sender">Odosielatel udalosti</param>
+            <param name="e">DataBytesEventArgs</param>
+        </member>
+        <member name="T:Project858.IO.Ports.SerialPortProtocolClient">
+            <summary>
+            Serial port client with protocol
+            </summary>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <param name="portName">Meno COM portu</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov readTimeout, writeTimeout
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentu baudRate
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov baudRate, readTimeout, writeTimeout
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentu baudRate 
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov baudRate, readTimeout, writeTimeout
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov baudRate, dataBits
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov baudRate, dataBits, readTimeout, writeTimeout
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.IO.Ports.StopBits)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov baudRate, dataBits
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+            <param name="stopBits">StopBits</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.#ctor(System.String,System.Int32,System.IO.Ports.Parity,System.Int32,System.IO.Ports.StopBits,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentException">
+            Chybna argumentu portName
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybna argumentov baudRate, dataBits, readTimeout, writeTimeout
+            </exception>
+            <param name="portName">Meno COM portu</param>
+            <param name="baudRate">Prenosova rychlost</param>
+            <param name="parity">Parity</param>
+            <param name="dataBits">DataBits</param>
+            <param name="stopBits">StopBits</param>
+            <param name="readTimeout">Timeout na citanie</param>
+            <param name="writeTimeout">Timeout na zapis</param>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortProtocolClient.m_receivedFrameEvent">
+            <summary>
+            Event na oznamenue prichodu frame na transportnej vrstve
+            </summary>
+        </member>
+        <member name="E:Project858.IO.Ports.SerialPortProtocolClient.ReceivedFrameEvent">
+            <summary>
+            Event na oznamenue prichodu frame na transportnej vrstve
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortProtocolClient.m_lockObject">
+            <summary>
+            Synchronization object
+            </summary>
+        </member>
+        <member name="F:Project858.IO.Ports.SerialPortProtocolClient.m_buffer">
+            <summary>
+            Buffer collection for processing data
+            </summary>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.Send(Project858.Net.Frame)">
+            <summary>
+            This function sends frame to transport layer
+            </summary>
+            <param name="frame">Frame to send</param>
+            <returns>True | false</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.OnReceivedData(Project858.IO.Ports.DataEventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho prijatie dat
+            </summary>
+            <param name="e">DataEventArgs</param>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.internalFindFrame(System.Collections.Generic.List{System.Byte})">
+            <summary>
+            This function finds frame in array
+            </summary>
+            <param name="array">Input array data</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.internalConstructFrame(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32,System.UInt16)">
+            <summary>
+            This function constructs frame from data array
+            </summary>
+            <param name="array">Data array</param>
+            <param name="index">Start frame index</param>
+            <param name="length">Frame length</param>
+            <param name="commandAddress">Command address from frame</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.internalGetFrameDataCheckSum(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            This function calculate check sum from frame
+            </summary>
+            <param name="array">Data array</param>
+            <param name="index">Start frame index</param>
+            <param name="length">Frame length</param>
+            <returns>Check sum</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.InternalGetFrameItemType(System.UInt16,System.UInt16)">
+            <summary>
+            This function returns frame item type from address
+            </summary>
+            <param name="address">Frame address</param>
+            <param name="itemAddress">Address to detect type</param>
+            <returns>Frame item type</returns>
+        </member>
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.OnReceivedFrame(Project858.Net.FrameEventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho prijatie dat
+            </summary>
+            <param name="e">EventArgs obsahujuci data</param>
+        </member>
         <member name="T:Project858.Net.FrameEventHandler">
             <summary>
             Delegat na oznamenie vykonania operacie s datami
@@ -3770,12 +4535,24 @@
             EventArgs pre event na prichod frame
             </summary>
         </member>
+        <member name="M:Project858.Net.FrameEventArgs.#ctor(Project858.Net.Frame,System.String)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="frame">Prijaty frame</param>
+            <param name="comPortName">Port name from serial port client</param>
+        </member>
         <member name="M:Project858.Net.FrameEventArgs.#ctor(Project858.Net.Frame,System.Net.IPEndPoint)">
             <summary>
             Initialize this class
             </summary>
             <param name="frame">Prijaty frame</param>
             <param name="remoteEndPoint">EndPoint odosielatela dat</param>
+        </member>
+        <member name="P:Project858.Net.FrameEventArgs.ComPortName">
+            <summary>
+            Port name from serial port client
+            </summary>
         </member>
         <member name="P:Project858.Net.FrameEventArgs.Frame">
             <summary>
@@ -3840,6 +4617,15 @@
             <param name="commandAddress">Frame command address</param>
             <returns>Frame | null</returns>
         </member>
+        <member name="M:Project858.Net.FrameHelper.Serialize``1(``0,Project858.Net.Frame)">
+            <summary>
+            Serializes the specified object to a Frame.
+            </summary>
+            <typeparam name="T">The type of the object to serialize to.</typeparam>
+            <param name="obj">The object to serialize.</param>
+            <param name="frame">Frame</param>
+            <returns>Frame | null</returns>
+        </member>
         <member name="M:Project858.Net.FrameHelper.Deserialize``1(Project858.Net.Frame)">
             <summary>
             Deserializes the Frame to a .NET object.
@@ -3848,13 +4634,13 @@
             <param name="frame">The Frame to deserialize.</param>
             <returns>The deserialized object from the Frame.</returns>
         </member>
-        <member name="M:Project858.Net.FrameHelper.InternalSerialize``1(``0,System.UInt16)">
+        <member name="M:Project858.Net.FrameHelper.InternalSerialize``1(``0,Project858.Net.Frame)">
             <summary>
             Serializes the specified Object to Frame
             </summary>
             <typeparam name="T">The type of the object to serialize to.</typeparam>
             <param name="obj">The object to serialize.</param>
-            <param name="commandAddress">Frame command address</param>
+            <param name="frame">Frame</param>
             <returns>Frame | null</returns>
         </member>
         <member name="M:Project858.Net.FrameHelper.InternalDeserialize``1(Project858.Net.Frame)">
@@ -3865,13 +4651,13 @@
             <param name="frame">The Frame to deserialize.</param>
             <returns>The deserialized object from the Frame.</returns>
         </member>
-        <member name="M:Project858.Net.FrameHelper.InternalSerialize``1(``0,System.UInt16,Project858.Reflection.ReflectionType)">
+        <member name="M:Project858.Net.FrameHelper.InternalSerialize``1(``0,Project858.Net.Frame,Project858.Reflection.ReflectionType)">
             <summary>
             Serializes the specified Object to Frame
             </summary>
             <typeparam name="T">The type of the object to serialize to.</typeparam>
             <param name="obj">The object to serialize.</param>
-            <param name="commandAddress">Frame command address</param>
+            <param name="frame">Frame</param>
             <param name="reflection">Reflection information for the Object to deserialize</param>
             <returns>Frame | null</returns>
         </member>
@@ -3883,6 +4669,15 @@
             <param name="frame">The Frame to deserialize.</param>
             <param name="reflection">Reflection information for the Object to deserialize</param>
             <returns>The deserialized object from the Frame.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalUpdateValue(Project858.Net.FrameItemTypes,System.Type,System.Object)">
+            <summary>
+            This method updates or converts value to target type
+            </summary>
+            <param name="type">Frame item type</param>
+            <param name="targetType">Target property type</param>
+            <param name="value">Value to convert</param>
+            <returns></returns>
         </member>
         <member name="T:Project858.Net.FrameItemBoolean">
             <summary>
@@ -3902,6 +4697,17 @@
             </summary>
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemBoolean.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemBoolean.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
         </member>
         <member name="M:Project858.Net.FrameItemBoolean.InternalParseValue(System.Byte[])">
             <summary>
@@ -3936,6 +4742,17 @@
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
         </member>
+        <member name="P:Project858.Net.FrameItemByte.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemByte.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
         <member name="M:Project858.Net.FrameItemByte.InternalParseValue(System.Byte[])">
             <summary>
             This function parse value from byt array
@@ -3969,6 +4786,17 @@
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
         </member>
+        <member name="P:Project858.Net.FrameItemInt16.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemInt16.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
         <member name="M:Project858.Net.FrameItemInt16.InternalParseValue(System.Byte[])">
             <summary>
             This function parse value from byt array
@@ -3977,6 +4805,50 @@
             <returns>Value</returns>
         </member>
         <member name="M:Project858.Net.FrameItemInt16.InternalParseFromValue(System.Int16)">
+            <summary>
+            This function parse byt array from value
+            </summary>
+            <param name="value">Value to parse</param>
+            <returns>Byte array</returns>
+        </member>
+        <member name="T:Project858.Net.FrameItemUInt32">
+            <summary>
+            Frame item with Int32 value
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt32.#ctor(System.UInt16,System.UInt32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Item address</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt32.#ctor(System.UInt16,System.Byte[])">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Item address</param>
+            <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemUInt32.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt32.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt32.InternalParseValue(System.Byte[])">
+            <summary>
+            This function parse value from byt array
+            </summary>
+            <param name="data">Byte array to parse</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt32.InternalParseFromValue(System.UInt32)">
             <summary>
             This function parse byt array from value
             </summary>
@@ -4001,6 +4873,17 @@
             </summary>
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemUInt64.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt64.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
         </member>
         <member name="M:Project858.Net.FrameItemUInt64.InternalParseValue(System.Byte[])">
             <summary>
@@ -4035,6 +4918,17 @@
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
         </member>
+        <member name="P:Project858.Net.FrameItemInt64.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemInt64.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
         <member name="M:Project858.Net.FrameItemInt64.InternalParseValue(System.Byte[])">
             <summary>
             This function parse value from byt array
@@ -4067,6 +4961,17 @@
             </summary>
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemInt32.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemInt32.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
         </member>
         <member name="M:Project858.Net.FrameItemInt32.InternalParseValue(System.Byte[])">
             <summary>
@@ -4101,6 +5006,17 @@
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
         </member>
+        <member name="P:Project858.Net.FrameItemString.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemString.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
         <member name="M:Project858.Net.FrameItemString.InternalParseValue(System.Byte[])">
             <summary>
             This function parse value from byt array
@@ -4134,6 +5050,17 @@
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
         </member>
+        <member name="P:Project858.Net.FrameItemGuid.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemGuid.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
         <member name="M:Project858.Net.FrameItemGuid.InternalParseValue(System.Byte[])">
             <summary>
             This function parse value from byt array
@@ -4166,6 +5093,17 @@
             </summary>
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemUnkown.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemUnkown.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
         </member>
         <member name="M:Project858.Net.FrameItemUnkown.InternalParseValue(System.Byte[])">
             <summary>
@@ -4231,6 +5169,11 @@
             Unsigned long value
             </summary>
         </member>
+        <member name="F:Project858.Net.FrameItemTypes.UInt32">
+            <summary>
+            Unsigned int value
+            </summary>
+        </member>
         <member name="F:Project858.Net.FrameItemTypes.Unkown">
             <summary>
             Unkown type
@@ -4239,6 +5182,11 @@
         <member name="T:Project858.Net.IFrameItem">
             <summary>
             Base frame item from tcp protocol
+            </summary>
+        </member>
+        <member name="P:Project858.Net.IFrameItem.ItemType">
+            <summary>
+            Item type
             </summary>
         </member>
         <member name="P:Project858.Net.IFrameItem.Address">
@@ -4282,6 +5230,11 @@
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
         </member>
+        <member name="P:Project858.Net.FrameItemBase`1.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
         <member name="P:Project858.Net.FrameItemBase`1.Value">
             <summary>
             Generics value
@@ -4296,6 +5249,12 @@
             <summary>
             Data item
             </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemBase`1.ChangeValue(`0)">
+            <summary>
+            This method changes value to other
+            </summary>
+            <param name="value">New value</param>
         </member>
         <member name="M:Project858.Net.FrameItemBase`1.GetValue">
             <summary>
@@ -4381,6 +5340,17 @@
             </summary>
             <param name="address">Item address</param>
             <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemDateTime.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemDateTime.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
         </member>
         <member name="M:Project858.Net.FrameItemDateTime.InternalParseValue(System.Byte[])">
             <summary>
@@ -4479,12 +5449,83 @@
             </summary>
             <param name="commandAddress">Command address</param>
         </member>
-        <member name="M:Project858.Net.Frame.#ctor(System.UInt16,System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,Project858.Net.FrameItemTypes})">
+        <member name="M:Project858.Net.Frame.#ctor(System.UInt16,System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,System.UInt16,Project858.Net.FrameItemTypes})">
             <summary>
             Initialize this class
             </summary>
-            <param name="commandAddress">Command address</param>
+            <param name="address">Command address</param>
             <param name="data">Frame data</param>
+            <param name="action">Action for returning frame item type</param>
+        </member>
+        <member name="T:Project858.Net.Frame.Defines">
+            <summary>
+            Define base value for frame
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.CP_TEST">
+            <summary>
+            Command for testing connection
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.CP_STATE">
+            <summary>
+            Command for sending state
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.TAG_STATE">
+            
+             State tag, see STATE* constants
+            
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_OK">
+            <summary>
+            State OK
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_DATA">
+            <summary>
+            Frame contains data
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_INTERNAL_ERROR">
+            <summary>
+            In the target system has experienced an internal error
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_NOT_AVAILABLE">
+            <summary>
+            Required data or operation are not available
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_BUSY">
+            <summary>
+            The target system is busy
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_DENIED">
+            <summary>
+            Command was denied
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_START_SEQUENCE">
+            <summary>
+            Start sequence, after this response continues frames with data, see STATE_START_SEQUENCE
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_END_SEQUENCE">
+            <summary>
+            End sequence, see STATE_START_SEQUENCE
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_MESSAGE">
+            <summary>
+            Frame contains message
+            </summary>
+        </member>
+        <member name="F:Project858.Net.Frame.Defines.STATE_CANCELED">
+            <summary>
+            Command was canceled
+            </summary>
         </member>
         <member name="P:Project858.Net.Frame.Address">
             <summary>
@@ -4505,7 +5546,7 @@
             <summary>
             Create frame from Byte value
             </summary>
-            <param name="commandAddress">Frame command address</param>
+            <param name="frameAddress">Frame address</param>
             <param name="address">Tag address for value</param>
             <param name="value">Value as Byte</param>
             <returns>New frame</returns>
@@ -4532,11 +5573,30 @@
             </summary>
             <param name="address">new address</param>
         </member>
-        <member name="M:Project858.Net.Frame.AddItem(Project858.Net.IFrameItem)">
+        <member name="M:Project858.Net.Frame.Remove(System.UInt16)">
+            <summary>
+             Removes the first occurrence of a specific object with address
+            </summary>
+            <param name="address">Specific address</param>
+        </member>
+        <member name="M:Project858.Net.Frame.Remove(Project858.Net.IFrameItem)">
+            <summary>
+             Removes the first occurrence of a specific object
+            </summary>
+            <param name="item">The object to remove</param>
+        </member>
+        <member name="M:Project858.Net.Frame.Add(Project858.Net.IFrameItem)">
             <summary>
             Adds an item to the end of the Frame
             </summary>
             <param name="item">The item to be added to the end of the Frame</param>
+        </member>
+        <member name="M:Project858.Net.Frame.Add(Project858.Net.IFrameItem,System.Int32)">
+            <summary>
+            Inserts an item into the Frame at the specified index.
+            </summary>
+            <param name="item">The object to insert. The value can be null for reference types.</param>
+            <param name="index">The zero-based index at which item should be inserted.</param>
         </member>
         <member name="M:Project858.Net.Frame.ToByteArray">
             <summary>
@@ -4578,7 +5638,7 @@
             <param name="array">Data array</param>
             <returns>Check sum</returns>
         </member>
-        <member name="M:Project858.Net.Frame.InternalParseFrame(System.Byte[],System.Func{System.UInt16,Project858.Net.FrameItemTypes})">
+        <member name="M:Project858.Net.Frame.InternalParseFrame(System.Byte[],System.Func{System.UInt16,System.UInt16,Project858.Net.FrameItemTypes})">
             <summary>
             This function parse frame from data
             </summary>
@@ -4910,11 +5970,12 @@
             <param name="length">Frame length</param>
             <returns>Check sum</returns>
         </member>
-        <member name="M:Project858.Net.TcpProtocolClient.InternalGetFrameItemType(System.UInt16)">
+        <member name="M:Project858.Net.TcpProtocolClient.InternalGetFrameItemType(System.UInt16,System.UInt16)">
             <summary>
             This function returns frame item type from address
             </summary>
-            <param name="address">Address to detect type</param>
+            <param name="address">Frame address</param>
+            <param name="itemAddress">Address to detect type</param>
             <returns>Frame item type</returns>
         </member>
         <member name="M:Project858.Net.TcpProtocolClient.OnReceivedFrame(Project858.Net.FrameEventArgs)">
@@ -6292,6 +7353,11 @@
             Client ktory sa automaticky spusta pre WndowsService
             </summary>
         </member>
+        <member name="P:Project858.ServiceProcess.IWindowsServiceClient.ServiceClientPriority">
+            <summary>
+            Priority for starting clients
+            </summary>
+        </member>
         <member name="T:Project858.ServiceProcess.WindowsServiceBase">
             <summary>
             Predpis pre Windows Service s podporou pre sledovanie stavu baterie
@@ -6310,6 +7376,16 @@
         <member name="M:Project858.ServiceProcess.WindowsServiceBase.#ctor">
             <summary>
             Initialize this class
+            </summary>
+        </member>
+        <member name="P:Project858.ServiceProcess.WindowsServiceBase.TraceType">
+            <summary>
+            (Get / Set) Definuje typ logovania informacii
+            </summary>
+        </member>
+        <member name="P:Project858.ServiceProcess.WindowsServiceBase.TraceErrorAlways">
+            <summary>
+            (Get / Set) Definuje ci je logovanie chyb zapnute za kazdych okolnosti
             </summary>
         </member>
         <member name="M:Project858.ServiceProcess.WindowsServiceBase.OnStart(System.String[])">
@@ -6405,6 +7481,14 @@
             <param name="message">Sprava</param>
             <param name="args">String.Format argumenty pre spravu</param>
         </member>
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalTrace(Project858.Diagnostics.TraceTypes,System.String,System.Object[])">
+            <summary>
+            Zaloguje spravu do suboru
+            </summary>
+            <param name="type">Trace type for log</param>
+            <param name="message">Sprava</param>
+            <param name="args">String.Format argumenty pre spravu</param>
+        </member>
         <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalTrace(System.Exception)">
             <summary>
             Zaloguje chybu do log suboru
@@ -6416,6 +7500,12 @@
             Vytvori a vrati vsetky instancie pluginov ktore su dostupne
             </summary>
             <returns>Kolekcia pluginov alebo null</returns>
+        </member>
+        <member name="M:Project858.ServiceProcess.WindowsServiceBase.InternalGetTraceType">
+            <summary>
+            This function return trace type for all clients
+            </summary>
+            <returns>TraceType</returns>
         </member>
         <member name="T:Project858.Web.BinaryContentResult">
             <summary>
@@ -7535,12 +8625,13 @@
             <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
             <returns>Token uzivatela</returns>
         </member>
-        <member name="M:Project858.Web.IUserBaseHandler.UserBaseGetUserToken(System.Guid,System.String)">
+        <member name="M:Project858.Web.IUserBaseHandler.UserBaseGetUserToken(System.Guid,System.String,System.DateTime)">
             <summary>
             Vygeneruje token obsahujuci dolezite data na validaciu uzivatela
             </summary>
             <param name="userId">Id uzivatela</param>
             <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
+            <param name="expireDate">Expiration date for this session</param>
             <returns>Token uzivatela</returns>
         </member>
         <member name="M:Project858.Web.IUserBaseHandler.UserBaseGetHostAddress">
@@ -7804,12 +8895,13 @@
             <param name="expireDate">Datum expiracie prihlasenia</param>
             <returns>True = prihlasenie bolo uspesne, inak false</returns>
         </member>
-        <member name="M:Project858.Web.UserBase.InternalGetUserToken(System.Guid,System.String)">
+        <member name="M:Project858.Web.UserBase.InternalGetUserToken(System.Guid,System.String,System.DateTime)">
             <summary>
             Vygeneruje token obsahujuci dolezite data na validaciu uzivatela
             </summary>
             <param name="userId">Id uzivatela</param>
             <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
+            <param name="expireDate">Expiration date for this session</param>
             <returns>Token uzivatela</returns>
         </member>
         <member name="M:Project858.Web.UserBase.Login(System.String,System.String)">
@@ -8023,12 +9115,13 @@
             <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
             <returns>Token uzivatela</returns>
         </member>
-        <member name="M:Project858.Web.WebApplication.UserBaseGetUserToken(System.Guid,System.String)">
+        <member name="M:Project858.Web.WebApplication.UserBaseGetUserToken(System.Guid,System.String,System.DateTime)">
             <summary>
             Vygeneruje token obsahujuci dolezite data na validaciu uzivatela
             </summary>
             <param name="userId">Id uzivatela</param>
             <param name="hostAddress">IP adresa uzivatela odkial sa prihlasil</param>
+            <param name="expireDate">Expiration date for this session</param>
             <returns>Token uzivatela</returns>
         </member>
         <member name="M:Project858.Web.WebApplication.UserBaseGetHostAddress">
@@ -11112,6 +12205,24 @@
             Metody na rozsirenie vlastnosti objektov
             </summary>
         </member>
+        <member name="M:Project858.ExtensionMethod.Min(System.DateTime,System.DateTime)">
+            <summary>
+            This method selects min value from current and MinValue 
+            </summary>
+            <param name="value">Current value</param>
+            <param name="minValue">Min value</param>
+            <returns>Min value</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.MinAddDays(System.DateTime,System.Int32)">
+            <summary>
+            This method selects min value from current and new date which is combine current value and days 
+            </summary>
+            <param name="value">Current value</param>
+            <param name="days">
+            A number of whole and fractional days. The value parameter can be negative or positive.
+            </param>
+            <returns>Min value</returns>
+        </member>
         <member name="M:Project858.ExtensionMethod.IsList(System.Type)">
             <summary>
             Overi ci je typ typu list
@@ -11162,6 +12273,50 @@
             </summary>
             <param name="value">Hodnota ktoru chceme overit</param>
             <returns>DBNull alebo aktualna hodnota</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.Contains(System.Collections.Generic.List{System.String},System.String,System.Boolean)">
+            <summary>
+            Determines whether an element is in the collection
+            </summary>
+            <param name="values">
+            Collection to check
+            </param>
+            <param name="value">
+            The object to locate in the collection. The value can be null for reference types.
+            </param>
+            <param name="ignoreCase">
+            true to ignore case during the comparison; otherwise, false.
+            </param>
+            <returns>true | fakse</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.Contains(System.String[],System.String,System.Boolean)">
+            <summary>
+            Determines whether an element is in the array
+            </summary>
+            <param name="values">
+            Array to check
+            </param>
+            <param name="value">
+            The object to locate in the array. The value  can be null for reference types.
+            </param>
+            <param name="ignoreCase">
+            true to ignore case during the comparison; otherwise, false.
+            </param>
+            <returns>true | fakse</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.ToHexaString(System.Byte[])">
+            <summary>
+            This method converts list of bytes to hexa string
+            </summary>
+            <param name="value">List with data</param>
+            <returns>Hexa string | null</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.ToHexaString(System.Collections.Generic.List{System.Byte})">
+            <summary>
+            This method converts list of bytes to hexa string
+            </summary>
+            <param name="value">List with data</param>
+            <returns>Hexa string | null</returns>
         </member>
         <member name="M:Project858.ExtensionMethod.ToTraceString(System.Data.SqlClient.SqlCommand)">
             <summary>
@@ -11606,6 +12761,13 @@
             <summary>
             Kryptovacie heslo na ulozenie konfiguracie sluzby
             </summary>
+        </member>
+        <member name="M:Project858.Utility.ConvertByteArrayToHexString(System.Byte[])">
+            <summary>
+            Vrati string dat ktore sa prijali alebo odoslali
+            </summary>
+            <param name="data">Data ktore chceme spracovat</param>
+            <returns>String dat</returns>
         </member>
         <member name="M:Project858.Utility.GetBitValue(System.Byte,System.Int32)">
             <summary>
