@@ -177,7 +177,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Frame to send</param>
         /// <returns>True | false</returns>
-        public Boolean Send(Frame frame)
+        public virtual Boolean Send(Frame frame)
         {
             return this.Write(frame.ToByteArray());
         }

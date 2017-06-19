@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/858project/bin/Debug/de/Microsoft.SqlServer.Types.resources.dll
+/858project/bin/Debug/es/Microsoft.SqlServer.Types.resources.dll
+/.vs/858project.Library
+/.vs/858project.Library
+/858project/bin/Debug/fr
+/.vs/858project.Library/v14/.suo
+/.vs/858project.Library/v15/.suo
+/858project/bin/Debug/fr/Microsoft.SqlServer.Types.resources.dll
+/858project/bin/Debug/it/Microsoft.SqlServer.Types.resources.dll

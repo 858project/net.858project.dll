@@ -34,7 +34,7 @@ namespace Project858
         /// <returns>Min value</returns>
         public static DateTime Min(this DateTime value, DateTime minValue)
         {
-            return value < minValue ? minValue : value;
+            return value < minValue ? value : minValue;
         }
         /// <summary>
         /// This method selects min value from current and new date which is combine current value and days 
@@ -46,8 +46,31 @@ namespace Project858
         /// <returns>Min value</returns>
         public static DateTime MinAddDays(this DateTime value, int days)
         {
-            DateTime minValue = value.AddDays(days);
+            DateTime minValue = DateTime.Now.AddDays(days);
             return value.Min(minValue);
+        }
+        /// <summary>
+        /// This method selects max value from current and MinValue 
+        /// </summary>
+        /// <param name="value">Current value</param>
+        /// <param name="maxValue">Max value</param>
+        /// <returns>Min value</returns>
+        public static DateTime Max(this DateTime value, DateTime maxValue)
+        {
+            return value < maxValue ? maxValue : value;
+        }
+        /// <summary>
+        /// This method selects max value from current and new date which is combine current value and days 
+        /// </summary>
+        /// <param name="value">Current value</param>
+        /// <param name="days">
+        /// A number of whole and fractional days. The value parameter can be negative or positive.
+        /// </param>
+        /// <returns>Min value</returns>
+        public static DateTime MaxAddDays(this DateTime value, int days)
+        {
+            DateTime maxValue = DateTime.Now.AddDays(days);
+            return value.Max(maxValue);
         }
         #endregion
 

@@ -307,7 +307,15 @@ namespace Project858.Net
             {
                 if (item.Address == address)
                 {
-                    return (T)Convert.ChangeType(item.GetValue(), typeof(T));
+                    try
+                    {
+                        return (T)Convert.ChangeType(item.GetValue(), typeof(T));
+                    }
+                    catch (Exception ex)
+                    {
+                        Object value = item.GetValue();
+                        throw new InvalidCastException(String.Format("Value: {0}, Type: {1}", (value == null ? "NULL" : value.ToString()), typeof(T)), ex);
+                    }
                 }
             }
             return default(T);
