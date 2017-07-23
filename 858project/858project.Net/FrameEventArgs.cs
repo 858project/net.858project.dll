@@ -17,7 +17,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Prijaty frame</param>
         /// <param name="comPortName">Port name from serial port client</param>
-        public FrameEventArgs(Frame frame, String comPortName)
+        public FrameEventArgs(IFrame frame, String comPortName)
         {
             this.Frame = frame;
             this.ComPortName = comPortName;
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Prijaty frame</param>
         /// <param name="remoteEndPoint">EndPoint odosielatela dat</param>
-        public FrameEventArgs(Frame frame, IPEndPoint remoteEndPoint)
+        public FrameEventArgs(IFrame frame, IPEndPoint remoteEndPoint)
         {
             this.Frame = frame;
             this.RemoteEndPoint = remoteEndPoint;
@@ -46,7 +46,7 @@ namespace Project858.Net
         /// <summary>
         /// (Get) Prijate _data
         /// </summary>
-        public Frame Frame
+        public IFrame Frame
         {
             get;
             private set;

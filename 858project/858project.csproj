@@ -197,6 +197,9 @@
     <Compile Include="858project.IO.Ports\ExceptionEventArgs.cs" />
     <Compile Include="858project.IO.Ports\ExceptionEventHandler.cs" />
     <Compile Include="858project.IO.Ports\SerialPortProtocolClient.cs" />
+    <Compile Include="858project.Net\IFrame.cs" />
+    <Compile Include="858project.Net\FrameGroupItem.cs" />
+    <Compile Include="858project.Net\FrameV2.cs" />
     <Compile Include="858project.Net\FrameEventHandler.cs" />
     <Compile Include="858project.Net\FrameEventArgs.cs" />
     <Compile Include="858project.Net\DataEventHandler.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="858project.Net\TcpClientEventArgs.cs" />
     <Compile Include="858project.Net\TcpClientEventHandler.cs" />
     <Compile Include="858project.Net\TcpContractServer.cs" />
+    <Compile Include="858project.Net\TcpProtocolClientV2.cs" />
     <Compile Include="858project.Net\TcpProtocolClient.cs" />
     <Compile Include="858project.Net\TcpServer.cs" />
     <Compile Include="858project.Net\TcpTransportClient.cs" />

@@ -210,7 +210,7 @@ namespace Project858.Net
                 while (true)
                 {
                     //find frame
-                    Frame frame = this.internalFindFrame(this.m_buffer);
+                    Frame frame = FrameHelper.FindFrame(this.m_buffer, this.InternalGetFrameItemType);
                     if (frame != null)
                     {
                         //send receive event
@@ -223,111 +223,6 @@ namespace Project858.Net
                     }
                 }
             }
-        }
-        /// <summary>
-        /// This function finds frame in array
-        /// </summary>
-        /// <param name="array">Input array data</param>
-        /// <returns>Frame | null</returns>
-        private Frame internalFindFrame(List<Byte> array)
-        {
-            //variables
-            int count = array.Count;
-
-            //find start byte
-            for (int index = 0; index < count; index++)
-            {
-                //check start byte and length
-                if (array[index] == 0x68 && (count - (index + 2)) >= 2)
-                {
-                    //get length from array
-                    UInt16 length = (UInt16)(array[index + 2] << 8 | array[index + 1]);
-
-                    //get command from array
-                    UInt16 commandAddress = (UInt16)(array[index + 4] << 8 | array[index + 3]);
-
-                    //overime ci je dostatok dat na vytvorenie package
-                    if (count >= (length - 1))
-                    {
-                        Frame frame = internalConstructFrame(array, index + 5, length - 5, commandAddress);
-                        if (frame != null)
-                        {
-                            //return package
-                            return frame;
-                        }
-                    }
-                    else
-                    {
-                        //remove first data
-                        if (index > 0)
-                        {
-                            array.RemoveRange(0, index + 1);
-                        }
-
-                        //nedostatok dat
-                        return null;
-                    }
-                }
-            }
-
-            //clear all data from buffer
-            array.Clear();
-
-            //any package
-            return null;
-        }
-        /// <summary>
-        /// This function constructs frame from data array
-        /// </summary>
-        /// <param name="array">Data array</param>
-        /// <param name="index">Start frame index</param>
-        /// <param name="length">Frame length</param>
-        /// <param name="commandAddress">Command address from frame</param>
-        /// <returns>Frame | null</returns>
-        private Frame internalConstructFrame(List<Byte> array, int index, int length, UInt16 commandAddress)
-        {
-            //check data length available
-            if ((array.Count - index) >= length)
-            {
-                //get checksum
-                Byte checkSum = this.internalGetFrameDataCheckSum(array, index - 4, length + 4);
-                Byte currentCheckSum = array[index + length + 0];
-                if (checkSum != currentCheckSum)
-                {
-                    return null;
-                }
-
-                //copy data block
-                List<Byte> temp = array.GetRange(index, length);
-
-                //initialize package
-                Frame frame = new Frame(commandAddress, temp, this.InternalGetFrameItemType);
-
-                //remove data
-                array.RemoveRange(0, length + index + 1);
-
-                //return package
-                return frame;
-            }
-            return null;
-        }
-        /// <summary>
-        /// This function calculate check sum from frame
-        /// </summary>
-        /// <param name="array">Data array</param>
-        /// <param name="index">Start frame index</param>
-        /// <param name="length">Frame length</param>
-        /// <returns>Check sum</returns>
-        private Byte internalGetFrameDataCheckSum(List<Byte> array, int index, int length)
-        {
-            int sum = 0;
-            for (int currentIndex = index; currentIndex < (length + index); currentIndex++)
-            {
-                sum += (int)array[currentIndex];
-            }
-            sum += 0xA5;
-            sum = sum & 0xFF;
-            return (byte)(256 - sum);
         }
         /// <summary>
         /// This function returns frame item type from address

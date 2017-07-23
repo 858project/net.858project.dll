@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Diagnostics;
 
 namespace Project858.Net
 {
     /// <summary>
     /// Protocol frame
     /// </summary>
-    public sealed class Frame
+    public sealed class Frame : IFrame
     {
         #region - Constructors -
         /// <summary>
@@ -374,28 +375,11 @@ namespace Project858.Net
             collection.InsertRange(0, header);
 
             //check sum
-            Byte checkSum = this.internalGetFrameDataCheckSum(collection);
+            Byte checkSum = FrameHelper.GetFrameDataCheckSum(collection, 0x01, collection.Count);
             collection.Add(checkSum);
 
             //return frame as data array
             return collection.ToArray();
-        }
-        /// <summary>
-        /// This function calculate check sum from frame
-        /// </summary>
-        /// <param name="array">Data array</param>
-        /// <returns>Check sum</returns>
-        private Byte internalGetFrameDataCheckSum(List<Byte> array)
-        {
-            int sum = 0;
-            int count = array.Count;
-            for (int currentIndex = 1; currentIndex < count; currentIndex++)
-            {
-                sum += (int)array[currentIndex];
-            }
-            sum += 0xA5;
-            sum = sum & 0xFF;
-            return (byte)(256 - sum);
         }
         /// <summary>
         /// This function parse frame from data
@@ -418,6 +402,9 @@ namespace Project858.Net
                 address = (UInt16)(data[i + 1] << 8 | data[i]);
                 length = (UInt16)(data[i + 3] << 8 | data[i + 2]);
 
+                Debug.WriteLine(data[i + 1].ToString("X2") + data[i + 0].ToString("X2"));
+                Debug.WriteLine("Length: " + length + " i: " + i.ToString("X4") + " address: " + address.ToString("X4"));
+
                 //read frame item type
                 type = action != null ? action(this.Address, address) : FrameItemTypes.Unkown;
  
@@ -429,7 +416,8 @@ namespace Project858.Net
                 IFrameItem item = this.InternalParseFrame(type, address, length, dataItem);
                 if (item != null)
                 {
-                    this.m_items.Add(item);
+                    Debug.WriteLine(item.ToString());
+                   this.m_items.Add(item);
                 }
 
                 //next
