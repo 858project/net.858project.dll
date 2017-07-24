@@ -259,7 +259,7 @@ namespace Project858.Net
         {
             //variables
             List<Byte> collection = new List<Byte>();
-            Int16 length = 0x05;
+            Int16 length = 0x06;
 
             //add items
             foreach (FrameGroupItem item in this.m_groups)
@@ -271,7 +271,7 @@ namespace Project858.Net
 
             //add headers
             Byte[] header = new Byte[6];
-            header[0] = 0x67;
+            header[0] = 0x70;
             header[1] = (byte)(length);
             header[2] = (byte)(length >> 8);
             header[3] = (byte)(this.Address);
@@ -297,6 +297,7 @@ namespace Project858.Net
             int count = array.Count;
             for (int currentIndex = 1; currentIndex < count; currentIndex++)
             {
+                TraceLogger.Info("{1}-{1:X2}", currentIndex, array[currentIndex]);
                 sum += (int)array[currentIndex];
             }
             sum += 0xA5;
