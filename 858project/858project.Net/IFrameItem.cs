@@ -18,7 +18,7 @@ namespace Project858.Net
         /// <summary>
         /// Item address
         /// </summary>
-        UInt16 Address { get; }
+        UInt32 Address { get; }
         /// <summary>
         /// Data item
         /// </summary>

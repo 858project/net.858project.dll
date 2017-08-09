@@ -17,7 +17,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemDateTime(UInt16 address, DateTime value)
+        public FrameItemDateTime(UInt32 address, DateTime value)
             : base(address, value)
         {
  
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemDateTime(UInt16 address, Byte[] data)
+        public FrameItemDateTime(UInt32 address, Byte[] data)
             : base(address, data)
         {
  

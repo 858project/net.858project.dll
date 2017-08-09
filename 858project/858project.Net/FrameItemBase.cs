@@ -16,7 +16,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemBase(UInt16 address, T value)
+        public FrameItemBase(UInt32 address, T value)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemBase(UInt16 address, Byte[] data)
+        public FrameItemBase(UInt32 address, Byte[] data)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Project858.Net
         /// <summary>
         /// Item address
         /// </summary>
-        public UInt16 Address { get; protected set; }
+        public UInt32 Address { get; protected set; }
         /// <summary>
         /// Data item
         /// </summary>
@@ -96,18 +96,20 @@ namespace Project858.Net
         {
             //initialize data
             int length = this.Data.Length;
-            Byte[] result = new Byte[length + 4];
+            Byte[] result = new Byte[length + 6];
 
             //address
             result[0] = (Byte)(this.Address);
             result[1] = (Byte)(this.Address >> 8);
+            result[2] = (Byte)(this.Address >> 16);
+            result[3] = (Byte)(this.Address >> 24);
 
             //length
-            result[2] = (Byte)(length);
-            result[3] = (Byte)(length >> 8);
+            result[4] = (Byte)(length);
+            result[5] = (Byte)(length >> 8);
 
             //data
-            Buffer.BlockCopy(this.Data, 0, result, 4, length);
+            Buffer.BlockCopy(this.Data, 0, result, 6, length);
 
             //return result
             return result;
@@ -150,6 +152,7 @@ namespace Project858.Net
         /// Nizsi bit: bl, vyssi bit: bh. \n
         /// Pre hodnotu data: 0x1234 a rozsah bitov bl: 4 bh: 7 makro vrati hodnotu 0x3. \n
         /// see GET_BITS, GET_BIT, SET_BITS_VAL
+        /// </summary>
         /// <param name="data"></param>
         /// <param name="bh">horny bit</param>
         /// <param name="bl">dolny bit</param>

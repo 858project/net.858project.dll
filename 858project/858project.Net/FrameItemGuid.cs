@@ -17,7 +17,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="value">Value</param>
-        public FrameItemGuid(UInt16 address, Guid value)
+        public FrameItemGuid(UInt32 address, Guid value)
             : base(address, value)
         {
  
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Item address</param>
         /// <param name="data">Byte array</param>
-        public FrameItemGuid(UInt16 address, Byte[] data)
+        public FrameItemGuid(UInt32 address, Byte[] data)
             : base(address, data)
         {
  
