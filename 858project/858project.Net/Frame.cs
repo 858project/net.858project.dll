@@ -27,7 +27,7 @@ namespace Project858.Net
         /// <param name="address">Command address</param>
         /// <param name="data">Frame data</param>
         /// <param name="action">Action for returning frame item type</param>
-        public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt16, FrameItemTypes> action)
+        public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt32, FrameItemTypes> action)
         {
             this.Address = address;
             this.m_items = new List<IFrameItem>();
@@ -285,7 +285,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Item | null</returns>
-        public IFrameItem GetFrameItem(UInt16 address)
+        public IFrameItem GetFrameItem(UInt32 address)
         {
             foreach (IFrameItem item in this.m_items)
             {
@@ -302,7 +302,7 @@ namespace Project858.Net
         /// <typeparam name="T">Type of value</typeparam>
         /// <param name="address">Address</param>
         /// <returns>Value | null</returns>
-        public T GetValue<T>(UInt16 address)
+        public T GetValue<T>(UInt32 address)
         {
             foreach (IFrameItem item in this.m_items)
             {
@@ -375,7 +375,7 @@ namespace Project858.Net
             collection.InsertRange(0, header);
 
             //check sum
-            Byte checkSum = FrameHelper.GetFrameDataCheckSum(collection, 0x01, collection.Count);
+            Byte checkSum = FrameHelper.GetFrameDataCheckSum(collection, 0x01, collection.Count - 0x01);
             collection.Add(checkSum);
 
             //return frame as data array
@@ -386,10 +386,10 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Data to parse</param>
         /// <param name="action">Function to get frame item type</param>
-        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt16, FrameItemTypes> action)
+        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt32, FrameItemTypes> action)
         {
             //vriables
-            UInt16 address = 0x00;
+            UInt32 address = 0x00;
             UInt16 length = 0x00;
             Byte[] dataItem = null;
             FrameItemTypes type = FrameItemTypes.Unkown;
@@ -399,29 +399,25 @@ namespace Project858.Net
             for (int i = 0; i < count; i++)
             {
                 //read address
-                address = (UInt16)(data[i + 1] << 8 | data[i]);
-                length = (UInt16)(data[i + 3] << 8 | data[i + 2]);
-
-                Debug.WriteLine(data[i + 1].ToString("X2") + data[i + 0].ToString("X2"));
-                Debug.WriteLine("Length: " + length + " i: " + i.ToString("X4") + " address: " + address.ToString("X4"));
+                address = (UInt32)(data[i + 3] << 24 | data[i + 2] << 16 | data[i + 1] << 8 | data[i]);
+                length = (UInt16)(data[i + 5] << 8 | data[i + 4]);
 
                 //read frame item type
                 type = action != null ? action(this.Address, address) : FrameItemTypes.Unkown;
  
                 //read data
                 dataItem = new Byte[length];
-                Buffer.BlockCopy(data, i + 4, dataItem, 0, length);
+                Buffer.BlockCopy(data, i + 6, dataItem, 0, length);
 
                 //parse 
                 IFrameItem item = this.InternalParseFrame(type, address, length, dataItem);
                 if (item != null)
                 {
-                    Debug.WriteLine(item.ToString());
                    this.m_items.Add(item);
                 }
 
                 //next
-                i += 3 + length;
+                i += 5 + length;
             }
         }
         /// <summary>
@@ -432,7 +428,7 @@ namespace Project858.Net
         /// <param name="length">Frame item length</param>
         /// <param name="data">Data frame item</param>
         /// <returns>Frame item or null</returns>
-        private IFrameItem InternalParseFrame(FrameItemTypes type, UInt16 address, UInt16 length, Byte[] data)
+        private IFrameItem InternalParseFrame(FrameItemTypes type, UInt32 address, UInt16 length, Byte[] data)
         {
             switch (type)
             {

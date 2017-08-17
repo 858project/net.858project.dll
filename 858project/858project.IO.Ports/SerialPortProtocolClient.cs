@@ -394,7 +394,7 @@ namespace Project858.IO.Ports
         /// <param name="address">Frame address</param>
         /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt16 itemAddress)
+        protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt32 itemAddress)
         {
             switch (itemAddress)
             {

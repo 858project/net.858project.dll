@@ -138,6 +138,7 @@ namespace Project858.Net
         /// Nizsi bit: bl, vyssi bit: bh. \n
         /// Pre hodnotu data: 0x1234 a rozsah bitov bl: 4 bh: 7 makro vrati hodnotu 0x3. \n
         /// see GET_BITS, GET_BIT, SET_BITS_VAL
+        /// </summary>
         /// <param name="data"></param>
         /// <param name="bh">horny bit</param>
         /// <param name="bl">dolny bit</param>

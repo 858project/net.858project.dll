@@ -207,7 +207,7 @@ namespace Project858.Net
         /// <param name="array">Input array data</param>
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        public static Frame FindFrame(List<Byte> array, Func<UInt16, UInt16, FrameItemTypes> action)
+        public static Frame FindFrame(List<Byte> array, Func<UInt16, UInt32, FrameItemTypes> action)
         {
             //variables
             int count = array.Count;
@@ -262,7 +262,7 @@ namespace Project858.Net
         /// <param name="length">Frame length</param>
         /// <param name="address">Command address from frame</param>
         /// <returns>Frame | null</returns>
-        private static Frame ConstructFrame(List<Byte> array, int index, int length, UInt16 address, Func<UInt16, UInt16, FrameItemTypes> action)
+        private static Frame ConstructFrame(List<Byte> array, int index, int length, UInt16 address, Func<UInt16, UInt32, FrameItemTypes> action)
         {
             //check data length available
             if ((array.Count - index) >= length)
