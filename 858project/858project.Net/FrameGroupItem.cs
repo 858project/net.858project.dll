@@ -94,7 +94,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Item | null</returns>
-        public IFrameItem GetFrameItem(UInt16 address)
+        public IFrameItem GetFrameItem(UInt32 address)
         {
             foreach (IFrameItem item in this.m_items)
             {
@@ -111,7 +111,7 @@ namespace Project858.Net
         /// <typeparam name="T">Type of value</typeparam>
         /// <param name="address">Address</param>
         /// <returns>Value | null</returns>
-        public T GetValue<T>(UInt16 address)
+        public T GetValue<T>(UInt32 address)
         {
             foreach (IFrameItem item in this.m_items)
             {

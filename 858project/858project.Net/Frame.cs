@@ -56,7 +56,7 @@ namespace Project858.Net
             ///
             /// State tag, see STATE* constants
             ///
-            public const UInt16 TAG_STATE = 0xFF01;
+            public const UInt32 TAG_STATE = 0xFFFFFFFF;
 
             /// <summary>
             /// State OK

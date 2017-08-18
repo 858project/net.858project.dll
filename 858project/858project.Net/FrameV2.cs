@@ -29,7 +29,7 @@ namespace Project858.Net
         /// <param name="state">State value</param>
         /// <param name="data">Frame data</param>
         /// <param name="action">Action for returning frame item type</param>
-        public FrameV2(UInt16 address, Byte state, List<Byte> data, Func<UInt16, UInt16, FrameItemTypes> action)
+        public FrameV2(UInt16 address, Byte state, List<Byte> data, Func<UInt16, UInt32, FrameItemTypes> action)
         {
             this.Address = address;
             this.State = state;
@@ -309,10 +309,10 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Data to parse</param>
         /// <param name="action">Function to get frame item type</param>
-        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt16, FrameItemTypes> action)
+        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt32, FrameItemTypes> action)
         {
             //vriables
-            UInt16 address = 0x00;
+            UInt32 address = 0x00;
             UInt16 length = 0x00;
             Byte[] dataItem = null;
             FrameItemTypes type = FrameItemTypes.Unkown;
@@ -340,15 +340,15 @@ namespace Project858.Net
                 for (int i = 0; i < itemCount; i++)
                 {
                     //read address
-                    address = (UInt16)(data[currentIndex + 1] << 8 | data[currentIndex]);
-                    length = (UInt16)(data[currentIndex + 3] << 8 | data[currentIndex + 2]);
+                    address = (UInt32)(data[currentIndex + 3] << 24 | data[currentIndex + 2] << 16 | data[currentIndex + 1] << 8 | data[currentIndex]);
+                    length = (UInt16)(data[currentIndex + 5] << 8 | data[currentIndex + 4]);
 
                     //read frame item type
                     type = action != null ? action(this.Address, address) : FrameItemTypes.Unkown;
-
+  
                     //read data
                     dataItem = new Byte[length];
-                    Buffer.BlockCopy(data, currentIndex + 4, dataItem, 0, length);
+                    Buffer.BlockCopy(data, currentIndex + 6, dataItem, 0, length);
 
                     //parse 
                     IFrameItem item = this.InternalParseFrame(type, address, length, dataItem);
@@ -358,7 +358,7 @@ namespace Project858.Net
                     }
 
                     //next
-                    currentIndex += 4 + length;
+                    currentIndex += 0x06 + length;
                 }
 
                 //add group to frame
@@ -373,7 +373,7 @@ namespace Project858.Net
         /// <param name="length">Frame item length</param>
         /// <param name="data">Data frame item</param>
         /// <returns>Frame item or null</returns>
-        private IFrameItem InternalParseFrame(FrameItemTypes type, UInt16 address, UInt16 length, Byte[] data)
+        private IFrameItem InternalParseFrame(FrameItemTypes type, UInt32 address, UInt16 length, Byte[] data)
         {
             switch (type)
             {
