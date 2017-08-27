@@ -297,7 +297,6 @@ namespace Project858.Net
             int count = array.Count;
             for (int currentIndex = 1; currentIndex < count; currentIndex++)
             {
-                TraceLogger.Info("{1}-{1:X2}", currentIndex, array[currentIndex]);
                 sum += (int)array[currentIndex];
             }
             sum += 0xA5;
