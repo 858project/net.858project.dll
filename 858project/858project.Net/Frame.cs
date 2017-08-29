@@ -147,7 +147,7 @@ namespace Project858.Net
         /// <param name="address">Item address for value</param>
         /// <param name="value">Value</param>
         /// <returns>Frame item | null</returns>
-        public static IFrameItem CreateFrameItem(FrameItemTypes type, UInt16 address, Object value)
+        public static IFrameItem CreateFrameItem(FrameItemTypes type, UInt32 address, Object value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

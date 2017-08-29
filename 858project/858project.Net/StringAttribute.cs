@@ -32,7 +32,7 @@ namespace Project858.Net
         /// <summary>
         /// Hodnota adresy
         /// </summary>
-        public UInt16 Address { get; set; }
+        public UInt32 Address { get; set; }
         #endregion
     }
 }

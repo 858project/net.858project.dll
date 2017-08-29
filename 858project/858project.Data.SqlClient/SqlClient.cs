@@ -1014,9 +1014,9 @@ namespace Project858.Data.SqlClient
                 }
             }
             //overime povinny atribut pre tuto metodu
-            if (properties.TableAttribute == null)
+            if (properties.TableAttribute == null && properties.ViewAttribute == null)
             {
-                throw new Exception("Missing attribute TableAttribute");
+                throw new Exception("Missing attribute TableAttribute or ViewAttribute");
             }
             //informacie o properties
             if (properties.Count == 0)
@@ -1027,10 +1027,16 @@ namespace Project858.Data.SqlClient
             //spracujeme dommand do SQL
             using (SqlCommand command = new SqlCommand())
             {
-                //vytvorime command
-                String commandText = String.Format("SELECT TOP 1 * FROM [{0}]{1}{2}", properties.TableOrViewName, (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)), (String.IsNullOrWhiteSpace(orderClause) ? String.Empty : String.Format(" ORDER BY {0}", orderClause)));
-                //vykoname prikad
+                //get table name
+                String tableName = properties.TableAttribute != null ?
+                    properties.TableAttribute.Name :
+                    properties.ViewAttribute.Name;
+
+                //create command text
+                String commandText = String.Format("SELECT TOP 1 * FROM [{0}]{1}{2}", tableName, (String.IsNullOrWhiteSpace(whereClause) ? String.Empty : String.Format(" WHERE {0}", whereClause)), (String.IsNullOrWhiteSpace(orderClause) ? String.Empty : String.Format(" ORDER BY {0}", orderClause)));
                 command.CommandText = commandText;
+
+                //read object
                 return this.ReadFirstObject<T>(command);
             }
         }
