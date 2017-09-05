@@ -60,6 +60,15 @@ namespace Project858.Net
         /// <returns>Value</returns>
         protected override Guid InternalParseValue(Byte[] data)
         {
+            if (data.Length == 32)
+            {
+                String hashValue = Encoding.ASCII.GetString(data);
+                Nullable<Guid> value = hashValue.ToGuidWithoutDash();
+                if (value.HasValue)
+                {
+                    return value.Value;
+                }
+            }
             return new Guid(data);
         }
         /// <summary>

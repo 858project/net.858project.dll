@@ -117,14 +117,19 @@ namespace Project858.Net
             {
                 if (item.Address == address)
                 {
+                    Object value = item.GetValue();
                     try
                     {
-                        return (T)Convert.ChangeType(item.GetValue(), typeof(T));
+                        //check type
+                        if (typeof(T) == typeof(Object))
+                        {
+                            return (T)value;
+                        }
+                        return (T)Convert.ChangeType(value, typeof(T));
                     }
                     catch (Exception ex)
                     {
-                        Object value = item.GetValue();
-                        throw new InvalidCastException(String.Format("Value: {0}, Type: {1}", (value == null ? "NULL" : value.ToString()), typeof(T)), ex);
+                        throw new InvalidCastException(String.Format("Value: {0}, Type: {1}, Item: {2}", (value == null ? "NULL" : value.ToString()), typeof(T), item), ex);
                     }
                 }
             }
