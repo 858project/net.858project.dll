@@ -233,11 +233,11 @@ namespace Project858.Net
                 FrameGroupItem group = this.m_groups[i];
                 builder.Append("---------");
                 builder.Append(Environment.NewLine);
-                builder.AppendFormat("Group: {0}, Items: {1}", (i + 1), group.Count);
+                builder.AppendFormat("Group: {0}, Address: 0x{1:x4}, Items: {2}", (i + 1), group.Address, group.Count);
                 builder.Append(Environment.NewLine);
                 foreach (IFrameItem item in group.Items)
                 {
-                    builder.AppendFormat("[{0}] - [{1} - {1:x4}] - {2}", item.GetType(), item.Address, item.GetValue());
+                    builder.AppendFormat("[{0}] - [{1} - 0x{1:x4}] - {2}", item.GetType(), item.Address, item.GetValue());
                     builder.Append(Environment.NewLine);
                 }
             }

@@ -126,13 +126,9 @@ namespace Project858.Net
         {
             foreach (IFrameItem item in this.m_items)
             {
-                TraceLogger.Trace(TraceTypes.Verbose, String.Format("Compare address: {0} - {1}", item.Address, address));
                 if (item.Address == address)
                 {
                     Object value = item.GetValue();
-
-                    TraceLogger.Trace(TraceTypes.Verbose, String.Format("Value from address: {0}", (value == null) ? "NULL" : value.ToString()));
-
                     try
                     {
                         //check type
