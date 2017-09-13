@@ -334,7 +334,7 @@ namespace Project858.Net
 
                 //get count+
                 itemCount = (UInt16)(data[currentIndex + 3] << 8 | data[currentIndex + 2]);
-                currentIndex += 0x02;
+                currentIndex += 0x04;
 
                 //create group
                 FrameGroupItem group = new FrameGroupItem(dataAddress);
