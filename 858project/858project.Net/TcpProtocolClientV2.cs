@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project858.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -198,6 +199,9 @@ namespace Project858.Net
                 {
                     this.m_buffer = new List<Byte>();
                 }
+
+                //zalogujeme prijate dat
+                this.InternalTrace(TraceTypes.Verbose, "Receiving data: [{0}]", e.Data.ToHexaString());
 
                 //add data to buffer
                 this.m_buffer.AddRange(e.Data);

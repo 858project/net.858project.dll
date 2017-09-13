@@ -317,6 +317,7 @@ namespace Project858.Net
             FrameItemTypes type = FrameItemTypes.Unkown;
             int count = data.Length;
             UInt16 itemCount = 0x00;
+            UInt16 dataAddress = 0x00;
             int currentIndex = 0x00;
 
             //parse data
@@ -328,12 +329,15 @@ namespace Project858.Net
                     throw new Exception("Data are not valid!");
                 }
 
+                //get data address
+                dataAddress = (UInt16)(data[currentIndex + 1] << 8 | data[currentIndex]);
+
                 //get count+
-                itemCount = (UInt16)(data[currentIndex + 1] << 8 | data[currentIndex]);
+                itemCount = (UInt16)(data[currentIndex + 3] << 8 | data[currentIndex + 2]);
                 currentIndex += 0x02;
 
                 //create group
-                FrameGroupItem group = new FrameGroupItem();
+                FrameGroupItem group = new FrameGroupItem(dataAddress);
 
                 //parse items
                 for (int i = 0; i < itemCount; i++)

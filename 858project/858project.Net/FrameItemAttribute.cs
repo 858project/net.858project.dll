@@ -11,13 +11,13 @@ namespace Project858.Net
     /// Element na definiciu adresy tagu
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = false)]
-    public sealed class FrameTagAttribute : Attribute
+    public sealed class FrameItemAttribute : Attribute
     {
         #region - Constructor -
         /// <summary>
         /// Initialize this class
         /// </summary>
-        public FrameTagAttribute()
+        public FrameItemAttribute()
         {
             this.Type = FrameItemTypes.Unkown;
             this.Address = 0x0000;

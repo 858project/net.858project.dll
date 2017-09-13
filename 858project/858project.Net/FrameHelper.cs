@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Project858.Reflection;
+using Project858.Diagnostics;
 
 namespace Project858.Net
 {
@@ -368,41 +369,48 @@ namespace Project858.Net
             //each object
             foreach (T obj in data)
             {
-                //create group
-                FrameGroupItem group = new FrameGroupItem();
- 
-                //set property
-                foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
+                //get group attribute
+                FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+
+                //check attribute
+                if (frameGroupAttribute != null)
                 {
-                    //check property type
-                    if (item.Property.CanRead)
+                    //create group
+                    FrameGroupItem group = new FrameGroupItem(frameGroupAttribute.Address);
+
+                    //set property
+                    foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
                     {
-                        //get current attribute
-                        FrameTagAttribute attribute = item.GetCustomAttribute<FrameTagAttribute>();
-                        if (attribute != null)
+                        //check property type
+                        if (item.Property.CanRead)
                         {
-                            try
+                            //get current attribute
+                            FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
+                            if (attribute != null)
                             {
-                                value = item.Property.GetValue(obj, null);
-                                if (value != null)
+                                try
                                 {
-                                    IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
-                                    if (frameItem != null)
+                                    value = item.Property.GetValue(obj, null);
+                                    if (value != null)
                                     {
-                                        group.Add(frameItem);
+                                        IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
+                                        if (frameItem != null)
+                                        {
+                                            group.Add(frameItem);
+                                        }
                                     }
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception(String.Format("Error type: {0} -> {1} [{2}]", attribute.Type, item.Property.Name, value), ex);
+                                catch (Exception ex)
+                                {
+                                    throw new Exception(String.Format("Error type: {0} -> {1} [{2}]", attribute.Type, item.Property.Name, value), ex);
+                                }
                             }
                         }
                     }
-                }
 
-                //create group to frame
-                frame.Add(group);
+                    //create group to frame
+                    frame.Add(group);
+                }
             }
 
             //return result
@@ -451,7 +459,7 @@ namespace Project858.Net
         {
             //intiailize object
             T result = (T)Activator.CreateInstance(typeof(T));
-
+ 
             //set property
             foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
             {
@@ -459,7 +467,7 @@ namespace Project858.Net
                 if (item.Property.CanWrite)
                 {
                     //get current attribute
-                    FrameTagAttribute attribute = item.GetCustomAttribute<FrameTagAttribute>();
+                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
                     if (attribute != null)
                     {
                         Object value = null;
@@ -493,17 +501,28 @@ namespace Project858.Net
         /// <returns>The deserialized object from the Frame.</returns>
         private static List<T> InternalDeserializeV2<T>(FrameV2 frame, ReflectionType reflection)
         {
+            //get group attribute
+            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+            if (frameGroupAttribute == null)
+            {
+                throw new Exception(String.Format("Type {0} does not contain FrameGroup attribute!", reflection.Type.Name));
+            }
+
             //create collection
             List<T> collection = new List<T>();
 
             //each objects
             foreach (FrameGroupItem group in frame.Groups)
             {
-                //intiailize object
-                T result = FrameHelper.InternalDeserializeV2<T>(group, reflection);
+                //check group address for this type
+                if (group.Address == frameGroupAttribute.Address)
+                {
+                    //intiailize object
+                    T result = FrameHelper.InternalDeserializeV2<T>(group, reflection);
 
-                //create objet to collection
-                collection.Add(result);
+                    //create objet to collection
+                    collection.Add(result);
+                }
             }
 
             //return result
@@ -562,7 +581,7 @@ namespace Project858.Net
                 if (item.Property.CanRead)
                 {
                     //get current attribute
-                    FrameTagAttribute attribute = item.GetCustomAttribute<FrameTagAttribute>();
+                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
                     if (attribute != null)
                     {
                         Object value = null;
@@ -608,7 +627,7 @@ namespace Project858.Net
                 if (item.Property.CanWrite)
                 {
                     //get current attribute
-                    FrameTagAttribute attribute = item.GetCustomAttribute<FrameTagAttribute>();
+                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
                     if (attribute != null)
                     {
                         Object value = null;

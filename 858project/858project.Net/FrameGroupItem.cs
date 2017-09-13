@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project858.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,13 +17,23 @@ namespace Project858.Net
         /// <summary>
         /// Initialize this class
         /// </summary>
-        public FrameGroupItem()
+        /// <param name="address">Data adress for this group</param>
+        public FrameGroupItem(UInt16 address)
         {
             this.m_items = new List<IFrameItem>();
+            this.Address = address;
         }
         #endregion
 
         #region - Properties -
+        /// <summary>
+        /// Data address
+        /// </summary>
+        public UInt16 Address
+        {
+            get;
+            private set;
+        }
         /// <summary>
         /// Command address
         /// </summary>
@@ -115,9 +126,13 @@ namespace Project858.Net
         {
             foreach (IFrameItem item in this.m_items)
             {
+                TraceLogger.Trace(TraceTypes.Verbose, String.Format("Compare address: {0} - {1}", item.Address, address));
                 if (item.Address == address)
                 {
                     Object value = item.GetValue();
+
+                    TraceLogger.Trace(TraceTypes.Verbose, String.Format("Value from address: {0}", (value == null) ? "NULL" : value.ToString()));
+
                     try
                     {
                         //check type
@@ -145,11 +160,13 @@ namespace Project858.Net
             List<Byte> collection = new List<Byte>();
 
             //add headers
-            Byte[] header = new Byte[3];
+            Byte[] header = new Byte[5];
             header[0] = 0x67;
             int count = this.m_items.Count;
-            header[1] = (byte)(count);
-            header[2] = (byte)(count >> 8);
+            header[1] = (byte)(this.Address);
+            header[2] = (byte)(this.Address >> 8);
+            header[3] = (byte)(count);
+            header[4] = (byte)(count >> 8);
             collection.InsertRange(0, header);
  
             //add items

@@ -128,6 +128,23 @@ namespace Project858.Reflection
                 info.SetValue(instance, internalValue, null);
             }
         }
+        /// <summary>
+        /// This function return first custom attribute
+        /// </summary>
+        /// <typeparam name="T">Type of attribute</typeparam>
+        /// <returns>Attribute or null</returns>
+        public T GetCustomAttribute<T>()
+        {
+            //get all attribute
+            Object[] collection = this.Type.GetCustomAttributes(typeof(T), true);
+
+            //check
+            if (collection != null && collection.Count() > 0)
+            {
+                return (T)collection[0];
+            }
+            return default(T);
+        }
         #endregion
 
         #region - Private Methods -
