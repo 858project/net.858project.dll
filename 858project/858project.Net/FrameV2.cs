@@ -29,7 +29,7 @@ namespace Project858.Net
         /// <param name="state">State value</param>
         /// <param name="data">Frame data</param>
         /// <param name="action">Action for returning frame item type</param>
-        public FrameV2(UInt16 address, Byte state, List<Byte> data, Func<UInt16, UInt32, FrameItemTypes> action)
+        public FrameV2(UInt16 address, Byte state, List<Byte> data, Func<UInt16, UInt16, UInt32, FrameItemTypes> action)
         {
             this.Address = address;
             this.State = state;
@@ -308,7 +308,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Data to parse</param>
         /// <param name="action">Function to get frame item type</param>
-        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt32, FrameItemTypes> action)
+        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt16, UInt32, FrameItemTypes> action)
         {
             //vriables
             UInt32 address = 0x00;
@@ -347,7 +347,7 @@ namespace Project858.Net
                     length = (UInt16)(data[currentIndex + 5] << 8 | data[currentIndex + 4]);
 
                     //read frame item type
-                    type = action != null ? action(this.Address, address) : FrameItemTypes.Unkown;
+                    type = action != null ? action(this.Address, dataAddress, address) : FrameItemTypes.Unkown;
   
                     //read data
                     dataItem = new Byte[length];
