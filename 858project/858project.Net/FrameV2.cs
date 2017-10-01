@@ -172,6 +172,24 @@ namespace Project858.Net
 
         #region - Public Methods -
         /// <summary>
+        /// This method returns first froup with required address
+        /// </summary>
+        /// <param name="address">Required address</param>
+        /// <returns></returns>
+        public FrameGroupItem FindGroup(UInt16 address)
+        {
+            int groupCount = this.m_groups.Count;
+            for (int i = 0; i < groupCount; i++)
+            {
+                FrameGroupItem group = this.m_groups[i];
+                if (group.Address == address)
+                {
+                    return group;
+                }
+            }
+            return null;
+        }
+        /// <summary>
         ///  Removes the first occurrence of a specific object
         /// </summary>
         /// <param name="group">The object to remove</param>

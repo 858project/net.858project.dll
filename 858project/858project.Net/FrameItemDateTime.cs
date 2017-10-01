@@ -60,7 +60,7 @@ namespace Project858.Net
         /// <returns>Value</returns>
         protected override DateTime InternalParseValue(byte[] data)
         {
-            int tmp = (int)(data[0] + (data[1] << 8));
+            int tmp = (int)(data[0] | (data[1] << 8));
             var tm_msec = tmp % 1000;
             var tm_sec = tmp / 1000;
             var tm_min = GET_BITS_VAL(data[2], 5, 0);
