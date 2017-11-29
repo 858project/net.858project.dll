@@ -356,17 +356,15 @@ namespace Project858
                 return null;
             }
 
-            //pridame pomlcky
-            guid = guid.Insert(8, "-").Insert(13, "-").Insert(18, "-").Insert(23, "-");
-
-            //overime guid
-            if (!Utility.ValidateGuid(guid))
+            //parse guid value
+            Guid value = Guid.Empty;
+            if (Guid.TryParseExact(guid, "N", out value))
             {
-                return null;
+                return value;
             }
 
-            //vyparsujeme quid
-            return Utility.ParseGuid(guid);
+            //no guid
+            return null;
         }
         /// <summary>
         /// Vyparsuje jedinecny identifikator

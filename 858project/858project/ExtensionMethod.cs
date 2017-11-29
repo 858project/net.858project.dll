@@ -122,7 +122,7 @@ namespace Project858
         /// <returns>Konvertovany guid</returns>
         public static String ToStringWithoutDash(this Guid value)
         {
-            return value.ToString().Replace("-", "");
+            return value.ToString("N");
         }
         /// <summary>
         /// Overi ci je guid empty
