@@ -258,25 +258,29 @@ namespace Project858.Net
         /// <param name="result">Asynchronny result</param>
         private void InternalOnAccept(IAsyncResult result)
         {
-            //get tcp client
-            TcpClient client = result != null ? this.m_listener.EndAcceptTcpClient(result) : null;
-
-            //overime klienta
-            if (client != null)
+            //check listener
+            if (this.m_listener != null)
             {
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Info, "Akceptovanie klienta: '{0}'", client.Client.RemoteEndPoint);
+                //get tcp client
+                TcpClient client = result != null ? this.m_listener.EndAcceptTcpClient(result) : null;
 
-                //odosleme event s prijatym klientom
-                this.OnTcpClientReceived(new TcpClientEventArgs(client));
+                //overime klienta
+                if (client != null)
+                {
+                    //zalogujeme
+                    this.InternalTrace(TraceTypes.Info, "Akceptovanie klienta: '{0}'", client.Client.RemoteEndPoint);
 
-                //new accept
-                this.m_listener.BeginAcceptTcpClient(this.InternalOnAccept, null);
-            }
-            else
-            {
-                //zalogujeme
-                this.InternalTrace(TraceTypes.Warning, "Akceptovanie klienta zalyalo. Vlakno bude ukoncene.");
+                    //odosleme event s prijatym klientom
+                    this.OnTcpClientReceived(new TcpClientEventArgs(client));
+
+                    //new accept
+                    this.m_listener.BeginAcceptTcpClient(this.InternalOnAccept, null);
+                }
+                else
+                {
+                    //zalogujeme
+                    this.InternalTrace(TraceTypes.Warning, "Akceptovanie klienta zalyalo. Vlakno bude ukoncene.");
+                }
             }
         }
 		/// <summary>
