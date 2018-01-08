@@ -37,13 +37,13 @@ namespace Project858.Net
 		{
             this.Change(ipAddress, ipPort);
 		}
-		#endregion
+        #endregion
 
-		#region - Event -
-		/// <summary>
-		/// Event oznamujuci akceptovanie klienta serverom
-		/// </summary>
-		private event TcpClientEventHandler m_tcpClientReceivedEvent = null;
+        #region - Event -
+        /// <summary>
+        /// Event oznamujuci akceptovanie klienta serverom
+        /// </summary>
+        private event TcpClientEventHandler m_tcpClientReceivedEvent = null;
 		/// <summary>
 		/// Event oznamujuci akceptovanie klienta serverom
 		/// </summary>
@@ -342,14 +342,14 @@ namespace Project858.Net
                 }
 			}
 		}
-		#endregion
+        #endregion
 
-		#region - Call Event Method -
-		/// <summary>
-		/// Vygeneruje event oznamujuci prijatie xml dokumentu
-		/// </summary>
-		/// <param name="e">XmlDocumentEventArgs</param>
-		protected virtual void OnTcpClientReceived(TcpClientEventArgs e)
+        #region - Call Event Method -
+        /// <summary>
+        /// Vygeneruje event oznamujuci prijatie xml dokumentu
+        /// </summary>
+        /// <param name="e">XmlDocumentEventArgs</param>
+        protected virtual void OnTcpClientReceived(TcpClientEventArgs e)
 		{
 			TcpClientEventHandler handler = this.m_tcpClientReceivedEvent;
 

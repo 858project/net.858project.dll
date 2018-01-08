@@ -228,6 +228,7 @@ namespace Project858.Net
         /// This function returns frame item type from address
         /// </summary>
         /// <param name="frameAddress">Frame address</param>
+        /// <param name="groupAddress">Group address</param>
         /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
         protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 frameAddress, UInt16 groupAddress, UInt32 itemAddress)

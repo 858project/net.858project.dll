@@ -4,6 +4,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using Project858.Diagnostics;
+using System.ComponentModel;
 
 namespace Project858.Net
 {
@@ -28,6 +29,73 @@ namespace Project858.Net
         public TcpContractServer(IPAddress ipAddress, Int32 ipPort)
             : base(ipAddress, ipPort)
         {
+        }
+        #endregion
+
+        #region - Events -
+        /// <summary>
+        /// Event with transport client which was added
+        /// </summary>
+        private event TransportClientEventHandler mTransportClientAdded = null;
+        /// <summary>
+        /// Event with transport client which was added
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">
+        /// Ak je object v stave _isDisposed
+        /// </exception>
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public event TransportClientEventHandler TransportClientAdded
+        {
+            add
+            {
+                //je objekt _isDisposed ?
+                if (this.IsDisposed)
+                    throw new ObjectDisposedException("Object was disposed");
+
+                lock (this.m_eventLock)
+                    this.mTransportClientAdded += value;
+            }
+            remove
+            {
+                //je objekt _isDisposed ?
+                if (this.IsDisposed)
+                    throw new ObjectDisposedException("Object was disposed");
+
+                lock (this.m_eventLock)
+                    this.mTransportClientAdded -= value;
+            }
+        }
+        /// <summary>
+        /// Event with transport client which was removed
+        /// </summary>
+        private event TransportClientEventHandler mTransportClientRemoved = null;
+        /// <summary>
+        /// Event with transport client which was removed
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">
+        /// Ak je object v stave _isDisposed
+        /// </exception>
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public event TransportClientEventHandler TransportClientRemoved
+        {
+            add
+            {
+                //je objekt _isDisposed ?
+                if (this.IsDisposed)
+                    throw new ObjectDisposedException("Object was disposed");
+
+                lock (this.m_eventLock)
+                    this.mTransportClientRemoved += value;
+            }
+            remove
+            {
+                //je objekt _isDisposed ?
+                if (this.IsDisposed)
+                    throw new ObjectDisposedException("Object was disposed");
+
+                lock (this.m_eventLock)
+                    this.mTransportClientRemoved -= value;
+            }
         }
         #endregion
 
@@ -205,6 +273,7 @@ namespace Project858.Net
                     //pridame instaniu servera
                     ITransportClient contract = this.InternalCreateContract(e.Client);
 
+                    //validate contract
                     if (contract != null && contract.IsConnected)
                     {
                         //namapujeme event oznamujuci odhlasenie klienta
@@ -212,6 +281,9 @@ namespace Project858.Net
 
                         //pridame contract 
                         this.InternalCreateContract(contract);
+
+                        //create event about new client
+                        this.OnTransportClientAdded(new TransportClientEventArgs(contract));
                     }
                     else
                     {
@@ -257,12 +329,12 @@ namespace Project858.Net
             this.InternalTrace(TraceTypes.Verbose, "Removing the client which was exited.");
 
             //ziskame pristup
-            ITransportClient client = sender as ITransportClient;
+            ITransportClient contract = sender as ITransportClient;
 
             try
             {
                 //odoberame klienta
-                this.InternalRemoveContract(client);
+                this.InternalRemoveContract(contract);
             }
             catch (Exception ex)
             {
@@ -302,9 +374,14 @@ namespace Project858.Net
             {
 				//zalofujeme
                 this.InternalTrace(TraceTypes.Info, "Pocet klientov: pred odobratim dalsieho {0}", this.m_contracts.Count);
+                
                 //odoberieme contract
                 this.m_contracts.Remove(contract);
-				//zalogujeme
+ 
+                //create event about remove client
+                this.OnTransportClientRemoved(new TransportClientEventArgs(contract));
+
+                //zalogujeme
                 this.InternalTrace(TraceTypes.Info, "Pocet klientov: po odobrati dalsieho {0}", this.m_contracts.Count);
             }
 
@@ -351,6 +428,31 @@ namespace Project858.Net
 
                 return true;
             }
+        }
+        #endregion
+
+        #region - Protected Event Methods -
+        /// <summary>
+        /// This method executes event with client which was removed
+        /// </summary>
+        /// <param name="e">Arguments</param>
+        protected virtual void OnTransportClientRemoved(TransportClientEventArgs e)
+        {
+            TransportClientEventHandler handler = this.mTransportClientRemoved;
+
+            if (handler != null)
+                handler(this, e);
+        }
+        /// <summary>
+        /// This method executes event with client which was added
+        /// </summary>
+        /// <param name="e">Arguments</param>
+        protected virtual void OnTransportClientAdded(TransportClientEventArgs e)
+        {
+            TransportClientEventHandler handler = this.mTransportClientAdded;
+
+            if (handler != null)
+                handler(this, e);
         }
         #endregion
     }
