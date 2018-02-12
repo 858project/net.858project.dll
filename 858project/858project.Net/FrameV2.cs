@@ -200,6 +200,17 @@ namespace Project858.Net
         /// <summary>
         /// Adds an item to the end of the Frame
         /// </summary>
+        /// <param name="groups">The item to be added to the end of the Frame</param>
+        public void Add(List<FrameGroupItem> groups)
+        {
+            foreach (FrameGroupItem group in groups)
+            {
+                this.Add(group);
+            }
+        }
+        /// <summary>
+        /// Adds an item to the end of the Frame
+        /// </summary>
         /// <param name="group">The item to be added to the end of the Frame</param>
         public void Add(FrameGroupItem group)
         {

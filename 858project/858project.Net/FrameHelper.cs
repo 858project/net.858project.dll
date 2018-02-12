@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Project858.Reflection;
-using Project858.Diagnostics;
 
 namespace Project858.Net
 {
@@ -105,6 +102,26 @@ namespace Project858.Net
                 return frame;
             }
             return null;
+        }
+        /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <returns>Group collection</returns>
+        public static List<FrameGroupItem> SerializeV2ToGroup<T>(List<T> data)
+        {
+            return FrameHelper.InternalSerializeV2ToGroup<T>(data);
+        }
+        /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <returns>Group collection</returns>
+        public static FrameGroupItem SerializeV2ToGroup<T>(T data)
+        {
+            return FrameHelper.InternalSerializeV2ToGroup<T>(data);
         }
         /// <summary>
         /// Serializes the specified object to a Frame.
@@ -354,6 +371,145 @@ namespace Project858.Net
             return null;
         }
         /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <returns>Group collection</returns>
+        private static FrameGroupItem InternalSerializeV2ToGroup<T>(T data)
+        {
+            //get the object reglection
+            ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
+            if (reflection != null)
+            {
+                return FrameHelper.InternalSerializeV2ToGroup<T>(data, reflection);
+            }
+            return null;
+        }
+        /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <returns>Group collection</returns>
+        private static List<FrameGroupItem> InternalSerializeV2ToGroup<T>(List<T> data)
+        {
+            //get the object reglection
+            ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
+            if (reflection != null)
+            {
+                return FrameHelper.InternalSerializeV2ToGroup<T>(data, reflection);
+            }
+            return null;
+        }
+        /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <param name="reflection">reflection info for this data type</param>
+        /// <returns>Group collection</returns>
+        private static List<FrameGroupItem> InternalSerializeV2ToGroup<T>(List<T> data, ReflectionType reflection)
+        {
+            //get group attribute
+            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+
+            //check group attribute
+            if (frameGroupAttribute != null)
+            {
+                //get collection
+                List<FrameGroupItem> collection = new List<FrameGroupItem>();
+
+                //loop all object
+                foreach (T obj in data)
+                {
+                    //serialize object
+                    FrameGroupItem group = InternalSerializeV2ToGroup<T>(obj, reflection, frameGroupAttribute);
+                    if (group != null)
+                    {
+                        collection.Add(group);
+                    }
+                }
+
+                //return groups
+                return collection;
+            }
+
+            //no data
+            return null;
+        }
+        /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <param name="reflection">reflection info for this data type</param>
+        /// <returns>Group | null</returns>
+        private static FrameGroupItem InternalSerializeV2ToGroup<T>(T data, ReflectionType reflection)
+        {
+            //get group attribute
+            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+
+            //check group attribute
+            if (frameGroupAttribute != null)
+            {
+                //serialize data
+                return InternalSerializeV2ToGroup<T>(data, reflection, frameGroupAttribute);
+            }
+
+            //no data
+            return null;
+        }
+        /// <summary>
+        /// This function serializes object to frame group
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <param name="data">Data object</param>
+        /// <param name="reflection">reflection info for this data type</param>
+        /// <param name="frameGroupAttribute">Current group attribute</param>
+        /// <returns>Group | null</returns>
+        private static FrameGroupItem InternalSerializeV2ToGroup<T>(T data, ReflectionType reflection, FrameGroupAttribute frameGroupAttribute)
+        {
+            //variables
+            Object value = null;
+
+            //create group
+            FrameGroupItem group = new FrameGroupItem(frameGroupAttribute.Address);
+
+            //set property
+            foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
+            {
+                //check property type
+                if (item.Property.CanRead)
+                {
+                    //get current attribute
+                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
+                    if (attribute != null)
+                    {
+                        try
+                        {
+                            value = item.Property.GetValue(data, null);
+                            if (value != null)
+                            {
+                                IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
+                                if (frameItem != null)
+                                {
+                                    group.Add(frameItem);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(String.Format("Error type: {0} -> {1} [{2}]", attribute.Type, item.Property.Name, value), ex);
+                        }
+                    }
+                }
+            }
+
+            //return current group
+            return group;
+        }
+        /// <summary>
         /// Serializes the specified Object to Frame
         /// </summary>
         /// <typeparam name="T">The type of the object to serialize to.</typeparam>
@@ -363,50 +519,17 @@ namespace Project858.Net
         /// <returns>Frame | null</returns>
         private static FrameV2 InternalSerializeV2<T>(List<T> data, FrameV2 frame, ReflectionType reflection)
         {
-            //variables
-            Object value = null;
+            //get group attribute
+            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
 
             //each object
             foreach (T obj in data)
             {
-                //get group attribute
-                FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
-
                 //check attribute
                 if (frameGroupAttribute != null)
                 {
-                    //create group
-                    FrameGroupItem group = new FrameGroupItem(frameGroupAttribute.Address);
-
-                    //set property
-                    foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
-                    {
-                        //check property type
-                        if (item.Property.CanRead)
-                        {
-                            //get current attribute
-                            FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
-                            if (attribute != null)
-                            {
-                                try
-                                {
-                                    value = item.Property.GetValue(obj, null);
-                                    if (value != null)
-                                    {
-                                        IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
-                                        if (frameItem != null)
-                                        {
-                                            group.Add(frameItem);
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    throw new Exception(String.Format("Error type: {0} -> {1} [{2}]", attribute.Type, item.Property.Name, value), ex);
-                                }
-                            }
-                        }
-                    }
+                    //serialize group
+                    FrameGroupItem group = InternalSerializeV2ToGroup<T>(obj, reflection, frameGroupAttribute);
 
                     //create group to frame
                     frame.Add(group);

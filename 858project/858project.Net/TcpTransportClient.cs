@@ -601,17 +601,57 @@ namespace Project858.Net
 
             return String.Format("{0}_[{1}]", base.ToString(), this.ActualIpEndPoint.ToString().Replace(":", "_"));
         }
-		/// <summary>
-		/// Zapise _data na komunikacnu linku
-		/// </summary>
-		/// <exception cref="InvalidOperationException">
-		/// Vynimka v pripade ze sa snazime zapisat _data, ale spojenie nie je.
-		/// </exception>
-		/// <exception cref="ObjectDisposedException">
-		/// Ak je object v stave _isDisposed
-		/// </exception>
-		/// <returns>True = _data boli uspesne zapisane, False = chyba pri zapise dat</returns>
-		public Boolean Write(Byte[] data)
+        /// <summary>
+        /// This function reads data from stream
+        /// </summary>
+        /// <param name="buffer">Buffer to insert data</param>
+        /// <param name="size">Max size for buffer</param>
+        /// <param name="result">Result, data count from stream</param>
+        /// <returns>True | false</returns>
+        public Boolean Read(Byte[] buffer, int size, out int result)
+        {
+            //je objekt _isDisposed ?
+            if (this.IsDisposed)
+                throw new ObjectDisposedException("Object was disposed");
+
+            //otvorenie nie je mozne ak je connection == true
+            if (!this.IsConnected)
+                throw new InvalidOperationException("Writing data is not possible! The client is not connected!");
+
+            //reset value
+            result = 0x00;
+
+            try
+            {
+                //zapiseme data
+                result = this.m_networkStream.Read(buffer, 0x00, size);
+
+                //successfully
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //zalogujeme
+                this.InternalException(ex, "Error during reading data to socket. {0}", ex.Message);
+
+                //ukoncime klienta
+                this.InternalDisconnect(false);
+
+                //chybne ukoncenie metody
+                return false;
+            }
+        }
+        /// <summary>
+        /// Zapise _data na komunikacnu linku
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Vynimka v pripade ze sa snazime zapisat _data, ale spojenie nie je.
+        /// </exception>
+        /// <exception cref="ObjectDisposedException">
+        /// Ak je object v stave _isDisposed
+        /// </exception>
+        /// <returns>True = _data boli uspesne zapisane, False = chyba pri zapise dat</returns>
+        public Boolean Write(Byte[] data)
 		{
 			//je objekt _isDisposed ?
 			if (this.IsDisposed)
