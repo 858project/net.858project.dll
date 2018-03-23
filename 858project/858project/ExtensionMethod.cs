@@ -105,7 +105,7 @@ namespace Project858
         /// <summary>
         /// This function returns bit value from position
         /// </summary>
-        /// <param name="data">byte</param>
+        /// <param name="value">byte</param>
         /// <param name="position">Position</param>
         /// <returns>True = bit = 1, False = bit = 0</returns>
         public static Boolean GetBitValue(this Byte value, int position)
