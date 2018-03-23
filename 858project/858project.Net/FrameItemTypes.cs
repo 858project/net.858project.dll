@@ -45,7 +45,7 @@ namespace Project858.Net
         /// <summary>
         /// Unsigned short value
         /// </summary>
-        UInt16
+        UInt16,
         /// <summary>
         /// Unsigned int value
         /// </summary>
