@@ -425,10 +425,12 @@ namespace Project858.Net
                     return new FrameItemByte(address, data);
                 case FrameItemTypes.Boolean:
                     return new FrameItemBoolean(address, data);
-                case FrameItemTypes.UInt64:
-                    return new FrameItemUInt64(address, data);
+                case FrameItemTypes.UInt16:
+                    return new FrameItemUInt16(address, data);
                 case FrameItemTypes.UInt32:
                     return new FrameItemUInt32(address, data);
+                case FrameItemTypes.UInt64:
+                    return new FrameItemUInt64(address, data);
                 default:
                     return new FrameItemUnkown(address, data);
             }
