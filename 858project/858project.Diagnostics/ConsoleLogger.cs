@@ -16,7 +16,7 @@ namespace Project858.Diagnostics
         private static readonly Object _globalLock = new Object();
         #endregion
 
-        #region - Method -
+        #region - Public Method -
         /// <summary>
         /// Zapise data do konzoly v zvolenom formate
         /// </summary>
@@ -32,13 +32,27 @@ namespace Project858.Diagnostics
         /// <summary>
         /// Zapise data do konzoly v zvolenom formate
         /// </summary>
+        /// <param name="format">String format</param>
+        /// <param name="color">Color for text</param>
+        /// <param name="arg">Argumenty</param>
+        public static void WriteLine(String format, ConsoleColor color, params Object[] arg)
+        {
+            lock (_globalLock)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine("[{0}]: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), ((arg != null && arg.Length > 0) ? String.Format(format, arg) : format));
+                Console.ResetColor();
+            }   
+        }
+        /// <summary>
+        /// Zapise data do konzoly v zvolenom formate
+        /// </summary>
         /// <param name="object">Objekty ktory chceme vypisat. (ToString())</param>
         public static void WriteLine(Object @object)
         {
             lock (_globalLock)
             {
-                Console.WriteLine("[{0}]: {1}", DateTime.Now.ToString("HH:mm:ss.fff"),
-                    @object);
+                Console.WriteLine("[{0}]: {1}", DateTime.Now.ToString("HH:mm:ss.fff"), @object);
             }
         }
         #endregion
