@@ -35,6 +35,7 @@ using System.Web.Script.Serialization;
 using System.Data.SqlClient;
 using Microsoft.Win32;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 
 namespace Project858
 {
@@ -176,8 +177,7 @@ namespace Project858
         {
             if (value != null)
             {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                return serializer.Serialize(value);
+                return JsonConvert.SerializeObject(value, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             return null;
         }
