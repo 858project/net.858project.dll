@@ -125,6 +125,8 @@ namespace Project858.Net
                     return new FrameItemInt64(address, (Int64)value);
                 case FrameItemTypes.Byte:
                     return new FrameItemByte(address, (Byte)value);
+                case FrameItemTypes.Enum:
+                    return new FrameItemEnum(address, value);
                 case FrameItemTypes.Boolean:
                     return new FrameItemBoolean(address, (Boolean)value);
                 case FrameItemTypes.UInt64:
@@ -156,6 +158,8 @@ namespace Project858.Net
                     return typeof(Int64);
                 case FrameItemTypes.String:
                     return typeof(String);
+                case FrameItemTypes.Enum:
+                    return typeof(Object);
                 case FrameItemTypes.Byte:
                     return typeof(Byte);
                 case FrameItemTypes.Boolean:
@@ -423,6 +427,8 @@ namespace Project858.Net
                     return new FrameItemInt64(address, data);
                 case FrameItemTypes.Byte:
                     return new FrameItemByte(address, data);
+                case FrameItemTypes.Enum:
+                    return new FrameItemEnum(address, data);
                 case FrameItemTypes.Boolean:
                     return new FrameItemBoolean(address, data);
                 case FrameItemTypes.UInt16:

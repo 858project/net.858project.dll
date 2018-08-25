@@ -2603,7 +2603,6 @@
             <summary>
             Aktualizuje pozadovany objekt v SQL
             </summary>
-            <typeparam name="T">Typ objektu ktory chceme aktualizovat</typeparam>
             <param name="item">objekt ktorych chceme aktualizovat</param>
             <param name="whereClause">Podmienka na aktualizaciu objektu</param>
             <returns>True = objekt bol uspesne aktualizovany</returns>
@@ -2936,6 +2935,14 @@
             Zapise data do konzoly v zvolenom formate
             </summary>
             <param name="format">String format</param>
+            <param name="arg">Argumenty</param>
+        </member>
+        <member name="M:Project858.Diagnostics.ConsoleLogger.WriteLine(System.String,System.ConsoleColor,System.Object[])">
+            <summary>
+            Zapise data do konzoly v zvolenom formate
+            </summary>
+            <param name="format">String format</param>
+            <param name="color">Color for text</param>
             <param name="arg">Argumenty</param>
         </member>
         <member name="M:Project858.Diagnostics.ConsoleLogger.WriteLine(System.Object)">
@@ -4508,7 +4515,7 @@
             <param name="length">Frame length</param>
             <returns>Check sum</returns>
         </member>
-        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.InternalGetFrameItemType(System.UInt16,System.UInt16)">
+        <member name="M:Project858.IO.Ports.SerialPortProtocolClient.InternalGetFrameItemType(System.UInt16,System.UInt32)">
             <summary>
             This function returns frame item type from address
             </summary>
@@ -4523,6 +4530,354 @@
             </summary>
             <param name="e">EventArgs obsahujuci data</param>
         </member>
+        <member name="T:Project858.Net.FrameGroupAttribute">
+            <summary>
+            Element na definiciu adresy skupiny
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameGroupAttribute.#ctor">
+            <summary>
+            Initialize this class
+            </summary>
+        </member>
+        <member name="P:Project858.Net.FrameGroupAttribute.Address">
+            <summary>
+            Hodnota adresy
+            </summary>
+        </member>
+        <member name="T:Project858.Net.FrameItemEnum">
+            <summary>
+            Frame item with Byte value
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemEnum.#ctor(System.UInt32,System.Object)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Item address</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:Project858.Net.FrameItemEnum.#ctor(System.UInt32,System.Byte[])">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Item address</param>
+            <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemEnum.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemEnum.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemEnum.InternalParseValue(System.Byte[])">
+            <summary>
+            This function parse value from byt array
+            </summary>
+            <param name="data">Byte array to parse</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemEnum.InternalParseFromValue(System.Object)">
+            <summary>
+            This function parse byt array from value
+            </summary>
+            <param name="value">Value to parse</param>
+            <returns>Byte array</returns>
+        </member>
+        <member name="T:Project858.Net.FrameItemUInt16">
+            <summary>
+            Frame item with Int16 value
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt16.#ctor(System.UInt32,System.UInt16)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Item address</param>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt16.#ctor(System.UInt32,System.Byte[])">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Item address</param>
+            <param name="data">Byte array</param>
+        </member>
+        <member name="P:Project858.Net.FrameItemUInt16.ItemType">
+            <summary>
+            Item type
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt16.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt16.InternalParseValue(System.Byte[])">
+            <summary>
+            This function parse value from byt array
+            </summary>
+            <param name="data">Byte array to parse</param>
+            <returns>Value</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemUInt16.InternalParseFromValue(System.UInt16)">
+            <summary>
+            This function parse byt array from value
+            </summary>
+            <param name="value">Value to parse</param>
+            <returns>Byte array</returns>
+        </member>
+        <member name="T:Project858.Net.IFrame">
+            <summary>
+            Protocol frame
+            </summary>
+        </member>
+        <member name="P:Project858.Net.IFrame.Address">
+            <summary>
+            Command address
+            </summary>
+        </member>
+        <member name="M:Project858.Net.IFrame.ChangeAddress(System.UInt16)">
+            <summary>
+            Change frame address
+            </summary>
+            <param name="address">new address</param>
+        </member>
+        <member name="M:Project858.Net.IFrame.ToByteArray">
+            <summary>
+            This finction converts frame to byte array
+            </summary>
+            <returns>Byte array | null</returns>
+        </member>
+        <member name="T:Project858.Net.FrameGroupItem">
+            <summary>
+            One group for frame v2
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.#ctor(System.UInt16)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Data adress for this group</param>
+        </member>
+        <member name="P:Project858.Net.FrameGroupItem.Address">
+            <summary>
+            Data address
+            </summary>
+        </member>
+        <member name="P:Project858.Net.FrameGroupItem.Count">
+            <summary>
+            Command address
+            </summary>
+        </member>
+        <member name="P:Project858.Net.FrameGroupItem.Items">
+            <summary>
+            Item collections
+            </summary>
+        </member>
+        <member name="F:Project858.Net.FrameGroupItem.m_items">
+            <summary>
+            Item collections
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.Remove(System.UInt16)">
+            <summary>
+             Removes the first occurrence of a specific object with address
+            </summary>
+            <param name="address">Specific address</param>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.Remove(Project858.Net.IFrameItem)">
+            <summary>
+             Removes the first occurrence of a specific object
+            </summary>
+            <param name="item">The object to remove</param>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.Add(Project858.Net.IFrameItem)">
+            <summary>
+            Adds an item to the end of the Frame
+            </summary>
+            <param name="item">The item to be added to the end of the Frame</param>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.Add(Project858.Net.IFrameItem,System.Int32)">
+            <summary>
+            Inserts an item into the Frame at the specified index.
+            </summary>
+            <param name="item">The object to insert. The value can be null for reference types.</param>
+            <param name="index">The zero-based index at which item should be inserted.</param>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.GetFrameItem(System.UInt32)">
+            <summary>
+            This function returns frame item with address
+            </summary>
+            <param name="address">Address</param>
+            <returns>Item | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.GetValue``1(System.UInt32)">
+            <summary>
+            This function returns value 
+            </summary>
+            <typeparam name="T">Type of value</typeparam>
+            <param name="address">Address</param>
+            <returns>Value | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameGroupItem.ToByteArray">
+            <summary>
+            This function returns item data
+            </summary>
+            <returns>Item array data</returns>
+        </member>
+        <member name="T:Project858.Net.FrameV2">
+            <summary>
+            Protocol frame
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameV2.#ctor(System.UInt16,System.Byte)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Command address</param>
+            <param name="state">State value</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.#ctor(System.UInt16,System.Byte,System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="address">Command address</param>
+            <param name="state">State value</param>
+            <param name="data">Frame data</param>
+            <param name="action">Action for returning frame item type</param>
+        </member>
+        <member name="P:Project858.Net.FrameV2.Address">
+            <summary>
+            Command address
+            </summary>
+        </member>
+        <member name="P:Project858.Net.FrameV2.State">
+            <summary>
+            Frame state
+            </summary>
+        </member>
+        <member name="P:Project858.Net.FrameV2.Groups">
+            <summary>
+            Item collections
+            </summary>
+        </member>
+        <member name="F:Project858.Net.FrameV2.m_groups">
+            <summary>
+            Group collections
+            </summary>
+        </member>
+        <member name="M:Project858.Net.FrameV2.CreateFrame(System.UInt16,System.Byte,System.Byte)">
+            <summary>
+            Create frame from Byte value
+            </summary>
+            <param name="frameAddress">Frame address</param>
+            <param name="state">Frate state</param>
+            <param name="value">Value as Byte</param>
+            <returns>New frame</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.CreateFrameItem(Project858.Net.FrameItemTypes,System.UInt16,System.Object)">
+            <summary>
+            This function initialize item of type
+            </summary>
+            <param name="type">Item type</param>
+            <param name="address">Item address for value</param>
+            <param name="value">Value</param>
+            <returns>Frame item | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.GetObjectTypeFromFrameItemType(Project858.Net.FrameItemTypes)">
+            <summary>
+            This function return NET object type from Frame Item type
+            </summary>
+            <param name="type">Frame item type</param>
+            <returns>NET object type</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.FindGroup(System.UInt16)">
+            <summary>
+            This method returns first froup with required address
+            </summary>
+            <param name="address">Required address</param>
+            <returns></returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.Remove(Project858.Net.FrameGroupItem)">
+            <summary>
+             Removes the first occurrence of a specific object
+            </summary>
+            <param name="group">The object to remove</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.Add(System.Collections.Generic.List{Project858.Net.FrameGroupItem})">
+            <summary>
+            Adds an item to the end of the Frame
+            </summary>
+            <param name="groups">The item to be added to the end of the Frame</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.Add(Project858.Net.FrameGroupItem)">
+            <summary>
+            Adds an item to the end of the Frame
+            </summary>
+            <param name="group">The item to be added to the end of the Frame</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.Add(Project858.Net.FrameGroupItem,System.Int32)">
+            <summary>
+            Inserts an item into the Frame at the specified index.
+            </summary>
+            <param name="group">The object to insert. The value can be null for reference types.</param>
+            <param name="index">The zero-based index at which item should be inserted.</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.ChangeAddress(System.UInt16)">
+            <summary>
+            Change frame address
+            </summary>
+            <param name="address">new address</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.ToByteArray">
+            <summary>
+            This finction converts frame to byte array
+            </summary>
+            <returns>Byte array | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.InternalToByteArray">
+            <summary>
+            This finction converts frame to byte array
+            </summary>
+            <returns>Byte array | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.internalGetFrameDataCheckSum(System.Collections.Generic.List{System.Byte})">
+            <summary>
+            This function calculate check sum from frame
+            </summary>
+            <param name="array">Data array</param>
+            <returns>Check sum</returns>
+        </member>
+        <member name="M:Project858.Net.FrameV2.InternalParseFrame(System.Byte[],System.Func{System.UInt16,System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
+            <summary>
+            This function parse frame from data
+            </summary>
+            <param name="data">Data to parse</param>
+            <param name="action">Function to get frame item type</param>
+        </member>
+        <member name="M:Project858.Net.FrameV2.InternalParseFrame(Project858.Net.FrameItemTypes,System.UInt32,System.UInt16,System.Byte[])">
+            <summary>
+            This function parse frame item from item type
+            </summary>
+            <param name="type">Type of frame</param>
+            <param name="address">Frame item address</param>
+            <param name="length">Frame item length</param>
+            <param name="data">Data frame item</param>
+            <returns>Frame item or null</returns>
+        </member>
         <member name="T:Project858.Net.FrameEventHandler">
             <summary>
             Delegat na oznamenie vykonania operacie s datami
@@ -4535,14 +4890,14 @@
             EventArgs pre event na prichod frame
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameEventArgs.#ctor(Project858.Net.Frame,System.String)">
+        <member name="M:Project858.Net.FrameEventArgs.#ctor(Project858.Net.IFrame,System.String)">
             <summary>
             Initialize this class
             </summary>
             <param name="frame">Prijaty frame</param>
             <param name="comPortName">Port name from serial port client</param>
         </member>
-        <member name="M:Project858.Net.FrameEventArgs.#ctor(Project858.Net.Frame,System.Net.IPEndPoint)">
+        <member name="M:Project858.Net.FrameEventArgs.#ctor(Project858.Net.IFrame,System.Net.IPEndPoint)">
             <summary>
             Initialize this class
             </summary>
@@ -4608,6 +4963,112 @@
             Frame helper for serializing or deserializing frame
             </summary>
         </member>
+        <member name="M:Project858.Net.FrameHelper.FindFrameV2(System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
+            <summary>
+            This function finds frame in array
+            </summary>
+            <param name="array">Input array data</param>
+            <param name="action">Callback for parsing frame items</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.ConstructFrameV2(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32,System.UInt16,System.Byte,System.Func{System.UInt16,System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
+            <summary>
+            This function constructs frame from data array
+            </summary>
+            <param name="array">Data array</param>
+            <param name="index">Start frame index</param>
+            <param name="length">Frame length</param>
+            <param name="address">Command address from frame</param>
+            <param name="state">State value</param>]
+            <param name="action">Callback for parsing frame items</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.SerializeV2ToGroup``1(System.Collections.Generic.List{``0})">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <returns>Group collection</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.SerializeV2ToGroup``1(``0)">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <returns>Group collection</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.SerializeV2``1(``0,System.UInt16)">
+            <summary>
+            Serializes the specified object to a Frame.
+            </summary>
+            <typeparam name="T">The type of the object to serialize to.</typeparam>
+            <param name="obj">The object to serialize.</param>
+            <param name="address">Frame command address</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.SerializeV2``1(System.Collections.Generic.List{``0},System.UInt16)">
+            <summary>
+            Serializes the specified object to a Frame.
+            </summary>
+            <typeparam name="T">The type of the object to serialize to.</typeparam>
+            <param name="obj">The object to serialize.</param>
+            <param name="commandAddress">Frame command address</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.SerializeV2``1(System.Collections.Generic.List{``0},Project858.Net.FrameV2)">
+            <summary>
+            Serializes the specified object to a Frame.
+            </summary>
+            <typeparam name="T">The type of the object to serialize to.</typeparam>
+            <param name="obj">The object to serialize.</param>
+            <param name="frame">Frame</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.DeserializeV2``1(Project858.Net.FrameV2)">
+            <summary>
+            Deserializes the Frame to a .NET object.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize to.</typeparam>
+            <param name="frame">The Frame to deserialize.</param>
+            <returns>The deserialized object from the Frame.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.DeserializeV2``1(Project858.Net.FrameGroupItem)">
+            <summary>
+            Deserializes the Group to a .NET object.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize to.</typeparam>
+            <param name="group">The Group to deserialize.</param>
+            <returns>The deserialized object from the Group.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.GetFrameDataCheckSum(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            This function calculate check sum from frame
+            </summary>
+            <param name="array">Data array</param>
+            <param name="index">Start frame index</param>
+            <param name="length">Frame length</param>
+            <returns>Check sum</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.FindFrame(System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
+            <summary>
+            This function finds frame in array
+            </summary>
+            <param name="array">Input array data</param>
+            <param name="action">Callback for parsing frame items</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.ConstructFrame(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32,System.UInt16,System.Func{System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
+            <summary>
+            This function constructs frame from data array
+            </summary>
+            <param name="array">Data array</param>
+            <param name="index">Start frame index</param>
+            <param name="length">Frame length</param>
+            <param name="address">Command address from frame</param>
+            <returns>Frame | null</returns>
+        </member>
         <member name="M:Project858.Net.FrameHelper.Serialize``1(``0,System.UInt16)">
             <summary>
             Serializes the specified object to a Frame.
@@ -4632,6 +5093,103 @@
             </summary>
             <typeparam name="T">The type of the object to deserialize to.</typeparam>
             <param name="frame">The Frame to deserialize.</param>
+            <returns>The deserialized object from the Frame.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2``1(System.Collections.Generic.List{``0},Project858.Net.FrameV2)">
+            <summary>
+            Serializes the specified Object to Frame
+            </summary>
+            <typeparam name="T">The type of the object to serialize to.</typeparam>
+            <param name="obj">The object to serialize.</param>
+            <param name="frame">Frame</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2ToGroup``1(``0)">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <returns>Group collection</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2ToGroup``1(System.Collections.Generic.List{``0})">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <returns>Group collection</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2ToGroup``1(System.Collections.Generic.List{``0},Project858.Reflection.ReflectionType)">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <param name="reflection">reflection info for this data type</param>
+            <returns>Group collection</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2ToGroup``1(``0,Project858.Reflection.ReflectionType)">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <param name="reflection">reflection info for this data type</param>
+            <returns>Group | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2ToGroup``1(``0,Project858.Reflection.ReflectionType,Project858.Net.FrameGroupAttribute)">
+            <summary>
+            This function serializes object to frame group
+            </summary>
+            <typeparam name="T">Data type</typeparam>
+            <param name="data">Data object</param>
+            <param name="reflection">reflection info for this data type</param>
+            <param name="frameGroupAttribute">Current group attribute</param>
+            <returns>Group | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalSerializeV2``1(System.Collections.Generic.List{``0},Project858.Net.FrameV2,Project858.Reflection.ReflectionType)">
+            <summary>
+            Serializes the specified Object to Frame
+            </summary>
+            <typeparam name="T">The type of the object to serialize to.</typeparam>
+            <param name="data">The object to serialize.</param>
+            <param name="frame">Frame</param>
+            <param name="reflection">Reflection information for the Object to deserialize</param>
+            <returns>Frame | null</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalDeserializeV2``1(Project858.Net.FrameV2)">
+            <summary>
+            Deserializes the Frame to a .NET object.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize to.</typeparam>
+            <param name="frame">The Frame to deserialize.</param>
+            <returns>The deserialized object from the Frame.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalDeserializeV2``1(Project858.Net.FrameGroupItem)">
+            <summary>
+            Deserializes the Group to a .NET object.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize to.</typeparam>
+            <param name="group">The Group to deserialize.</param>
+            <returns>The deserialized object from the Group.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalDeserializeV2``1(Project858.Net.FrameGroupItem,Project858.Reflection.ReflectionType)">
+            <summary>
+            Deserializes the Group to a .NET object.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize to.</typeparam>
+            <param name="group">The Group to deserialize.</param>
+            <param name="reflection">Reflection information for the Object to deserialize</param>
+            <returns>The deserialized object from the Group.</returns>
+        </member>
+        <member name="M:Project858.Net.FrameHelper.InternalDeserializeV2``1(Project858.Net.FrameV2,Project858.Reflection.ReflectionType)">
+            <summary>
+            Deserializes the Frame to a .NET object.
+            </summary>
+            <typeparam name="T">The type of the object to deserialize to.</typeparam>
+            <param name="frame">The Frame to deserialize.</param>
+            <param name="reflection">Reflection information for the Object to deserialize</param>
             <returns>The deserialized object from the Frame.</returns>
         </member>
         <member name="M:Project858.Net.FrameHelper.InternalSerialize``1(``0,Project858.Net.Frame)">
@@ -4684,14 +5242,14 @@
             Frame item with Byte value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemBoolean.#ctor(System.UInt16,System.Boolean)">
+        <member name="M:Project858.Net.FrameItemBoolean.#ctor(System.UInt32,System.Boolean)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemBoolean.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemBoolean.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4728,14 +5286,14 @@
             Frame item with Byte value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemByte.#ctor(System.UInt16,System.Byte)">
+        <member name="M:Project858.Net.FrameItemByte.#ctor(System.UInt32,System.Byte)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemByte.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemByte.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4772,14 +5330,14 @@
             Frame item with Int16 value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemInt16.#ctor(System.UInt16,System.Int16)">
+        <member name="M:Project858.Net.FrameItemInt16.#ctor(System.UInt32,System.Int16)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemInt16.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemInt16.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4816,14 +5374,14 @@
             Frame item with Int32 value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemUInt32.#ctor(System.UInt16,System.UInt32)">
+        <member name="M:Project858.Net.FrameItemUInt32.#ctor(System.UInt32,System.UInt32)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemUInt32.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemUInt32.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4860,14 +5418,14 @@
             Frame item with Int64 value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemUInt64.#ctor(System.UInt16,System.UInt64)">
+        <member name="M:Project858.Net.FrameItemUInt64.#ctor(System.UInt32,System.UInt64)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemUInt64.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemUInt64.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4904,14 +5462,14 @@
             Frame item with Int64 value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemInt64.#ctor(System.UInt16,System.Int64)">
+        <member name="M:Project858.Net.FrameItemInt64.#ctor(System.UInt32,System.Int64)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemInt64.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemInt64.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4948,14 +5506,14 @@
             Frame item with Int32 value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemInt32.#ctor(System.UInt16,System.Int32)">
+        <member name="M:Project858.Net.FrameItemInt32.#ctor(System.UInt32,System.Int32)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemInt32.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemInt32.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -4992,14 +5550,14 @@
             Frame item with string value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemString.#ctor(System.UInt16,System.String)">
+        <member name="M:Project858.Net.FrameItemString.#ctor(System.UInt32,System.String)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemString.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemString.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -5036,14 +5594,14 @@
             Frame item with byte array value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemGuid.#ctor(System.UInt16,System.Guid)">
+        <member name="M:Project858.Net.FrameItemGuid.#ctor(System.UInt32,System.Guid)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemGuid.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemGuid.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -5080,14 +5638,14 @@
             Frame item with byte array value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemUnkown.#ctor(System.UInt16,System.Collections.Generic.List{System.Byte})">
+        <member name="M:Project858.Net.FrameItemUnkown.#ctor(System.UInt32,System.Collections.Generic.List{System.Byte})">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemUnkown.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemUnkown.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -5164,14 +5722,24 @@
             Long value
             </summary>
         </member>
-        <member name="F:Project858.Net.FrameItemTypes.UInt64">
+        <member name="F:Project858.Net.FrameItemTypes.UInt16">
             <summary>
-            Unsigned long value
+            Unsigned short value
             </summary>
         </member>
         <member name="F:Project858.Net.FrameItemTypes.UInt32">
             <summary>
             Unsigned int value
+            </summary>
+        </member>
+        <member name="F:Project858.Net.FrameItemTypes.UInt64">
+            <summary>
+            Unsigned long value
+            </summary>
+        </member>
+        <member name="F:Project858.Net.FrameItemTypes.Enum">
+            <summary>
+            Enum type
             </summary>
         </member>
         <member name="F:Project858.Net.FrameItemTypes.Unkown">
@@ -5216,14 +5784,14 @@
             Base frame item from tcp protocol
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemBase`1.#ctor(System.UInt16,`0)">
+        <member name="M:Project858.Net.FrameItemBase`1.#ctor(System.UInt32,`0)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemBase`1.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemBase`1.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -5282,8 +5850,32 @@
             <param name="value">Value to parse</param>
             <returns>Byte array</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Project858.Net.FrameItemBase`1.GET_BITS_VAL(System.UInt32,System.Int32,System.Int32)" -->
-        <!-- Badly formed XML comment ignored for member "M:Project858.Net.FrameItemBase`1.GET_BITS_VAL(System.Byte,System.Int32,System.Int32)" -->
+        <member name="M:Project858.Net.FrameItemBase`1.GET_BITS_VAL(System.UInt32,System.Int32,System.Int32)">
+            <summary>
+            def GET_BITS_VAL( data, bh, bl )
+            brief Makro vrati hodnotu z \b data, ktora je definovana rozsahom bitov \b bl az \b bh. \n
+            Nizsi bit: bl, vyssi bit: bh. \n
+            Pre hodnotu data: 0x1234 a rozsah bitov bl: 4 bh: 7 makro vrati hodnotu 0x3. \n
+            see GET_BITS, GET_BIT, SET_BITS_VAL
+            </summary>
+            <param name="data"></param>
+            <param name="bh">horny bit</param>
+            <param name="bl">dolny bit</param>
+            <returns>int</returns>
+        </member>
+        <member name="M:Project858.Net.FrameItemBase`1.GET_BITS_VAL(System.Byte,System.Int32,System.Int32)">
+            <summary>
+            def GET_BITS_VAL( data, bh, bl )
+            brief Makro vrati hodnotu z \b data, ktora je definovana rozsahom bitov \b bl az \b bh. \n
+            Nizsi bit: bl, vyssi bit: bh. \n
+            Pre hodnotu data: 0x1234 a rozsah bitov bl: 4 bh: 7 makro vrati hodnotu 0x3. \n
+            see GET_BITS, GET_BIT, SET_BITS_VAL
+            </summary>
+            <param name="data"></param>
+            <param name="bh">horny bit</param>
+            <param name="bl">dolny bit</param>
+            <returns>int</returns>
+        </member>
         <member name="M:Project858.Net.FrameItemBase`1.GET_BITS(System.Byte,System.Int32,System.Int32)">
             <summary>
             def GET_BITS( data, bh, bl )
@@ -5327,14 +5919,14 @@
             Frame item with datetime value
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameItemDateTime.#ctor(System.UInt16,System.DateTime)">
+        <member name="M:Project858.Net.FrameItemDateTime.#ctor(System.UInt32,System.DateTime)">
             <summary>
             Initialize this class
             </summary>
             <param name="address">Item address</param>
             <param name="value">Value</param>
         </member>
-        <member name="M:Project858.Net.FrameItemDateTime.#ctor(System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.FrameItemDateTime.#ctor(System.UInt32,System.Byte[])">
             <summary>
             Initialize this class
             </summary>
@@ -5449,7 +6041,7 @@
             </summary>
             <param name="commandAddress">Command address</param>
         </member>
-        <member name="M:Project858.Net.Frame.#ctor(System.UInt16,System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,System.UInt16,Project858.Net.FrameItemTypes})">
+        <member name="M:Project858.Net.Frame.#ctor(System.UInt16,System.Collections.Generic.List{System.Byte},System.Func{System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
             <summary>
             Initialize this class
             </summary>
@@ -5551,7 +6143,7 @@
             <param name="value">Value as Byte</param>
             <returns>New frame</returns>
         </member>
-        <member name="M:Project858.Net.Frame.CreateFrameItem(Project858.Net.FrameItemTypes,System.UInt16,System.Object)">
+        <member name="M:Project858.Net.Frame.CreateFrameItem(Project858.Net.FrameItemTypes,System.UInt32,System.Object)">
             <summary>
             This function initialize item of type
             </summary>
@@ -5604,14 +6196,14 @@
             </summary>
             <returns>Byte array | null</returns>
         </member>
-        <member name="M:Project858.Net.Frame.GetFrameItem(System.UInt16)">
+        <member name="M:Project858.Net.Frame.GetFrameItem(System.UInt32)">
             <summary>
             This function returns frame item with address
             </summary>
             <param name="address">Address</param>
             <returns>Item | null</returns>
         </member>
-        <member name="M:Project858.Net.Frame.GetValue``1(System.UInt16)">
+        <member name="M:Project858.Net.Frame.GetValue``1(System.UInt32)">
             <summary>
             This function returns value 
             </summary>
@@ -5631,21 +6223,14 @@
             </summary>
             <returns>Byte array | null</returns>
         </member>
-        <member name="M:Project858.Net.Frame.internalGetFrameDataCheckSum(System.Collections.Generic.List{System.Byte})">
-            <summary>
-            This function calculate check sum from frame
-            </summary>
-            <param name="array">Data array</param>
-            <returns>Check sum</returns>
-        </member>
-        <member name="M:Project858.Net.Frame.InternalParseFrame(System.Byte[],System.Func{System.UInt16,System.UInt16,Project858.Net.FrameItemTypes})">
+        <member name="M:Project858.Net.Frame.InternalParseFrame(System.Byte[],System.Func{System.UInt16,System.UInt32,Project858.Net.FrameItemTypes})">
             <summary>
             This function parse frame from data
             </summary>
             <param name="data">Data to parse</param>
             <param name="action">Function to get frame item type</param>
         </member>
-        <member name="M:Project858.Net.Frame.InternalParseFrame(Project858.Net.FrameItemTypes,System.UInt16,System.UInt16,System.Byte[])">
+        <member name="M:Project858.Net.Frame.InternalParseFrame(Project858.Net.FrameItemTypes,System.UInt32,System.UInt16,System.Byte[])">
             <summary>
             This function parse frame item from item type
             </summary>
@@ -5655,22 +6240,22 @@
             <param name="data">Data frame item</param>
             <returns>Frame item or null</returns>
         </member>
-        <member name="T:Project858.Net.FrameTagAttribute">
+        <member name="T:Project858.Net.FrameItemAttribute">
             <summary>
             Element na definiciu adresy tagu
             </summary>
         </member>
-        <member name="M:Project858.Net.FrameTagAttribute.#ctor">
+        <member name="M:Project858.Net.FrameItemAttribute.#ctor">
             <summary>
             Initialize this class
             </summary>
         </member>
-        <member name="P:Project858.Net.FrameTagAttribute.Type">
+        <member name="P:Project858.Net.FrameItemAttribute.Type">
             <summary>
             Typ objektu
             </summary>
         </member>
-        <member name="P:Project858.Net.FrameTagAttribute.Address">
+        <member name="P:Project858.Net.FrameItemAttribute.Address">
             <summary>
             Hodnota adresy
             </summary>
@@ -5719,6 +6304,32 @@
             </summary>
             <param name="ipAddress">Ip adresa servera</param>
             <param name="ipPort">Ip port servera</param>
+        </member>
+        <member name="E:Project858.Net.TcpContractServer.mTransportClientAdded">
+            <summary>
+            Event with transport client which was added
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpContractServer.TransportClientAdded">
+            <summary>
+            Event with transport client which was added
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="E:Project858.Net.TcpContractServer.mTransportClientRemoved">
+            <summary>
+            Event with transport client which was removed
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpContractServer.TransportClientRemoved">
+            <summary>
+            Event with transport client which was removed
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
         </member>
         <member name="P:Project858.Net.TcpContractServer.Contracts">
             <summary>
@@ -5811,6 +6422,166 @@
             Overi maximalny pocet moznych klientov a vykona start alebo stop listenera
             </summary>
             <returns>True = je mozne aktivovat dalsieho klient</returns>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.OnTransportClientRemoved(Project858.Net.TransportClientEventArgs)">
+            <summary>
+            This method executes event with client which was removed
+            </summary>
+            <param name="e">Arguments</param>
+        </member>
+        <member name="M:Project858.Net.TcpContractServer.OnTransportClientAdded(Project858.Net.TransportClientEventArgs)">
+            <summary>
+            This method executes event with client which was added
+            </summary>
+            <param name="e">Arguments</param>
+        </member>
+        <member name="T:Project858.Net.TcpProtocolClientV2">
+            <summary>
+            Implement TCP client with custom protocol
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.#ctor(System.Net.IPEndPoint)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument / rozsah IP portu
+            </exception>
+            <param name="ipEndPoint">IpPoint ku ktoremu sa chceme pripojit</param>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.#ctor(Project858.Net.IpEndPointCollection)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument / rozsah IP portu
+            </exception>
+            <param name="ipEndPoints">Kolekcia IpEndPointov ku ktory sa bude klient striedavo pripajat pri autoreconnecte</param>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.#ctor(System.Net.IPEndPoint,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov, alebo IP portu
+            </exception>
+            <param name="ipEndPoint">IpPoint ku ktoremu sa chceme pripojit</param>
+            <param name="tcpReadTimeout">TcpClient Read Timeout</param>
+            <param name="tcpWriteTimeout">TcpClient Write Timeout</param>
+            <param name="nsReadTimeout">NetworkStream Read Timeout</param>
+            <param name="nsWriteTimeout">NetworkStream Write Timeout</param>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.#ctor(Project858.Net.IpEndPointCollection,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovana IPAddress
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov, alebo IP portu
+            </exception>
+            <param name="ipEndPoints">Kolekcia IpEndPointov ku ktory sa bude klient striedavo pripajat pri autoreconnecte</param>
+            <param name="tcpReadTimeout">TcpClient Read Timeout</param>
+            <param name="tcpWriteTimeout">TcpClient Write Timeout</param>
+            <param name="nsReadTimeout">NetworkStream Read Timeout</param>
+            <param name="nsWriteTimeout">NetworkStream Write Timeout</param>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.#ctor(System.Net.Sockets.TcpClient)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovany TcpClient
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je RemoteEndPoint v tcpClientovi Disposed
+            </exception>
+            <param name="tcpClient">Client zabezpecujuci tcp komunikaciu</param>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.#ctor(System.Net.Sockets.TcpClient,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initialize this class
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            Neinicializovany TcpClient
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Chybny argument jedneho z timeoutov
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je RemoteEndPoint v tcpClientovi Disposed
+            </exception>
+            <param name="tcpClient">Client zabezpecujuci tcp komunikaciu</param>
+            <param name="tcpReadTimeout">TcpClient Read Timeout</param>
+            <param name="tcpWriteTimeout">TcpClient Write Timeout</param>
+            <param name="nsReadTimeout">NetworkStream Read Timeout</param>
+            <param name="nsWriteTimeout">NetworkStream Write Timeout</param>
+        </member>
+        <member name="E:Project858.Net.TcpProtocolClientV2.m_receivedFrameEvent">
+            <summary>
+            Event na oznamenue prichodu frame na transportnej vrstve
+            </summary>
+        </member>
+        <member name="E:Project858.Net.TcpProtocolClientV2.ReceivedFrameEvent">
+            <summary>
+            Event na oznamenue prichodu frame na transportnej vrstve
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">
+            Ak je object v stave _isDisposed
+            </exception>
+        </member>
+        <member name="F:Project858.Net.TcpProtocolClientV2.m_lockObject">
+            <summary>
+            Synchronization object
+            </summary>
+        </member>
+        <member name="F:Project858.Net.TcpProtocolClientV2.m_buffer">
+            <summary>
+            Buffer collection for processing data
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.Send(Project858.Net.FrameV2)">
+            <summary>
+            This function sends frame to transport layer
+            </summary>
+            <param name="frame">Frame to send</param>
+            <returns>True | false</returns>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.OnReceivedData(Project858.Net.DataEventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho prijatie dat
+            </summary>
+            <param name="e">DataEventArgs</param>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.InternalGetFrameItemType(System.UInt16,System.UInt16,System.UInt32)">
+            <summary>
+            This function returns frame item type from address
+            </summary>
+            <param name="frameAddress">Frame address</param>
+            <param name="groupAddress">Group address</param>
+            <param name="itemAddress">Address to detect type</param>
+            <returns>Frame item type</returns>
+        </member>
+        <member name="M:Project858.Net.TcpProtocolClientV2.OnReceivedFrame(Project858.Net.FrameEventArgs)">
+            <summary>
+            Vytvori asynchronne volanie na metodu zabezpecujucu vytvorenie eventu
+            oznamujuceho prijatie dat
+            </summary>
+            <param name="e">EventArgs obsahujuci data</param>
         </member>
         <member name="T:Project858.Net.TcpProtocolClient">
             <summary>
@@ -5944,33 +6715,7 @@
             </summary>
             <param name="e">DataEventArgs</param>
         </member>
-        <member name="M:Project858.Net.TcpProtocolClient.internalFindFrame(System.Collections.Generic.List{System.Byte})">
-            <summary>
-            This function finds frame in array
-            </summary>
-            <param name="array">Input array data</param>
-            <returns>Frame | null</returns>
-        </member>
-        <member name="M:Project858.Net.TcpProtocolClient.internalConstructFrame(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32,System.UInt16)">
-            <summary>
-            This function constructs frame from data array
-            </summary>
-            <param name="array">Data array</param>
-            <param name="index">Start frame index</param>
-            <param name="length">Frame length</param>
-            <param name="commandAddress">Command address from frame</param>
-            <returns>Frame | null</returns>
-        </member>
-        <member name="M:Project858.Net.TcpProtocolClient.internalGetFrameDataCheckSum(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32)">
-            <summary>
-            This function calculate check sum from frame
-            </summary>
-            <param name="array">Data array</param>
-            <param name="index">Start frame index</param>
-            <param name="length">Frame length</param>
-            <returns>Check sum</returns>
-        </member>
-        <member name="M:Project858.Net.TcpProtocolClient.InternalGetFrameItemType(System.UInt16,System.UInt16)">
+        <member name="M:Project858.Net.TcpProtocolClient.InternalGetFrameItemType(System.UInt16,System.UInt32)">
             <summary>
             This function returns frame item type from address
             </summary>
@@ -6431,6 +7176,15 @@
             </summary>
             <returns>Popis klienta</returns>
         </member>
+        <member name="M:Project858.Net.TcpTransportClient.Read(System.Byte[],System.Int32,System.Int32@)">
+            <summary>
+            This function reads data from stream
+            </summary>
+            <param name="buffer">Buffer to insert data</param>
+            <param name="size">Max size for buffer</param>
+            <param name="result">Result, data count from stream</param>
+            <returns>True | false</returns>
+        </member>
         <member name="M:Project858.Net.TcpTransportClient.Write(System.Byte[])">
             <summary>
             Zapise _data na komunikacnu linku
@@ -6551,6 +7305,29 @@
             Vygeneruje event oznamujui zmenu stavu pripojenia
             </summary>
             <param name="e">EventArgs</param>
+        </member>
+        <member name="T:Project858.Net.TransportClientEventArgs">
+            <summary>
+            EventArgs with Transport Client
+            </summary>
+        </member>
+        <member name="M:Project858.Net.TransportClientEventArgs.#ctor(Project858.Net.ITransportClient)">
+            <summary>
+            Initialize this class
+            </summary>
+            <param name="client">Client</param>
+        </member>
+        <member name="P:Project858.Net.TransportClientEventArgs.Client">
+            <summary>
+            Client 
+            </summary>
+        </member>
+        <member name="T:Project858.Net.TransportClientEventHandler">
+            <summary>
+            Delegat for transport client
+            </summary>
+            <param name="sender">Sender</param>
+            <param name="e">Event arguments</param>
         </member>
         <member name="T:Project858.Net.UdpTransportClient">
             <summary>
@@ -7341,6 +8118,13 @@
             <param name="name">Meno property ktorej chceme hodnotu nastavit</param>
             <param name="value">Hodnota ktoru chceme nastavit</param>
             <param name="changeType">Definuje ci si zelame zmenit typ na typ property</param>
+        </member>
+        <member name="M:Project858.Reflection.ReflectionType.GetCustomAttribute``1">
+            <summary>
+            This function return first custom attribute
+            </summary>
+            <typeparam name="T">Type of attribute</typeparam>
+            <returns>Attribute or null</returns>
         </member>
         <member name="M:Project858.Reflection.ReflectionType.InternalInitializePropertyCollection">
             <summary>
@@ -12223,6 +13007,24 @@
             </param>
             <returns>Min value</returns>
         </member>
+        <member name="M:Project858.ExtensionMethod.Max(System.DateTime,System.DateTime)">
+            <summary>
+            This method selects max value from current and MinValue 
+            </summary>
+            <param name="value">Current value</param>
+            <param name="maxValue">Max value</param>
+            <returns>Min value</returns>
+        </member>
+        <member name="M:Project858.ExtensionMethod.MaxAddDays(System.DateTime,System.Int32)">
+            <summary>
+            This method selects max value from current and new date which is combine current value and days 
+            </summary>
+            <param name="value">Current value</param>
+            <param name="days">
+            A number of whole and fractional days. The value parameter can be negative or positive.
+            </param>
+            <returns>Min value</returns>
+        </member>
         <member name="M:Project858.ExtensionMethod.IsList(System.Type)">
             <summary>
             Overi ci je typ typu list
@@ -12242,7 +13044,7 @@
             <summary>
             This function returns bit value from position
             </summary>
-            <param name="data">byte</param>
+            <param name="value">byte</param>
             <param name="position">Position</param>
             <returns>True = bit = 1, False = bit = 0</returns>
         </member>
@@ -12898,6 +13700,13 @@
             </summary>
             <param name="guid">Guid hodnota v stringu</param>
             <returns>True = hodnota je guid, inak false</returns>
+        </member>
+        <member name="M:Project858.Utility.IsNullableType(System.Type)">
+            <summary>
+            This function check whether type is from nullable type
+            </summary>
+            <param name="type">Value to check</param>
+            <returns></returns>
         </member>
         <member name="M:Project858.Utility.IsNumbericType(System.Object)">
             <summary>

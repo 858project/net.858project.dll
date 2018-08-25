@@ -198,6 +198,7 @@
     <Compile Include="858project.IO.Ports\ExceptionEventHandler.cs" />
     <Compile Include="858project.IO.Ports\SerialPortProtocolClient.cs" />
     <Compile Include="858project.Net\FrameGroupAttribute.cs" />
+    <Compile Include="858project.Net\FrameItemEnum.cs" />
     <Compile Include="858project.Net\FrameItemUInt16.cs" />
     <Compile Include="858project.Net\IFrame.cs" />
     <Compile Include="858project.Net\FrameGroupItem.cs" />

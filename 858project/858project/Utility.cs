@@ -400,6 +400,15 @@ namespace Project858
             return Regex.IsMatch(guid, @"^(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}$");
         }
         /// <summary>
+        /// This function check whether type is from nullable type
+        /// </summary>
+        /// <param name="type">Value to check</param>
+        /// <returns></returns>
+        public static Boolean IsNullableType(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+        /// <summary>
         /// Overi ci je objekt ciselneho typu
         /// </summary>
         /// <param name="value">Objekt ktory chceme overit</param>

@@ -55,6 +55,10 @@ namespace Project858.Net
         /// </summary>
         UInt64,
         /// <summary>
+        /// Enum type
+        /// </summary>
+        Enum,
+        /// <summary>
         /// Unkown type
         /// </summary>
         Unkown,

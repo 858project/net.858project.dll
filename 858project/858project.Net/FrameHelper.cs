@@ -794,6 +794,18 @@ namespace Project858.Net
                     Nullable<Guid> guidValue = (value as String).ToGuidWithoutDash();
                     return guidValue.Value;
                 }
+                else if (type == FrameItemTypes.Enum)
+                {
+                    if (Utility.IsNullableType(targetType))
+                    {
+                        targetType = Nullable.GetUnderlyingType(targetType);
+                    }
+                    if (!targetType.IsEnum)
+                    {
+                        throw new Exception(String.Format("TargetType is not enum type. [{0}]", targetType));
+                    }
+                    return Enum.ToObject(targetType, value);
+                }
             }
             return value;
         }
