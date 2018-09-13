@@ -261,25 +261,36 @@ namespace Project858.Net
             //check listener
             if (this.m_listener != null)
             {
-                //get tcp client
-                TcpClient client = result != null ? this.m_listener.EndAcceptTcpClient(result) : null;
-
-                //overime klienta
-                if (client != null)
+                try
                 {
-                    //zalogujeme
-                    this.InternalTrace(TraceTypes.Info, "Akceptovanie klienta: '{0}'", client.Client.RemoteEndPoint);
+                    //get tcp client
+                    TcpClient client = result != null ? this.m_listener.EndAcceptTcpClient(result) : null;
 
-                    //odosleme event s prijatym klientom
-                    this.OnTcpClientReceived(new TcpClientEventArgs(client));
+                    //overime klienta
+                    if (client != null)
+                    {
+                        //zalogujeme
+                        this.InternalTrace(TraceTypes.Info, "Akceptovanie klienta: '{0}'", client.Client.RemoteEndPoint);
 
-                    //new accept
-                    this.m_listener.BeginAcceptTcpClient(this.InternalOnAccept, null);
+                        //odosleme event s prijatym klientom
+                        this.OnTcpClientReceived(new TcpClientEventArgs(client));
+
+                        //new accept
+                        this.m_listener.BeginAcceptTcpClient(this.InternalOnAccept, null);
+                    }
+                    else
+                    {
+                        //zalogujeme
+                        this.InternalTrace(TraceTypes.Warning, "Akceptovanie klienta zalyalo. Vlakno bude ukoncene.");
+                    }
                 }
-                else
+                catch (ObjectDisposedException)
                 {
-                    //zalogujeme
-                    this.InternalTrace(TraceTypes.Warning, "Akceptovanie klienta zalyalo. Vlakno bude ukoncene.");
+                    //ignore this error
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
             }
         }

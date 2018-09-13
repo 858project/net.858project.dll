@@ -23,9 +23,7 @@ namespace Project858.Diagnostics
         public TraceEventArgs(DateTime time, String modul, TraceTypes traceType, String message)
         {
             //osetrime vstupne parametre
-            if (String.IsNullOrEmpty(modul))
-                throw new ArgumentNullException("modul");
-            if (String.IsNullOrEmpty(modul))
+            if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
 
             this.time = time;

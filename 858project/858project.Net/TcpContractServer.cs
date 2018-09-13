@@ -224,7 +224,7 @@ namespace Project858.Net
             //ukoncime beziace contracty
             lock (this)
             {
-                for (int i = 0; i < this.m_contracts.Count; i++)
+                for (int i = this.m_contracts.Count - 1; i > -1; i--)
                 {
                     try
                     {
@@ -233,8 +233,11 @@ namespace Project858.Net
 
                         //ukoncime contract
                         this.InternalStopContract(contract);
+
+                        //remove contract
+                        this.InternalRemoveContract(contract);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         //chybu ignorujeme
                     }

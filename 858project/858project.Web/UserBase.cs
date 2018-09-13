@@ -144,14 +144,15 @@ namespace Project858.Web
         /// Vykona prihlasenie uzivatela s pozadovanym Id
         /// </summary>
         /// <param name="id">Id uzivatela ktoreho chceme prihlasit</param>
-        /// <param name="expireDate">Datum expiracie prihlasenia</param>
+        /// <param name="interval">Interval for session</param>
         /// <returns>True = prihlasenie bolo uspesne, inak false</returns>
-        public Boolean LoginUser(Guid id, DateTime expireDate)
+        public Boolean Login(Guid id, TimeSpan interval)
         {
             HttpContext current = HttpContext.Current;
             if (current != null)
             {
                 //ziskame token uzivatela
+                DateTime expireDate = DateTime.Now.Add(interval);
                 String token = this.InternalGetUserToken(id, UserBase.GetHostAddress(), expireDate);
                 if (!String.IsNullOrWhiteSpace(token))
                 {
