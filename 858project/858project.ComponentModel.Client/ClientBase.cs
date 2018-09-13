@@ -983,7 +983,7 @@ namespace Project858.ComponentModel.Client
             }
 
             //odosleme spravu
-            this.OnTrace(new TraceEventArgs(time, this.ToString(), type, String.Format(message, msgArgs)));
+            this.OnTrace(this, new TraceEventArgs(time, this.ToString(), type, String.Format(message, msgArgs)));
         }
         /// <summary>
         /// Zaloguje chybu do log suboru
@@ -1071,17 +1071,18 @@ namespace Project858.ComponentModel.Client
         /// <summary>
         /// Vygeneruje event oznamujuci poziadavku na logovanie informacii
         /// </summary>
+        /// <param name="sender">Sender object</param>
         /// <param name="e">TraceEventArgs</param>
-        protected virtual void OnTrace(TraceEventArgs e)
+        protected virtual void OnTrace(Object sender, TraceEventArgs e)
         {
             TraceEventHandler handler = this.traceEvent;
 
             if (handler != null)
             {
                 if (this._traceEventAsync)
-                    handler.BeginInvoke(this, e, null, null);
+                    handler.BeginInvoke(sender, e, null, null);
                 else
-                    handler(this, e);
+                    handler(sender, e);
             }
         }
         #endregion

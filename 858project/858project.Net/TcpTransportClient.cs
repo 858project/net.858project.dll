@@ -505,21 +505,21 @@ namespace Project858.Net
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _isDisposed
         /// </exception>
-        public IPEndPoint ActualIpEndPoint
+        public IPEndPoint LastIpEndPoint
         {
             get {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException("Object was disposed"); 
                 
-                return m_actualIpEndPoint;
+                return m_lastIpEndPoint;
             }
             set {
                 //je objekt _isDisposed ?
                 if (this.IsDisposed)
                     throw new ObjectDisposedException("Object was disposed"); 
                 
-                m_actualIpEndPoint = value;
+                m_lastIpEndPoint = value;
             }
         }
 		#endregion
@@ -584,7 +584,7 @@ namespace Project858.Net
         /// <summary>
         /// Aktualny ip end point na ktory sa pripajame alebo na ktorom sme pripojeny
         /// </summary>
-        private IPEndPoint m_actualIpEndPoint = null;
+        private IPEndPoint m_lastIpEndPoint = null;
 		#endregion
 
 		#region - Public Method -
@@ -594,12 +594,12 @@ namespace Project858.Net
         /// <returns>Popis klienta</returns>
         public override string ToString()
         {
-            if (this.m_actualIpEndPoint == null)
+            if (this.m_lastIpEndPoint == null)
             {
                 return base.ToString();
             }
 
-            return String.Format("{0}_[{1}]", base.ToString(), this.ActualIpEndPoint.ToString().Replace(":", "_"));
+            return String.Format("{0}_[{1}]", base.ToString(), this.LastIpEndPoint.ToString().Replace(":", "_"));
         }
         /// <summary>
         /// This function reads data from stream
@@ -747,9 +747,6 @@ namespace Project858.Net
                 this.OnDisconnected(EventArgs.Empty);
             }
 
-            //uz nie sme pripojeny
-            this.m_actualIpEndPoint = null;
-
             //spojenie nie ja aktivne
             if (this.m_connectionState != ConnectionStates.Closed)
             {
@@ -834,16 +831,16 @@ namespace Project858.Net
                 if (this.m_tcpClient == null)
                 {
                     //ziskame ipEndPoint na pripojenie
-                    this.m_actualIpEndPoint = this.GetIpEndPoint();
+                    this.m_lastIpEndPoint = this.GetIpEndPoint();
 
                     //inicializujeme a pripojime klienta
                     this.m_tcpClient = new TcpClient();
-                    this.m_tcpClient.Connect(this.m_actualIpEndPoint);
+                    this.m_tcpClient.Connect(this.m_lastIpEndPoint);
                 }
                 else
                 {
                     //adresa ku ktorej som pripojeny
-                    this.m_actualIpEndPoint = (IPEndPoint)this.m_tcpClient.Client.RemoteEndPoint;
+                    this.m_lastIpEndPoint = (IPEndPoint)this.m_tcpClient.Client.RemoteEndPoint;
                 }
 
                 //nastavime timeoty pre socket
@@ -925,25 +922,24 @@ namespace Project858.Net
             }
             else
             {
-                //event o ukonceni spojenia len ak uz bolo oznamenie o connecte
-                if (this.m_connectionState == ConnectionStates.Connected)
-                {
-                    //doslo k ukonceniu spojenia
-                    this.OnDisconnected(EventArgs.Empty);
-                }
-
-                 //zmenime stav
-                this.m_connectionState = ConnectionStates.Closed;
-                //doslo k zmene stavu
-                this.OnChangeConnectionState(EventArgs.Empty);
-
                 //ukoncime klienta
                 if (!this.IsDisposed)
+                {
                     if (this.IsRun)
                     {
                         //ukoncime klienta
                         this.Stop();
                     }
+                }
+
+                //doslo k ukonceniu spojenia
+                this.OnDisconnected(EventArgs.Empty);
+
+                 //zmenime stav
+                this.m_connectionState = ConnectionStates.Closed;
+
+                //doslo k zmene stavu
+                this.OnChangeConnectionState(EventArgs.Empty);
             }
         }
         /// <summary>
