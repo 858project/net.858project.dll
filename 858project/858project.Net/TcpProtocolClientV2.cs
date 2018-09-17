@@ -124,14 +124,14 @@ namespace Project858.Net
         /// <summary>
         /// Event na oznamenue prichodu frame na transportnej vrstve
         /// </summary>
-        private event FrameEventHandler m_receivedFrameEvent = null;
+        private event PackageEventHandler m_receivedPackageEvent = null;
         /// <summary>
         /// Event na oznamenue prichodu frame na transportnej vrstve
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _isDisposed
         /// </exception>
-        public event FrameEventHandler ReceivedFrameEvent
+        public event PackageEventHandler ReceivedPackageEvent
         {
             add
             {
@@ -141,7 +141,7 @@ namespace Project858.Net
                     throw new ObjectDisposedException("Object was disposed");
 
                 lock (this.m_eventLock)
-                    this.m_receivedFrameEvent += value;
+                    this.m_receivedPackageEvent += value;
             }
             remove
             {
@@ -152,7 +152,7 @@ namespace Project858.Net
 
                 //netusim preco ale to mi zvykne zamrznut thread a ja fakt neviem preco
                 lock (this.m_eventLock)
-                    this.m_receivedFrameEvent -= value;
+                    this.m_receivedPackageEvent -= value;
             }
         }
         #endregion
@@ -172,11 +172,11 @@ namespace Project858.Net
         /// <summary>
         /// This function sends frame to transport layer
         /// </summary>
-        /// <param name="frame">Frame to send</param>
+        /// <param name="package">Frame to send</param>
         /// <returns>True | false</returns>
-        public virtual Boolean Send(PackageV2 frame)
+        public virtual Boolean Send(PackageV2 package)
         {
-            return this.Write(frame.ToByteArray());
+            return this.Write(package.ToByteArray());
         }
         #endregion
 
@@ -210,11 +210,11 @@ namespace Project858.Net
                 while (true)
                 {
                     //find frame
-                    PackageV2 frame = PackageHelper.FindFrameV2(this.m_buffer, this.InternalGetFrameItemType);
+                    PackageV2 frame = PackageHelper.FindPackageV2(this.m_buffer, this.InternalGetPackageItemType);
                     if (frame != null)
                     {
                         //send receive event
-                        this.OnReceivedFrame(new FrameEventArgs(frame, e.RemoteEndPoint));
+                        this.OnReceivedPackage(new PackageEventArgs(frame, e.RemoteEndPoint));
                     }
                     else
                     {
@@ -231,7 +231,7 @@ namespace Project858.Net
         /// <param name="groupAddress">Group address</param>
         /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected virtual PackageItemTypes InternalGetFrameItemType(UInt16 frameAddress, UInt16 groupAddress, UInt32 itemAddress)
+        protected virtual PackageItemTypes InternalGetPackageItemType(UInt16 frameAddress, UInt16 groupAddress, UInt32 itemAddress)
         {
             switch (itemAddress)
             {
@@ -249,9 +249,9 @@ namespace Project858.Net
         /// oznamujuceho prijatie dat
         /// </summary>
         /// <param name="e">EventArgs obsahujuci data</param>
-        protected virtual void OnReceivedFrame(FrameEventArgs e)
+        protected virtual void OnReceivedPackage(PackageEventArgs e)
         {
-            FrameEventHandler handler = this.m_receivedFrameEvent;
+            PackageEventHandler handler = this.m_receivedPackageEvent;
 
             if (handler != null)
                 handler(this, e);

@@ -33,7 +33,7 @@ namespace Project858.Net
         {
             this.Address = address;
             this.State = state;
-            this.m_groups = new List<FrameGroupItem>();
+            this.m_groups = new List<PackageGroupItem>();
             if (data != null)
             {
                 this.InternalParseFrame(data.ToArray(), action);
@@ -61,7 +61,7 @@ namespace Project858.Net
         /// <summary>
         /// Item collections
         /// </summary>
-        public ReadOnlyCollection<FrameGroupItem> Groups
+        public ReadOnlyCollection<PackageGroupItem> Groups
         {
             get { return this.m_groups.AsReadOnly(); }
         }
@@ -71,7 +71,7 @@ namespace Project858.Net
         /// <summary>
         /// Group collections
         /// </summary>
-        private List<FrameGroupItem> m_groups = null;
+        private List<PackageGroupItem> m_groups = null;
         #endregion
 
         #region - Public Static Methods -
@@ -180,12 +180,12 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Required address</param>
         /// <returns></returns>
-        public FrameGroupItem FindGroup(UInt16 address)
+        public PackageGroupItem FindGroup(UInt16 address)
         {
             int groupCount = this.m_groups.Count;
             for (int i = 0; i < groupCount; i++)
             {
-                FrameGroupItem group = this.m_groups[i];
+                PackageGroupItem group = this.m_groups[i];
                 if (group.Address == address)
                 {
                     return group;
@@ -197,7 +197,7 @@ namespace Project858.Net
         ///  Removes the first occurrence of a specific object
         /// </summary>
         /// <param name="group">The object to remove</param>
-        public void Remove(FrameGroupItem group)
+        public void Remove(PackageGroupItem group)
         {
             this.m_groups.Remove(group);
         }
@@ -205,9 +205,9 @@ namespace Project858.Net
         /// Adds an item to the end of the Frame
         /// </summary>
         /// <param name="groups">The item to be added to the end of the Frame</param>
-        public void Add(List<FrameGroupItem> groups)
+        public void Add(List<PackageGroupItem> groups)
         {
-            foreach (FrameGroupItem group in groups)
+            foreach (PackageGroupItem group in groups)
             {
                 this.Add(group);
             }
@@ -216,7 +216,7 @@ namespace Project858.Net
         /// Adds an item to the end of the Frame
         /// </summary>
         /// <param name="group">The item to be added to the end of the Frame</param>
-        public void Add(FrameGroupItem group)
+        public void Add(PackageGroupItem group)
         {
             this.m_groups.Add(group);
         }
@@ -225,7 +225,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="group">The object to insert. The value can be null for reference types.</param>
         /// <param name="index">The zero-based index at which item should be inserted.</param>
-        public void Add(FrameGroupItem group, int index)
+        public void Add(PackageGroupItem group, int index)
         {
             this.m_groups.Insert(index, group);
         }
@@ -263,7 +263,7 @@ namespace Project858.Net
             int groupCount = this.m_groups.Count;
             for (int i = 0; i < groupCount; i++)
             {
-                FrameGroupItem group = this.m_groups[i];
+                PackageGroupItem group = this.m_groups[i];
                 builder.Append("---------");
                 builder.Append(Environment.NewLine);
                 builder.AppendFormat("Group: {0}, Address: 0x{1:x4}, Items: {2}", (i + 1), group.Address, group.Count);
@@ -295,7 +295,7 @@ namespace Project858.Net
             Int16 length = 0x06;
 
             //add items
-            foreach (FrameGroupItem item in this.m_groups)
+            foreach (PackageGroupItem item in this.m_groups)
             {
                 Byte[] data = item.ToByteArray();
                 length += (Int16)data.Length;
@@ -370,7 +370,7 @@ namespace Project858.Net
                 currentIndex += 0x04;
 
                 //create group
-                FrameGroupItem group = new FrameGroupItem(dataAddress);
+                PackageGroupItem group = new PackageGroupItem(dataAddress);
 
                 //parse items
                 for (int i = 0; i < itemCount; i++)

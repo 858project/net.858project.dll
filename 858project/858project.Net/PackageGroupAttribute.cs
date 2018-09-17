@@ -11,13 +11,13 @@ namespace Project858.Net
     /// Element na definiciu adresy skupiny
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public sealed class FrameGroupAttribute : Attribute
+    public sealed class PackageGroupAttribute : Attribute
     {
         #region - Constructor -
         /// <summary>
         /// Initialize this class
         /// </summary>
-        public FrameGroupAttribute()
+        public PackageGroupAttribute()
         {
             this.Address = 0x0000;
         }

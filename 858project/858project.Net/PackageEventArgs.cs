@@ -9,7 +9,7 @@ namespace Project858.Net
     /// <summary>
     /// EventArgs pre event na prichod frame
     /// </summary>
-    public class FrameEventArgs : EventArgs
+    public class PackageEventArgs : EventArgs
     {
         #region - Constructor -
         /// <summary>
@@ -17,9 +17,9 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Prijaty frame</param>
         /// <param name="comPortName">Port name from serial port client</param>
-        public FrameEventArgs(IPackage frame, String comPortName)
+        public PackageEventArgs(IPackage frame, String comPortName)
         {
-            this.Frame = frame;
+            this.Package = frame;
             this.ComPortName = comPortName;
         }
         /// <summary>
@@ -27,9 +27,9 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Prijaty frame</param>
         /// <param name="remoteEndPoint">EndPoint odosielatela dat</param>
-        public FrameEventArgs(IPackage frame, IPEndPoint remoteEndPoint)
+        public PackageEventArgs(IPackage frame, IPEndPoint remoteEndPoint)
         {
-            this.Frame = frame;
+            this.Package = frame;
             this.RemoteEndPoint = remoteEndPoint;
         }
         #endregion
@@ -46,7 +46,7 @@ namespace Project858.Net
         /// <summary>
         /// (Get) Prijate _data
         /// </summary>
-        public IPackage Frame
+        public IPackage Package
         {
             get;
             private set;

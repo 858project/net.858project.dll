@@ -9,6 +9,6 @@ namespace Project858.Net
     /// Delegat na oznamenie vykonania operacie s datami
     /// </summary>
     /// <param name="sender">Odosielatel udalosti</param>
-    /// <param name="e">FrameEventArgs</param>
-    public delegate void FrameEventHandler(Object sender, FrameEventArgs e);
+    /// <param name="e">PackageEventArgs</param>
+    public delegate void PackageEventHandler(Object sender, PackageEventArgs e);
 }

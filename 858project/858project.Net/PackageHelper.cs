@@ -16,7 +16,7 @@ namespace Project858.Net
         /// <param name="array">Input array data</param>
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        public static PackageV2 FindFrameV2(List<Byte> array, Func<UInt16, UInt16, UInt32, PackageItemTypes> action)
+        public static PackageV2 FindPackageV2(List<Byte> array, Func<UInt16, UInt16, UInt32, PackageItemTypes> action)
         {
             //variables
             int count = array.Count;
@@ -39,7 +39,7 @@ namespace Project858.Net
                     //overime ci je dostatok dat na vytvorenie package
                     if (count >= (length - 1))
                     {
-                        PackageV2 frame = PackageHelper.ConstructFrameV2(array, index + 6, length - 6, address, state, action);
+                        PackageV2 frame = PackageHelper.ConstructPackageV2(array, index + 6, length - 6, address, state, action);
                         if (frame != null)
                         {
                             //return package
@@ -76,7 +76,7 @@ namespace Project858.Net
         /// <param name="state">State value</param>]
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        private static PackageV2 ConstructFrameV2(List<Byte> array, int index, int length, UInt16 address, Byte state, Func<UInt16, UInt16, UInt32, PackageItemTypes> action)
+        private static PackageV2 ConstructPackageV2(List<Byte> array, int index, int length, UInt16 address, Byte state, Func<UInt16, UInt16, UInt32, PackageItemTypes> action)
         {
             //check data length available
             if ((array.Count - index) >= length)
@@ -109,7 +109,7 @@ namespace Project858.Net
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="data">Data object</param>
         /// <returns>Group collection</returns>
-        public static List<FrameGroupItem> SerializeV2ToGroup<T>(List<T> data)
+        public static List<PackageGroupItem> SerializeV2ToGroup<T>(List<T> data)
         {
             return PackageHelper.InternalSerializeV2ToGroup<T>(data);
         }
@@ -119,7 +119,7 @@ namespace Project858.Net
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="data">Data object</param>
         /// <returns>Group collection</returns>
-        public static FrameGroupItem SerializeV2ToGroup<T>(T data)
+        public static PackageGroupItem SerializeV2ToGroup<T>(T data)
         {
             return PackageHelper.InternalSerializeV2ToGroup<T>(data);
         }
@@ -191,7 +191,7 @@ namespace Project858.Net
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="group">The Group to deserialize.</param>
         /// <returns>The deserialized object from the Group.</returns>
-        public static T DeserializeV2<T>(FrameGroupItem group)
+        public static T DeserializeV2<T>(PackageGroupItem group)
         {
             if (group == null)
                 throw new ArgumentNullException("group");
@@ -376,7 +376,7 @@ namespace Project858.Net
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="data">Data object</param>
         /// <returns>Group collection</returns>
-        private static FrameGroupItem InternalSerializeV2ToGroup<T>(T data)
+        private static PackageGroupItem InternalSerializeV2ToGroup<T>(T data)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
@@ -392,7 +392,7 @@ namespace Project858.Net
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="data">Data object</param>
         /// <returns>Group collection</returns>
-        private static List<FrameGroupItem> InternalSerializeV2ToGroup<T>(List<T> data)
+        private static List<PackageGroupItem> InternalSerializeV2ToGroup<T>(List<T> data)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
@@ -409,22 +409,22 @@ namespace Project858.Net
         /// <param name="data">Data object</param>
         /// <param name="reflection">reflection info for this data type</param>
         /// <returns>Group collection</returns>
-        private static List<FrameGroupItem> InternalSerializeV2ToGroup<T>(List<T> data, ReflectionType reflection)
+        private static List<PackageGroupItem> InternalSerializeV2ToGroup<T>(List<T> data, ReflectionType reflection)
         {
             //get group attribute
-            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+            PackageGroupAttribute PackageGroupAttribute = reflection.GetCustomAttribute<PackageGroupAttribute>();
 
             //check group attribute
-            if (frameGroupAttribute != null)
+            if (PackageGroupAttribute != null)
             {
                 //get collection
-                List<FrameGroupItem> collection = new List<FrameGroupItem>();
+                List<PackageGroupItem> collection = new List<PackageGroupItem>();
 
                 //loop all object
                 foreach (T obj in data)
                 {
                     //serialize object
-                    FrameGroupItem group = InternalSerializeV2ToGroup<T>(obj, reflection, frameGroupAttribute);
+                    PackageGroupItem group = InternalSerializeV2ToGroup<T>(obj, reflection, PackageGroupAttribute);
                     if (group != null)
                     {
                         collection.Add(group);
@@ -445,16 +445,16 @@ namespace Project858.Net
         /// <param name="data">Data object</param>
         /// <param name="reflection">reflection info for this data type</param>
         /// <returns>Group | null</returns>
-        private static FrameGroupItem InternalSerializeV2ToGroup<T>(T data, ReflectionType reflection)
+        private static PackageGroupItem InternalSerializeV2ToGroup<T>(T data, ReflectionType reflection)
         {
             //get group attribute
-            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+            PackageGroupAttribute PackageGroupAttribute = reflection.GetCustomAttribute<PackageGroupAttribute>();
 
             //check group attribute
-            if (frameGroupAttribute != null)
+            if (PackageGroupAttribute != null)
             {
                 //serialize data
-                return InternalSerializeV2ToGroup<T>(data, reflection, frameGroupAttribute);
+                return InternalSerializeV2ToGroup<T>(data, reflection, PackageGroupAttribute);
             }
 
             //no data
@@ -466,15 +466,15 @@ namespace Project858.Net
         /// <typeparam name="T">Data type</typeparam>
         /// <param name="data">Data object</param>
         /// <param name="reflection">reflection info for this data type</param>
-        /// <param name="frameGroupAttribute">Current group attribute</param>
+        /// <param name="PackageGroupAttribute">Current group attribute</param>
         /// <returns>Group | null</returns>
-        private static FrameGroupItem InternalSerializeV2ToGroup<T>(T data, ReflectionType reflection, FrameGroupAttribute frameGroupAttribute)
+        private static PackageGroupItem InternalSerializeV2ToGroup<T>(T data, ReflectionType reflection, PackageGroupAttribute PackageGroupAttribute)
         {
             //variables
             Object value = null;
 
             //create group
-            FrameGroupItem group = new FrameGroupItem(frameGroupAttribute.Address);
+            PackageGroupItem group = new PackageGroupItem(PackageGroupAttribute.Address);
 
             //set property
             foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
@@ -483,7 +483,7 @@ namespace Project858.Net
                 if (item.Property.CanRead)
                 {
                     //get current attribute
-                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
+                    PackageItemAttribute attribute = item.GetCustomAttribute<PackageItemAttribute>();
                     if (attribute != null)
                     {
                         try
@@ -520,16 +520,16 @@ namespace Project858.Net
         private static PackageV2 InternalSerializeV2<T>(List<T> data, PackageV2 frame, ReflectionType reflection)
         {
             //get group attribute
-            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
+            PackageGroupAttribute PackageGroupAttribute = reflection.GetCustomAttribute<PackageGroupAttribute>();
 
             //each object
             foreach (T obj in data)
             {
                 //check attribute
-                if (frameGroupAttribute != null)
+                if (PackageGroupAttribute != null)
                 {
                     //serialize group
-                    FrameGroupItem group = InternalSerializeV2ToGroup<T>(obj, reflection, frameGroupAttribute);
+                    PackageGroupItem group = InternalSerializeV2ToGroup<T>(obj, reflection, PackageGroupAttribute);
 
                     //create group to frame
                     frame.Add(group);
@@ -561,7 +561,7 @@ namespace Project858.Net
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="group">The Group to deserialize.</param>
         /// <returns>The deserialized object from the Group.</returns>
-        private static T InternalDeserializeV2<T>(FrameGroupItem group)
+        private static T InternalDeserializeV2<T>(PackageGroupItem group)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
@@ -578,7 +578,7 @@ namespace Project858.Net
         /// <param name="group">The Group to deserialize.</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>The deserialized object from the Group.</returns>
-        private static T InternalDeserializeV2<T>(FrameGroupItem group, ReflectionType reflection)
+        private static T InternalDeserializeV2<T>(PackageGroupItem group, ReflectionType reflection)
         {
             //intiailize object
             T result = (T)Activator.CreateInstance(typeof(T));
@@ -590,7 +590,7 @@ namespace Project858.Net
                 if (item.Property.CanWrite)
                 {
                     //get current attribute
-                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
+                    PackageItemAttribute attribute = item.GetCustomAttribute<PackageItemAttribute>();
                     if (attribute != null)
                     {
                         Object value = null;
@@ -625,8 +625,8 @@ namespace Project858.Net
         private static List<T> InternalDeserializeV2<T>(PackageV2 frame, ReflectionType reflection)
         {
             //get group attribute
-            FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
-            if (frameGroupAttribute == null)
+            PackageGroupAttribute PackageGroupAttribute = reflection.GetCustomAttribute<PackageGroupAttribute>();
+            if (PackageGroupAttribute == null)
             {
                 throw new Exception(String.Format("Type {0} does not contain FrameGroup attribute!", reflection.Type.Name));
             }
@@ -635,10 +635,10 @@ namespace Project858.Net
             List<T> collection = new List<T>();
 
             //each objects
-            foreach (FrameGroupItem group in frame.Groups)
+            foreach (PackageGroupItem group in frame.Groups)
             {
                 //check group address for this type
-                if (group.Address == frameGroupAttribute.Address)
+                if (group.Address == PackageGroupAttribute.Address)
                 {
                     //intiailize object
                     T result = PackageHelper.InternalDeserializeV2<T>(group, reflection);
@@ -704,7 +704,7 @@ namespace Project858.Net
                 if (item.Property.CanRead)
                 {
                     //get current attribute
-                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
+                    PackageItemAttribute attribute = item.GetCustomAttribute<PackageItemAttribute>();
                     if (attribute != null)
                     {
                         Object value = null;
@@ -750,7 +750,7 @@ namespace Project858.Net
                 if (item.Property.CanWrite)
                 {
                     //get current attribute
-                    FrameItemAttribute attribute = item.GetCustomAttribute<FrameItemAttribute>();
+                    PackageItemAttribute attribute = item.GetCustomAttribute<PackageItemAttribute>();
                     if (attribute != null)
                     {
                         Object value = null;

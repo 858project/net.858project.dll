@@ -127,14 +127,14 @@ namespace Project858.Net
         /// <summary>
         /// Event na oznamenue prichodu frame na transportnej vrstve
         /// </summary>
-        private event FrameEventHandler m_receivedFrameEvent = null;
+        private event PackageEventHandler m_receivedFrameEvent = null;
         /// <summary>
         /// Event na oznamenue prichodu frame na transportnej vrstve
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Ak je object v stave _isDisposed
         /// </exception>
-        public event FrameEventHandler ReceivedFrameEvent
+        public event PackageEventHandler ReceivedFrameEvent
         {
             add
             {
@@ -214,7 +214,7 @@ namespace Project858.Net
                     if (frame != null)
                     {
                         //send receive event
-                        this.OnReceivedFrame(new FrameEventArgs(frame, e.RemoteEndPoint));
+                        this.OnReceivedFrame(new PackageEventArgs(frame, e.RemoteEndPoint));
                     }
                     else
                     {
@@ -248,9 +248,9 @@ namespace Project858.Net
         /// oznamujuceho prijatie dat
         /// </summary>
         /// <param name="e">EventArgs obsahujuci data</param>
-        protected virtual void OnReceivedFrame(FrameEventArgs e)
+        protected virtual void OnReceivedFrame(PackageEventArgs e)
         {
-            FrameEventHandler handler = this.m_receivedFrameEvent;
+            PackageEventHandler handler = this.m_receivedFrameEvent;
 
             if (handler != null)
                 handler(this, e);

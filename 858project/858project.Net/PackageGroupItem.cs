@@ -11,14 +11,14 @@ namespace Project858.Net
     /// <summary>
     /// One group for frame v2
     /// </summary>
-    public sealed class FrameGroupItem
+    public sealed class PackageGroupItem
     {
         #region - Constructor -
         /// <summary>
         /// Initialize this class
         /// </summary>
         /// <param name="address">Data adress for this group</param>
-        public FrameGroupItem(UInt16 address)
+        public PackageGroupItem(UInt16 address)
         {
             this.m_items = new List<IPackageItem>();
             this.Address = address;
