@@ -177,7 +177,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Frame to send</param>
         /// <returns>True | false</returns>
-        public virtual Boolean Send(Frame frame)
+        public virtual Boolean Send(Package frame)
         {
             return this.Write(frame.ToByteArray());
         }
@@ -210,7 +210,7 @@ namespace Project858.Net
                 while (true)
                 {
                     //find frame
-                    Frame frame = PackageHelper.FindFrame(this.m_buffer, this.InternalGetFrameItemType);
+                    Package frame = PackageHelper.FindFrame(this.m_buffer, this.InternalGetFrameItemType);
                     if (frame != null)
                     {
                         //send receive event
@@ -234,7 +234,7 @@ namespace Project858.Net
         {
             switch (itemAddress)
             {
-                case Frame.Defines.TAG_STATE:
+                case Package.Defines.TAG_STATE:
                     return PackageItemTypes.Byte;
                 default:
                     return PackageItemTypes.Unkown;

@@ -131,6 +131,8 @@ namespace Project858.Net
                     return new PackageItemUInt64(address, (UInt64)value);
                 case PackageItemTypes.UInt32:
                     return new PackageItemUInt32(address, (UInt32)value);
+                case PackageItemTypes.Enum:
+                    return new PackageItemEnum(address, value);
                 default:
                     return new PackageItemUnkown(address, (List<Byte>)value);
             }
@@ -156,9 +158,9 @@ namespace Project858.Net
                     return typeof(Int64);
                 case PackageItemTypes.String:
                     return typeof(String);
-                case FrameItemTypes.Enum:
+                case PackageItemTypes.Enum:
                     return typeof(Object);
-                case FrameItemTypes.Byte:
+                case PackageItemTypes.Byte:
                     return typeof(Byte);
                 case PackageItemTypes.Boolean:
                     return typeof(Boolean);

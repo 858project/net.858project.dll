@@ -10,14 +10,14 @@ namespace Project858.Net
     /// <summary>
     /// Protocol frame
     /// </summary>
-    public sealed class Frame : IPackage
+    public sealed class Package : IPackage
     {
         #region - Constructors -
         /// <summary>
         /// Initialize this class
         /// </summary>
         /// <param name="commandAddress">Command address</param>
-        public Frame(UInt16 commandAddress)
+        public Package(UInt16 commandAddress)
             : this(commandAddress, null, null)
         {
         }
@@ -27,7 +27,7 @@ namespace Project858.Net
         /// <param name="address">Command address</param>
         /// <param name="data">Frame data</param>
         /// <param name="action">Action for returning frame item type</param>
-        public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt32, PackageItemTypes> action)
+        public Package(UInt16 address, List<Byte> data, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             this.Address = address;
             this.m_items = new List<IPackageItem>();
@@ -134,9 +134,9 @@ namespace Project858.Net
         /// <param name="address">Tag address for value</param>
         /// <param name="value">Value as Byte</param>
         /// <returns>New frame</returns>
-        public static Frame CreateFrame(UInt16 frameAddress, UInt16 address, Byte value)
+        public static Package PackageFrame(UInt16 frameAddress, UInt16 address, Byte value)
         {
-            Frame frame = new Frame(frameAddress);
+            Package frame = new Package(frameAddress);
             frame.Add(new PackageItemByte(address, value));
             return frame;
         }
@@ -147,7 +147,7 @@ namespace Project858.Net
         /// <param name="address">Item address for value</param>
         /// <param name="value">Value</param>
         /// <returns>Frame item | null</returns>
-        public static IPackageItem CreateFrameItem(PackageItemTypes type, UInt32 address, Object value)
+        public static IPackageItem CreatePackageItem(PackageItemTypes type, UInt32 address, Object value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
@@ -196,7 +196,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="type">Frame item type</param>
         /// <returns>NET object type</returns>
-        public static Type GetObjectTypeFromFrameItemType(PackageItemTypes type)
+        public static Type GetObjectTypeFromPackageItemType(PackageItemTypes type)
         {
             switch (type)
             {
@@ -214,9 +214,7 @@ namespace Project858.Net
                     return typeof(String);
                 case PackageItemTypes.Byte:
                     return typeof(Byte);
-                case FrameItemTypes.Enum:
-                    return typeof(Object);
-                case FrameItemTypes.Boolean:
+                case PackageItemTypes.Boolean:
                     return typeof(Boolean);
                 case PackageItemTypes.UInt64:
                     return typeof(UInt64);

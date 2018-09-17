@@ -235,7 +235,7 @@ namespace Project858.Net
         {
             switch (itemAddress)
             {
-                case Frame.Defines.TAG_STATE:
+                case Package.Defines.TAG_STATE:
                     return PackageItemTypes.Byte;
                 default:
                     return PackageItemTypes.Unkown;

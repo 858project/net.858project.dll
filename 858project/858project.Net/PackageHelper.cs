@@ -225,7 +225,7 @@ namespace Project858.Net
         /// <param name="array">Input array data</param>
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        public static Frame FindFrame(List<Byte> array, Func<UInt16, UInt32, PackageItemTypes> action)
+        public static Package FindFrame(List<Byte> array, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             //variables
             int count = array.Count;
@@ -245,7 +245,7 @@ namespace Project858.Net
                     //overime ci je dostatok dat na vytvorenie package
                     if (count >= (length - 1))
                     {
-                        Frame frame = PackageHelper.ConstructFrame(array, index + 5, length - 5, address, action);
+                        Package frame = PackageHelper.ConstructFrame(array, index + 5, length - 5, address, action);
                         if (frame != null)
                         {
                             //return package
@@ -280,7 +280,7 @@ namespace Project858.Net
         /// <param name="length">Frame length</param>
         /// <param name="address">Command address from frame</param>
         /// <returns>Frame | null</returns>
-        private static Frame ConstructFrame(List<Byte> array, int index, int length, UInt16 address, Func<UInt16, UInt32, PackageItemTypes> action)
+        private static Package ConstructFrame(List<Byte> array, int index, int length, UInt16 address, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             //check data length available
             if ((array.Count - index) >= length)
@@ -297,7 +297,7 @@ namespace Project858.Net
                 List<Byte> temp = array.GetRange(index, length);
 
                 //initialize package
-                Frame frame = new Frame(address, temp, action);
+                Package frame = new Package(address, temp, action);
 
                 //remove data
                 array.RemoveRange(0, length + index + 1);
@@ -314,13 +314,13 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="commandAddress">Frame command address</param>
         /// <returns>Frame | null</returns>
-        public static Frame Serialize<T>(T obj, UInt16 commandAddress)
+        public static Package Serialize<T>(T obj, UInt16 commandAddress)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
 
             //intiailize object
-            Frame result = new Frame(commandAddress);
+            Package result = new Package(commandAddress);
 
             //serialize
             return Serialize<T>(obj, result);
@@ -332,7 +332,7 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="frame">Frame</param>
         /// <returns>Frame | null</returns>
-        public static Frame Serialize<T>(T obj, Frame frame)
+        public static Package Serialize<T>(T obj, Package frame)
         {
             //intiailize object
             return InternalSerialize<T>(obj, frame);
@@ -343,7 +343,7 @@ namespace Project858.Net
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="frame">The Frame to deserialize.</param>
         /// <returns>The deserialized object from the Frame.</returns>
-        public static T Deserialize<T>(Frame frame)
+        public static T Deserialize<T>(Package frame)
         {
             if (frame == null)
                 throw new ArgumentNullException("frame");
@@ -491,7 +491,7 @@ namespace Project858.Net
                             value = item.Property.GetValue(data, null);
                             if (value != null)
                             {
-                                IPackageItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
+                                IPackageItem frameItem = Package.CreatePackageItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
                                     group.Add(frameItem);
@@ -661,7 +661,7 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="frame">Frame</param>
         /// <returns>Frame | null</returns>
-        private static Frame InternalSerialize<T>(T obj, Frame frame)
+        private static Package InternalSerialize<T>(T obj, Package frame)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
@@ -677,7 +677,7 @@ namespace Project858.Net
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="frame">The Frame to deserialize.</param>
         /// <returns>The deserialized object from the Frame.</returns>
-        private static T InternalDeserialize<T>(Frame frame)
+        private static T InternalDeserialize<T>(Package frame)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
@@ -695,7 +695,7 @@ namespace Project858.Net
         /// <param name="frame">Frame</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>Frame | null</returns>
-        private static Frame InternalSerialize<T>(T obj, Frame frame, ReflectionType reflection)
+        private static Package InternalSerialize<T>(T obj, Package frame, ReflectionType reflection)
         {
             //set property
             foreach (ReflectionProperty item in reflection.PropertyCollection.Values)
@@ -713,7 +713,7 @@ namespace Project858.Net
                             value = item.Property.GetValue(obj, null);
                             if (value != null)
                             {
-                                IPackageItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
+                                IPackageItem frameItem = Package.CreatePackageItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
                                     frame.Add(frameItem);
@@ -738,7 +738,7 @@ namespace Project858.Net
         /// <param name="frame">The Frame to deserialize.</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>The deserialized object from the Frame.</returns>
-        private static T InternalDeserialize<T>(Frame frame, ReflectionType reflection)
+        private static T InternalDeserialize<T>(Package frame, ReflectionType reflection)
         {
             //intiailize object
             T result = (T)Activator.CreateInstance(typeof(T));
@@ -794,7 +794,7 @@ namespace Project858.Net
                     Nullable<Guid> guidValue = (value as String).ToGuidWithoutDash();
                     return guidValue.Value;
                 }
-                else if (type == FrameItemTypes.Enum)
+                else if (type == PackageItemTypes.Enum)
                 {
                     if (Utility.IsNullableType(targetType))
                     {

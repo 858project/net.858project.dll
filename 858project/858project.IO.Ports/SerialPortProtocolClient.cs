@@ -236,7 +236,7 @@ namespace Project858.IO.Ports
         /// </summary>
         /// <param name="frame">Frame to send</param>
         /// <returns>True | false</returns>
-        public Boolean Send(Frame frame)
+        public Boolean Send(Package frame)
         {
             return this.Write(frame.ToByteArray());
         }
@@ -269,7 +269,7 @@ namespace Project858.IO.Ports
                 while (true)
                 {
                     //find frame
-                    Frame frame = this.internalFindFrame(this.m_buffer);
+                    Package frame = this.internalFindFrame(this.m_buffer);
                     if (frame != null)
                     {
                         //send receive event
@@ -288,7 +288,7 @@ namespace Project858.IO.Ports
         /// </summary>
         /// <param name="array">Input array data</param>
         /// <returns>Frame | null</returns>
-        private Frame internalFindFrame(List<Byte> array)
+        private Package internalFindFrame(List<Byte> array)
         {
             //variables
             int count = array.Count;
@@ -308,7 +308,7 @@ namespace Project858.IO.Ports
                     //overime ci je dostatok dat na vytvorenie package
                     if (count >= (length - 1))
                     {
-                        Frame frame = internalConstructFrame(array, index + 5, length - 5, commandAddress);
+                        Package frame = internalConstructFrame(array, index + 5, length - 5, commandAddress);
                         if (frame != null)
                         {
                             //return package
@@ -343,7 +343,7 @@ namespace Project858.IO.Ports
         /// <param name="length">Frame length</param>
         /// <param name="commandAddress">Command address from frame</param>
         /// <returns>Frame | null</returns>
-        private Frame internalConstructFrame(List<Byte> array, int index, int length, UInt16 commandAddress)
+        private Package internalConstructFrame(List<Byte> array, int index, int length, UInt16 commandAddress)
         {
             //check data length available
             if ((array.Count - index) >= length)
@@ -360,7 +360,7 @@ namespace Project858.IO.Ports
                 List<Byte> temp = array.GetRange(index, length);
 
                 //initialize package
-                Frame frame = new Frame(commandAddress, temp, this.InternalGetFrameItemType);
+                Package frame = new Package(commandAddress, temp, this.InternalGetFrameItemType);
 
                 //remove data
                 array.RemoveRange(0, length + index + 1);
@@ -398,7 +398,7 @@ namespace Project858.IO.Ports
         {
             switch (itemAddress)
             {
-                case Frame.Defines.TAG_STATE:
+                case Package.Defines.TAG_STATE:
                     return PackageItemTypes.Byte;
                 default:
                     return PackageItemTypes.Unkown;
