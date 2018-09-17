@@ -8,7 +8,7 @@ namespace Project858.Net
     /// <summary>
     /// Frame item types
     /// </summary>
-    public enum FrameItemTypes
+    public enum PackageItemTypes
     {
         /// <summary>
         /// Date Time

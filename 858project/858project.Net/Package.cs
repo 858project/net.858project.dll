@@ -10,7 +10,7 @@ namespace Project858.Net
     /// <summary>
     /// Protocol frame
     /// </summary>
-    public sealed class Frame : IFrame
+    public sealed class Frame : IPackage
     {
         #region - Constructors -
         /// <summary>
@@ -27,10 +27,10 @@ namespace Project858.Net
         /// <param name="address">Command address</param>
         /// <param name="data">Frame data</param>
         /// <param name="action">Action for returning frame item type</param>
-        public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt32, FrameItemTypes> action)
+        public Frame(UInt16 address, List<Byte> data, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             this.Address = address;
-            this.m_items = new List<IFrameItem>();
+            this.m_items = new List<IPackageItem>();
             if (data != null)
             {
                 this.InternalParseFrame(data.ToArray(), action);
@@ -113,7 +113,7 @@ namespace Project858.Net
         /// <summary>
         /// Item collections
         /// </summary>
-        public ReadOnlyCollection<IFrameItem> Items
+        public ReadOnlyCollection<IPackageItem> Items
         {
             get { return this.m_items.AsReadOnly(); }
         }
@@ -123,7 +123,7 @@ namespace Project858.Net
         /// <summary>
         /// Item collections
         /// </summary>
-        private List<IFrameItem> m_items = null;
+        private List<IPackageItem> m_items = null;
         #endregion
 
         #region - Public Static Methods -
@@ -137,7 +137,7 @@ namespace Project858.Net
         public static Frame CreateFrame(UInt16 frameAddress, UInt16 address, Byte value)
         {
             Frame frame = new Frame(frameAddress);
-            frame.Add(new FrameItemByte(address, value));
+            frame.Add(new PackageItemByte(address, value));
             return frame;
         }
         /// <summary>
@@ -147,48 +147,48 @@ namespace Project858.Net
         /// <param name="address">Item address for value</param>
         /// <param name="value">Value</param>
         /// <returns>Frame item | null</returns>
-        public static IFrameItem CreateFrameItem(FrameItemTypes type, UInt32 address, Object value)
+        public static IPackageItem CreateFrameItem(PackageItemTypes type, UInt32 address, Object value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
 
             switch (type)
             {
-                case FrameItemTypes.DateTime:
-                    return new FrameItemDateTime(address, (DateTime)value);
-                case FrameItemTypes.Guid:
-                    return new FrameItemGuid(address, (Guid)value);
-                case FrameItemTypes.String:
+                case PackageItemTypes.DateTime:
+                    return new PackageItemDateTime(address, (DateTime)value);
+                case PackageItemTypes.Guid:
+                    return new PackageItemGuid(address, (Guid)value);
+                case PackageItemTypes.String:
                     {
                         if (value is Guid)
                         {
-                            return new FrameItemString(address, ((Guid)value).ToStringWithoutDash());
+                            return new PackageItemString(address, ((Guid)value).ToStringWithoutDash());
                         }
                         else
                         {
-                            return new FrameItemString(address, (String)value);
+                            return new PackageItemString(address, (String)value);
                         }
                     }
-                case FrameItemTypes.Int16:
-                    return new FrameItemInt16(address, (Int16)value);
-                case FrameItemTypes.Int32:
-                    return new FrameItemInt32(address, (Int32)value);
-                case FrameItemTypes.Int64:
-                    return new FrameItemInt64(address, (Int64)value);
-                case FrameItemTypes.Byte:
-                    return new FrameItemByte(address, (Byte)value);
-                case FrameItemTypes.Enum:
-                    return new FrameItemEnum(address, value);
-                case FrameItemTypes.Boolean:
-                    return new FrameItemBoolean(address, (Boolean)value);
-                case FrameItemTypes.UInt16:
-                    return new FrameItemUInt16(address, (UInt16)value);
-                case FrameItemTypes.UInt32:
-                    return new FrameItemUInt32(address, (UInt32)value);
-                case FrameItemTypes.UInt64:
-                    return new FrameItemUInt64(address, (UInt64)value);
+                case PackageItemTypes.Int16:
+                    return new PackageItemInt16(address, (Int16)value);
+                case PackageItemTypes.Int32:
+                    return new PackageItemInt32(address, (Int32)value);
+                case PackageItemTypes.Int64:
+                    return new PackageItemInt64(address, (Int64)value);
+                case PackageItemTypes.Byte:
+                    return new PackageItemByte(address, (Byte)value);
+                case PackageItemTypes.Boolean:
+                    return new PackageItemBoolean(address, (Boolean)value);
+                case PackageItemTypes.UInt16:
+                    return new PackageItemUInt16(address, (UInt16)value);
+                case PackageItemTypes.UInt32:
+                    return new PackageItemUInt32(address, (UInt32)value);
+                case PackageItemTypes.UInt64:
+                    return new PackageItemUInt64(address, (UInt64)value);
+                case PackageItemTypes.Enum:
+                    return new PackageItemEnum(address, value);
                 default:
-                    return new FrameItemUnkown(address, (List<Byte>)value);
+                    return new PackageItemUnkown(address, (List<Byte>)value);
             }
         }
         /// <summary>
@@ -196,32 +196,34 @@ namespace Project858.Net
         /// </summary>
         /// <param name="type">Frame item type</param>
         /// <returns>NET object type</returns>
-        public static Type GetObjectTypeFromFrameItemType(FrameItemTypes type)
+        public static Type GetObjectTypeFromFrameItemType(PackageItemTypes type)
         {
             switch (type)
             {
-                case FrameItemTypes.DateTime:
+                case PackageItemTypes.DateTime:
                     return typeof(DateTime);
-                case FrameItemTypes.Guid:
+                case PackageItemTypes.Guid:
                     return typeof(Guid);
-                case FrameItemTypes.Int16:
+                case PackageItemTypes.Int16:
                     return typeof(Int16);
-                case FrameItemTypes.Int32:
+                case PackageItemTypes.Int32:
                     return typeof(Int32);
-                case FrameItemTypes.Int64:
+                case PackageItemTypes.Int64:
                     return typeof(Int64);
-                case FrameItemTypes.String:
+                case PackageItemTypes.String:
                     return typeof(String);
-                case FrameItemTypes.Byte:
+                case PackageItemTypes.Byte:
                     return typeof(Byte);
                 case FrameItemTypes.Enum:
                     return typeof(Object);
                 case FrameItemTypes.Boolean:
                     return typeof(Boolean);
-                case FrameItemTypes.UInt64:
+                case PackageItemTypes.UInt64:
                     return typeof(UInt64);
-                case FrameItemTypes.UInt32:
+                case PackageItemTypes.UInt32:
                     return typeof(UInt32);
+                case PackageItemTypes.Enum:
+                    return typeof(Enum);
                 default:
                     return typeof(Object);
             }
@@ -245,7 +247,7 @@ namespace Project858.Net
         {
             for (int i = 0; i < this.m_items.Count; i++) 
             {
-                IFrameItem item = this.m_items[i];
+                IPackageItem item = this.m_items[i];
                 if (item.Address == address)
                 {
                     this.Remove(item);
@@ -257,7 +259,7 @@ namespace Project858.Net
         ///  Removes the first occurrence of a specific object
         /// </summary>
         /// <param name="item">The object to remove</param>
-        public void Remove(IFrameItem item)
+        public void Remove(IPackageItem item)
         {
             this.m_items.Remove(item);
         }
@@ -265,7 +267,7 @@ namespace Project858.Net
         /// Adds an item to the end of the Frame
         /// </summary>
         /// <param name="item">The item to be added to the end of the Frame</param>
-        public void Add(IFrameItem item)
+        public void Add(IPackageItem item)
         {
             this.m_items.Add(item);
         }
@@ -274,7 +276,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="item">The object to insert. The value can be null for reference types.</param>
         /// <param name="index">The zero-based index at which item should be inserted.</param>
-        public void Add(IFrameItem item, int index)
+        public void Add(IPackageItem item, int index)
         {
             this.m_items.Insert(index, item);
         }
@@ -291,9 +293,9 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Item | null</returns>
-        public IFrameItem GetFrameItem(UInt32 address)
+        public IPackageItem GetFrameItem(UInt32 address)
         {
-            foreach (IFrameItem item in this.m_items)
+            foreach (IPackageItem item in this.m_items)
             {
                 if (item.Address == address)
                 {
@@ -310,7 +312,7 @@ namespace Project858.Net
         /// <returns>Value | null</returns>
         public T GetValue<T>(UInt32 address)
         {
-            foreach (IFrameItem item in this.m_items)
+            foreach (IPackageItem item in this.m_items)
             {
                 if (item.Address == address)
                 {
@@ -341,7 +343,7 @@ namespace Project858.Net
             builder.Append(Environment.NewLine);
 
             //items
-            foreach (IFrameItem item in this.m_items)
+            foreach (IPackageItem item in this.m_items)
             {
                 builder.AppendFormat("[{0}] - [{1} - {1:x4}] - {2}", item.GetType(), item.Address, item.GetValue());
                 builder.Append(Environment.NewLine);
@@ -364,7 +366,7 @@ namespace Project858.Net
             Int16 length = 0x05;
 
             //add items
-            foreach (IFrameItem item in this.m_items)
+            foreach (IPackageItem item in this.m_items)
             {
                 Byte[] data = item.ToByteArray();
                 length += (Int16)data.Length;
@@ -381,7 +383,7 @@ namespace Project858.Net
             collection.InsertRange(0, header);
 
             //check sum
-            Byte checkSum = FrameHelper.GetFrameDataCheckSum(collection, 0x01, collection.Count - 0x01);
+            Byte checkSum = PackageHelper.GetFrameDataCheckSum(collection, 0x01, collection.Count - 0x01);
             collection.Add(checkSum);
 
             //return frame as data array
@@ -392,13 +394,13 @@ namespace Project858.Net
         /// </summary>
         /// <param name="data">Data to parse</param>
         /// <param name="action">Function to get frame item type</param>
-        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt32, FrameItemTypes> action)
+        private void InternalParseFrame(Byte[] data, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             //vriables
             UInt32 address = 0x00;
             UInt16 length = 0x00;
             Byte[] dataItem = null;
-            FrameItemTypes type = FrameItemTypes.Unkown;
+            PackageItemTypes type = PackageItemTypes.Unkown;
             int count = data.Length;
             
             //parse frame
@@ -409,14 +411,14 @@ namespace Project858.Net
                 length = (UInt16)(data[i + 5] << 8 | data[i + 4]);
 
                 //read frame item type
-                type = action != null ? action(this.Address, address) : FrameItemTypes.Unkown;
+                type = action != null ? action(this.Address, address) : PackageItemTypes.Unkown;
  
                 //read data
                 dataItem = new Byte[length];
                 Buffer.BlockCopy(data, i + 6, dataItem, 0, length);
 
                 //parse 
-                IFrameItem item = this.InternalParseFrame(type, address, length, dataItem);
+                IPackageItem item = this.InternalParseFrame(type, address, length, dataItem);
                 if (item != null)
                 {
                    this.m_items.Add(item);
@@ -434,34 +436,34 @@ namespace Project858.Net
         /// <param name="length">Frame item length</param>
         /// <param name="data">Data frame item</param>
         /// <returns>Frame item or null</returns>
-        private IFrameItem InternalParseFrame(FrameItemTypes type, UInt32 address, UInt16 length, Byte[] data)
+        private IPackageItem InternalParseFrame(PackageItemTypes type, UInt32 address, UInt16 length, Byte[] data)
         {
             switch (type)
             {
-                case FrameItemTypes.DateTime:
-                    return new FrameItemDateTime(address, data);
-                case FrameItemTypes.Guid:
-                    return new FrameItemGuid(address, data);
-                case FrameItemTypes.String:
-                    return new FrameItemString(address, data);
-                case FrameItemTypes.Int16:
-                    return new FrameItemInt16(address, data);
-                case FrameItemTypes.Int32:
-                    return new FrameItemInt32(address, data);
-                case FrameItemTypes.Int64:
-                    return new FrameItemInt64(address, data);
-                case FrameItemTypes.Byte:
-                    return new FrameItemByte(address, data);
-                case FrameItemTypes.Boolean:
-                    return new FrameItemBoolean(address, data);
-                case FrameItemTypes.Enum:
-                    return new FrameItemEnum(address, data);
-                case FrameItemTypes.UInt64:
-                    return new FrameItemUInt64(address, data);
-                case FrameItemTypes.UInt32:
-                    return new FrameItemUInt32(address, data);
+                case PackageItemTypes.DateTime:
+                    return new PackageItemDateTime(address, data);
+                case PackageItemTypes.Guid:
+                    return new PackageItemGuid(address, data);
+                case PackageItemTypes.String:
+                    return new PackageItemString(address, data);
+                case PackageItemTypes.Int16:
+                    return new PackageItemInt16(address, data);
+                case PackageItemTypes.Int32:
+                    return new PackageItemInt32(address, data);
+                case PackageItemTypes.Int64:
+                    return new PackageItemInt64(address, data);
+                case PackageItemTypes.Byte:
+                    return new PackageItemByte(address, data);
+                case PackageItemTypes.Boolean:
+                    return new PackageItemBoolean(address, data);
+                case PackageItemTypes.UInt64:
+                    return new PackageItemUInt64(address, data);
+                case PackageItemTypes.UInt32:
+                    return new PackageItemUInt32(address, data);
+                case PackageItemTypes.Enum:
+                    return new PackageItemEnum(address, data);
                 default:
-                    return new FrameItemUnkown(address, data);
+                    return new PackageItemUnkown(address, data);
             }
         }
         #endregion

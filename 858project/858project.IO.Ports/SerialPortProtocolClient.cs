@@ -394,14 +394,14 @@ namespace Project858.IO.Ports
         /// <param name="address">Frame address</param>
         /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 address, UInt32 itemAddress)
+        protected virtual PackageItemTypes InternalGetFrameItemType(UInt16 address, UInt32 itemAddress)
         {
             switch (itemAddress)
             {
                 case Frame.Defines.TAG_STATE:
-                    return FrameItemTypes.Byte;
+                    return PackageItemTypes.Byte;
                 default:
-                    return FrameItemTypes.Unkown;
+                    return PackageItemTypes.Unkown;
             }
         }
         #endregion

@@ -174,7 +174,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="frame">Frame to send</param>
         /// <returns>True | false</returns>
-        public virtual Boolean Send(FrameV2 frame)
+        public virtual Boolean Send(PackageV2 frame)
         {
             return this.Write(frame.ToByteArray());
         }
@@ -210,7 +210,7 @@ namespace Project858.Net
                 while (true)
                 {
                     //find frame
-                    FrameV2 frame = FrameHelper.FindFrameV2(this.m_buffer, this.InternalGetFrameItemType);
+                    PackageV2 frame = PackageHelper.FindFrameV2(this.m_buffer, this.InternalGetFrameItemType);
                     if (frame != null)
                     {
                         //send receive event
@@ -231,14 +231,14 @@ namespace Project858.Net
         /// <param name="groupAddress">Group address</param>
         /// <param name="itemAddress">Address to detect type</param>
         /// <returns>Frame item type</returns>
-        protected virtual FrameItemTypes InternalGetFrameItemType(UInt16 frameAddress, UInt16 groupAddress, UInt32 itemAddress)
+        protected virtual PackageItemTypes InternalGetFrameItemType(UInt16 frameAddress, UInt16 groupAddress, UInt32 itemAddress)
         {
             switch (itemAddress)
             {
                 case Frame.Defines.TAG_STATE:
-                    return FrameItemTypes.Byte;
+                    return PackageItemTypes.Byte;
                 default:
-                    return FrameItemTypes.Unkown;
+                    return PackageItemTypes.Unkown;
             }
         }
         #endregion

@@ -7,7 +7,7 @@ namespace Project858.Net
     /// <summary>
     /// Frame helper for serializing or deserializing frame
     /// </summary>
-    public static class FrameHelper
+    public static class PackageHelper
     {
         #region - Public Static Methods V2 -
         /// <summary>
@@ -16,7 +16,7 @@ namespace Project858.Net
         /// <param name="array">Input array data</param>
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        public static FrameV2 FindFrameV2(List<Byte> array, Func<UInt16, UInt16, UInt32, FrameItemTypes> action)
+        public static PackageV2 FindFrameV2(List<Byte> array, Func<UInt16, UInt16, UInt32, PackageItemTypes> action)
         {
             //variables
             int count = array.Count;
@@ -39,7 +39,7 @@ namespace Project858.Net
                     //overime ci je dostatok dat na vytvorenie package
                     if (count >= (length - 1))
                     {
-                        FrameV2 frame = FrameHelper.ConstructFrameV2(array, index + 6, length - 6, address, state, action);
+                        PackageV2 frame = PackageHelper.ConstructFrameV2(array, index + 6, length - 6, address, state, action);
                         if (frame != null)
                         {
                             //return package
@@ -76,13 +76,13 @@ namespace Project858.Net
         /// <param name="state">State value</param>]
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        private static FrameV2 ConstructFrameV2(List<Byte> array, int index, int length, UInt16 address, Byte state, Func<UInt16, UInt16, UInt32, FrameItemTypes> action)
+        private static PackageV2 ConstructFrameV2(List<Byte> array, int index, int length, UInt16 address, Byte state, Func<UInt16, UInt16, UInt32, PackageItemTypes> action)
         {
             //check data length available
             if ((array.Count - index) >= length)
             {
                 //get checksum
-                Byte checkSum = FrameHelper.GetFrameDataCheckSum(array, index - 5, length + 5);
+                Byte checkSum = PackageHelper.GetFrameDataCheckSum(array, index - 5, length + 5);
                 Byte currentCheckSum = array[index + length + 0];
                 if (checkSum != currentCheckSum)
                 {
@@ -93,7 +93,7 @@ namespace Project858.Net
                 List<Byte> temp = array.GetRange(index, length);
 
                 //initialize package
-                FrameV2 frame = new FrameV2(address, state, temp, action);
+                PackageV2 frame = new PackageV2(address, state, temp, action);
 
                 //remove data
                 array.RemoveRange(0, length + index + 1);
@@ -111,7 +111,7 @@ namespace Project858.Net
         /// <returns>Group collection</returns>
         public static List<FrameGroupItem> SerializeV2ToGroup<T>(List<T> data)
         {
-            return FrameHelper.InternalSerializeV2ToGroup<T>(data);
+            return PackageHelper.InternalSerializeV2ToGroup<T>(data);
         }
         /// <summary>
         /// This function serializes object to frame group
@@ -121,7 +121,7 @@ namespace Project858.Net
         /// <returns>Group collection</returns>
         public static FrameGroupItem SerializeV2ToGroup<T>(T data)
         {
-            return FrameHelper.InternalSerializeV2ToGroup<T>(data);
+            return PackageHelper.InternalSerializeV2ToGroup<T>(data);
         }
         /// <summary>
         /// Serializes the specified object to a Frame.
@@ -130,7 +130,7 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="address">Frame command address</param>
         /// <returns>Frame | null</returns>
-        public static FrameV2 SerializeV2<T>(T obj, UInt16 address)
+        public static PackageV2 SerializeV2<T>(T obj, UInt16 address)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
@@ -149,13 +149,13 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="commandAddress">Frame command address</param>
         /// <returns>Frame | null</returns>
-        public static FrameV2 SerializeV2<T>(List<T> obj, UInt16 commandAddress)
+        public static PackageV2 SerializeV2<T>(List<T> obj, UInt16 commandAddress)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
 
             //intiailize object
-            FrameV2 result = new FrameV2(commandAddress, 0x00);
+            PackageV2 result = new PackageV2(commandAddress, 0x00);
 
             //serialize
             return SerializeV2<T>(obj, result);
@@ -167,7 +167,7 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="frame">Frame</param>
         /// <returns>Frame | null</returns>
-        public static FrameV2 SerializeV2<T>(List<T> obj, FrameV2 frame)
+        public static PackageV2 SerializeV2<T>(List<T> obj, PackageV2 frame)
         {
             //intiailize object
             return InternalSerializeV2<T>(obj, frame);
@@ -178,12 +178,12 @@ namespace Project858.Net
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="frame">The Frame to deserialize.</param>
         /// <returns>The deserialized object from the Frame.</returns>
-        public static List<T> DeserializeV2<T>(FrameV2 frame)
+        public static List<T> DeserializeV2<T>(PackageV2 frame)
         {
             if (frame == null)
                 throw new ArgumentNullException("frame");
 
-            return FrameHelper.InternalDeserializeV2<T>(frame);
+            return PackageHelper.InternalDeserializeV2<T>(frame);
         }
         /// <summary>
         /// Deserializes the Group to a .NET object.
@@ -196,7 +196,7 @@ namespace Project858.Net
             if (group == null)
                 throw new ArgumentNullException("group");
 
-            return FrameHelper.InternalDeserializeV2<T>(group);
+            return PackageHelper.InternalDeserializeV2<T>(group);
         }
         #endregion
 
@@ -225,7 +225,7 @@ namespace Project858.Net
         /// <param name="array">Input array data</param>
         /// <param name="action">Callback for parsing frame items</param>
         /// <returns>Frame | null</returns>
-        public static Frame FindFrame(List<Byte> array, Func<UInt16, UInt32, FrameItemTypes> action)
+        public static Frame FindFrame(List<Byte> array, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             //variables
             int count = array.Count;
@@ -245,7 +245,7 @@ namespace Project858.Net
                     //overime ci je dostatok dat na vytvorenie package
                     if (count >= (length - 1))
                     {
-                        Frame frame = FrameHelper.ConstructFrame(array, index + 5, length - 5, address, action);
+                        Frame frame = PackageHelper.ConstructFrame(array, index + 5, length - 5, address, action);
                         if (frame != null)
                         {
                             //return package
@@ -280,13 +280,13 @@ namespace Project858.Net
         /// <param name="length">Frame length</param>
         /// <param name="address">Command address from frame</param>
         /// <returns>Frame | null</returns>
-        private static Frame ConstructFrame(List<Byte> array, int index, int length, UInt16 address, Func<UInt16, UInt32, FrameItemTypes> action)
+        private static Frame ConstructFrame(List<Byte> array, int index, int length, UInt16 address, Func<UInt16, UInt32, PackageItemTypes> action)
         {
             //check data length available
             if ((array.Count - index) >= length)
             {
                 //get checksum
-                Byte checkSum = FrameHelper.GetFrameDataCheckSum(array, index - 4, length + 4);
+                Byte checkSum = PackageHelper.GetFrameDataCheckSum(array, index - 4, length + 4);
                 Byte currentCheckSum = array[index + length + 0];
                 if (checkSum != currentCheckSum)
                 {
@@ -348,7 +348,7 @@ namespace Project858.Net
             if (frame == null)
                 throw new ArgumentNullException("frame");
 
-            return FrameHelper.InternalDeserialize<T>(frame);
+            return PackageHelper.InternalDeserialize<T>(frame);
         }
         #endregion
 
@@ -360,13 +360,13 @@ namespace Project858.Net
         /// <param name="obj">The object to serialize.</param>
         /// <param name="frame">Frame</param>
         /// <returns>Frame | null</returns>
-        private static FrameV2 InternalSerializeV2<T>(List<T> obj, FrameV2 frame)
+        private static PackageV2 InternalSerializeV2<T>(List<T> obj, PackageV2 frame)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalSerializeV2<T>(obj, frame, reflection);
+                return PackageHelper.InternalSerializeV2<T>(obj, frame, reflection);
             }
             return null;
         }
@@ -382,7 +382,7 @@ namespace Project858.Net
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalSerializeV2ToGroup<T>(data, reflection);
+                return PackageHelper.InternalSerializeV2ToGroup<T>(data, reflection);
             }
             return null;
         }
@@ -398,7 +398,7 @@ namespace Project858.Net
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalSerializeV2ToGroup<T>(data, reflection);
+                return PackageHelper.InternalSerializeV2ToGroup<T>(data, reflection);
             }
             return null;
         }
@@ -491,7 +491,7 @@ namespace Project858.Net
                             value = item.Property.GetValue(data, null);
                             if (value != null)
                             {
-                                IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
+                                IPackageItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
                                     group.Add(frameItem);
@@ -517,7 +517,7 @@ namespace Project858.Net
         /// <param name="frame">Frame</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>Frame | null</returns>
-        private static FrameV2 InternalSerializeV2<T>(List<T> data, FrameV2 frame, ReflectionType reflection)
+        private static PackageV2 InternalSerializeV2<T>(List<T> data, PackageV2 frame, ReflectionType reflection)
         {
             //get group attribute
             FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
@@ -545,13 +545,13 @@ namespace Project858.Net
         /// <typeparam name="T">The type of the object to deserialize to.</typeparam>
         /// <param name="frame">The Frame to deserialize.</param>
         /// <returns>The deserialized object from the Frame.</returns>
-        private static List<T> InternalDeserializeV2<T>(FrameV2 frame)
+        private static List<T> InternalDeserializeV2<T>(PackageV2 frame)
         {
             //get the object reglection
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalDeserializeV2<T>(frame, reflection);
+                return PackageHelper.InternalDeserializeV2<T>(frame, reflection);
             }
             return default(List<T>);
         }
@@ -567,7 +567,7 @@ namespace Project858.Net
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalDeserializeV2<T>(group, reflection);
+                return PackageHelper.InternalDeserializeV2<T>(group, reflection);
             }
             return default(T);
         }
@@ -600,7 +600,7 @@ namespace Project858.Net
                             value = group.GetValue<Object>(attribute.Address);
 
                             //update value
-                            value = FrameHelper.InternalUpdateValue(attribute.Type, item.Property.PropertyType, value);
+                            value = PackageHelper.InternalUpdateValue(attribute.Type, item.Property.PropertyType, value);
 
                             //set value to property
                             item.Property.SetValue(result, value, null);
@@ -622,7 +622,7 @@ namespace Project858.Net
         /// <param name="frame">The Frame to deserialize.</param>
         /// <param name="reflection">Reflection information for the Object to deserialize</param>
         /// <returns>The deserialized object from the Frame.</returns>
-        private static List<T> InternalDeserializeV2<T>(FrameV2 frame, ReflectionType reflection)
+        private static List<T> InternalDeserializeV2<T>(PackageV2 frame, ReflectionType reflection)
         {
             //get group attribute
             FrameGroupAttribute frameGroupAttribute = reflection.GetCustomAttribute<FrameGroupAttribute>();
@@ -641,7 +641,7 @@ namespace Project858.Net
                 if (group.Address == frameGroupAttribute.Address)
                 {
                     //intiailize object
-                    T result = FrameHelper.InternalDeserializeV2<T>(group, reflection);
+                    T result = PackageHelper.InternalDeserializeV2<T>(group, reflection);
 
                     //create objet to collection
                     collection.Add(result);
@@ -667,7 +667,7 @@ namespace Project858.Net
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalSerialize<T>(obj, frame, reflection);
+                return PackageHelper.InternalSerialize<T>(obj, frame, reflection);
             }
             return null;
         }
@@ -683,7 +683,7 @@ namespace Project858.Net
             ReflectionType reflection = ReflectionHelper.GetType(typeof(T));
             if (reflection != null)
             {
-                return FrameHelper.InternalDeserialize<T>(frame, reflection);
+                return PackageHelper.InternalDeserialize<T>(frame, reflection);
             }
             return default(T);
         }
@@ -713,7 +713,7 @@ namespace Project858.Net
                             value = item.Property.GetValue(obj, null);
                             if (value != null)
                             {
-                                IFrameItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
+                                IPackageItem frameItem = Frame.CreateFrameItem(attribute.Type, attribute.Address, value);
                                 if (frameItem != null)
                                 {
                                     frame.Add(frameItem);
@@ -760,7 +760,7 @@ namespace Project858.Net
                             value = frame.GetValue<Object>(attribute.Address);
 
                             //update value
-                            value = FrameHelper.InternalUpdateValue(attribute.Type, item.Property.PropertyType, value);
+                            value = PackageHelper.InternalUpdateValue(attribute.Type, item.Property.PropertyType, value);
 
                             //set value to property
                             item.Property.SetValue(result, value, null);
@@ -783,13 +783,13 @@ namespace Project858.Net
         /// <param name="targetType">Target property type</param>
         /// <param name="value">Value to convert</param>
         /// <returns></returns>
-        private static Object InternalUpdateValue(FrameItemTypes type, Type targetType, Object value)
+        private static Object InternalUpdateValue(PackageItemTypes type, Type targetType, Object value)
         {
             //check value
             if (value != null)
             {
                 //check type
-                if (type == FrameItemTypes.String && targetType == typeof(Guid) && value is String)
+                if (type == PackageItemTypes.String && targetType == typeof(Guid) && value is String)
                 {
                     Nullable<Guid> guidValue = (value as String).ToGuidWithoutDash();
                     return guidValue.Value;
