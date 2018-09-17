@@ -11,3 +11,7 @@
 /.vs/858project.Library/v15/.suo
 /858project/bin/Debug/fr/Microsoft.SqlServer.Types.resources.dll
 /858project/bin/Debug/it/Microsoft.SqlServer.Types.resources.dll
+/858project/bin/Release
+/858project/obj/Debug
+/858project/obj/Release
+/858project/bin/Debug
