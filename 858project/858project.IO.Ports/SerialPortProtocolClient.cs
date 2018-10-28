@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
 
 namespace Project858.IO.Ports
 {
