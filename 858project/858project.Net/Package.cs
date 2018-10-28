@@ -291,7 +291,7 @@ namespace Project858.Net
         /// </summary>
         /// <param name="address">Address</param>
         /// <returns>Item | null</returns>
-        public IPackageItem GetFrameItem(UInt32 address)
+        public IPackageItem GetPackageItem(UInt32 address)
         {
             foreach (IPackageItem item in this.m_items)
             {

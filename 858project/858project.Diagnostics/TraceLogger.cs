@@ -248,7 +248,7 @@ namespace Project858.Diagnostics
                     message = String.Format("{0}{1} -> {2}", traceType, modulName, message);
 
                     //zapiseme na konzolu
-                    ConsoleLogger.WriteLine(message);
+                    ConsoleLogger.Info(message);
 
                     // Create string recipients write
                     message = String.Format("{0} {1}", date.ToString("yyyy-MM-dd HH:mm:ss.fff"), message);
@@ -263,7 +263,7 @@ namespace Project858.Diagnostics
             catch (Exception ex)
             {
                 //zapis do trace, netusim kde recipients pojde
-                ConsoleLogger.WriteLine("Chyba pri zapise log suboru. {0}", ex);
+                ConsoleLogger.Info("Chyba pri zapise log suboru. {0}", ex);
 #if DEBUG
                 Debug.WriteLine(ex);
 #endif

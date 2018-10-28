@@ -682,7 +682,7 @@ namespace Project858
             catch (Exception ex)
             {
                 //zalogujeme
-                ConsoleLogger.WriteLine(ex);
+                ConsoleLogger.Error(ex);
                 //preposleme vynimku
                 throw;
             }
@@ -731,7 +731,7 @@ namespace Project858
             catch (Exception ex)
             {
                 //zalogujeme
-                ConsoleLogger.WriteLine(ex);
+                ConsoleLogger.Error(ex);
 #if DEBUG
                 Debug.WriteLine(ex);
 #endif
@@ -780,7 +780,7 @@ namespace Project858
             catch (Exception ex)
             {
                 //zalogujeme
-                ConsoleLogger.WriteLine(ex.Message);
+                ConsoleLogger.Info(ex.Message);
 #if DEBUG
                 Debug.WriteLine(ex);
 #endif

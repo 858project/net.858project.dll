@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Project858.Reflection;
 
 namespace Project858.Net
@@ -9,7 +10,240 @@ namespace Project858.Net
     /// </summary>
     public static class PackageHelper
     {
+        #region - Constructors -
+        /// <summary>
+        /// Initialize this class
+        /// </summary>
+        static PackageHelper()
+        {
+            PackageHelper.m_reflectionPropertyCollection = new ReflectionPackageModelCollection();
+        }
+        #endregion
+
+        #region - Private Static Class -
+        /// <summary>
+        /// Item property
+        /// </summary>
+        private sealed class PackageModelPropertyItem
+        {
+            #region - Constructor -
+            /// <summary>
+            /// Initialize this class
+            /// </summary>
+            /// <param name="property">Property ktoru objekt reprezentuje</param>
+            public PackageModelPropertyItem(PropertyInfo property)
+            {
+                if (property == null)
+                    throw new ArgumentNullException("property");
+
+                this.m_property = property;
+            }
+            #endregion
+
+            #region - Properties -
+            /// <summary>
+            /// Vrati atributy prisluchajucej property
+            /// </summary>
+            public PackageItemAttribute ItemAttribute
+            {
+                get
+                {
+                    if (this.m_columnAttributes == null)
+                    {
+                        Object[] attributes = this.Property.GetCustomAttributes(typeof(PackageItemAttribute), true);
+                        if (attributes != null && attributes.Length == 1)
+                        {
+                            this.m_columnAttributes = attributes[0] as PackageItemAttribute;
+                        }
+                    }
+                    return this.m_columnAttributes;
+                }
+            }
+            /// <summary>
+            /// Property ktoru objekt reprezentuje
+            /// </summary>
+            public PropertyInfo Property
+            {
+                get { return this.m_property; }
+            }
+            #endregion
+
+            #region - Variable -
+            /// <summary>
+            /// Atributy prisluchajucej property
+            /// </summary>
+            private PackageItemAttribute m_columnAttributes = null;
+            /// <summary>
+            /// Property
+            /// </summary>
+            private PropertyInfo m_property = null;
+            #endregion
+        }
+        /// <summary>
+        /// Package item
+        /// </summary>
+        private sealed class ReflectionPackageModelItem : Dictionary<UInt32, PackageModelPropertyItem>
+        {
+            #region - Constructor -
+            /// <summary>
+            /// Initialize this class
+            /// </summary>
+            /// <param name="type">Typ objektu ktoreho property objekt reprezentuje</param>
+            public ReflectionPackageModelItem(Type type)
+            {
+                if (type == null)
+                    throw new ArgumentNullException("type");
+
+                this.Type = type;
+                this.InternalInitializeProperty(type);
+            }
+            #endregion
+
+            #region - Properties -
+            /// <summary>
+            /// Typ objektu
+            /// </summary>
+            public Type Type { get; set; }
+            /// <summary>
+            /// Atribut definujuci informacie o view prisluchajucemu k objektu
+            /// </summary>
+            public PackageGroupAttribute GroupAttribute
+            {
+                get
+                {
+                    if (this.m_viewAttribute == null)
+                    {
+                        Object[] attributes = this.Type.GetCustomAttributes(typeof(PackageGroupAttribute), true);
+                        if (attributes != null && attributes.Length == 1)
+                        {
+                            this.m_viewAttribute = attributes[0] as PackageGroupAttribute;
+                        }
+                    }
+                    return this.m_viewAttribute;
+                }
+            }
+            #endregion
+
+            #region - Variable -
+            /// <summary>
+            /// Atribut definujuci informacie o view prisluchajucemu k objektu
+            /// </summary>
+            private PackageGroupAttribute m_viewAttribute = null;
+            #endregion
+
+            #region - Public Methods -
+            /// <summary>
+            /// Vrati pozadovanu property a jej informacie na zaklade mena
+            /// </summary>
+            /// <param name="address">Meno property ktoru ziadame</param>
+            /// <returns>ReflectionPropertyItem alebo null</returns>
+            public PackageModelPropertyItem FindProperty(UInt32 address)
+            {
+                if (this.ContainsKey(address))
+                {
+                    return this[address];
+                }
+                return null;
+            }
+            #endregion
+
+            #region - Private Methods -
+            /// <summary>
+            /// Inicializuje property objektu
+            /// </summary>
+            /// <param name="type">Typ objektu ktoreho property objekt reprezentuje</param>
+            private void InternalInitializeProperty(Type type)
+            {
+                PropertyInfo[] properties = type.GetProperties();
+                int length = properties.Length;
+                for (int i = 0; i < length; i++)
+                {
+                    PropertyInfo property = properties[i];
+                    PackageModelPropertyItem item = new PackageModelPropertyItem(property);
+                    if (item.ItemAttribute != null)
+                    {
+                        this.Add(item.ItemAttribute.Address, item);
+                    }
+                }
+            }
+            #endregion
+        }
+        /// <summary>
+        /// Cache data
+        /// </summary>
+        private sealed class ReflectionPackageModelCollection : Dictionary<UInt16, ReflectionPackageModelItem>
+        {
+            #region - Public Methods -
+            /// <summary>
+            /// Vrati alebo vytvori a vrati kolekciu property pre pozadovany typ objektu
+            /// </summary>
+            /// <param name="type">Model type</param>
+            /// <returns>ReflectionPropertyItemCollection</returns>
+            public ReflectionPackageModelItem FindPropertyCollection(Type type)
+            {
+                //get group attribude
+                PackageGroupAttribute attribute = InternalGetGroupAttribute(type);
+                if (attribute != null)
+                {
+                    if (!this.ContainsKey(attribute.Address))
+                    {
+                        return this.InternalCreateType(type);
+                    }
+                    return this[attribute.Address];
+                }
+                return null;
+            }
+            #endregion
+
+            #region - Private Methods -
+            /// <summary>
+            /// Prida objekt pre pozadovany type
+            /// </summary>
+            /// <param name="type">Type objektu pre ktory chceme property nacitat</param>
+            private ReflectionPackageModelItem InternalCreateType(Type type)
+            {
+                ReflectionPackageModelItem item = new ReflectionPackageModelItem(type);
+                if (item.GroupAttribute != null)
+                {
+                    this.Add(item.GroupAttribute.Address, item);
+                    return item;
+                }
+                return null;
+            }
+            /// <summary>
+            /// This method returns group attribude from type
+            /// </summary>
+            /// <param name="type">Type</param>
+            /// <returns>Group attribude</returns>
+            private PackageGroupAttribute InternalGetGroupAttribute(Type type)
+            {
+                Object[] attributes = type.GetCustomAttributes(typeof(PackageGroupAttribute), true);
+                if (attributes != null && attributes.Length == 1)
+                {
+                    return attributes[0] as PackageGroupAttribute;
+                }
+                return null;
+            }
+            #endregion
+        }
+        #endregion
+
+        #region - Private Static Variable -
+        /// <summary>
+        /// Static variable for this item
+        /// </summary>
+        private static ReflectionPackageModelCollection m_reflectionPropertyCollection;
+        #endregion
+
         #region - Public Static Methods V2 -
+        /// <summary>
+        /// This function registers model to cache
+        /// </summary>
+        /// <param name="type">Type</param>
+        public static void RegisterModel(Type type)
+        {
+            PackageHelper.m_reflectionPropertyCollection.FindPropertyCollection(type);
+        }
         /// <summary>
         /// This function finds frame in array
         /// </summary>
@@ -92,8 +326,11 @@ namespace Project858.Net
                 //copy data block
                 List<Byte> temp = array.GetRange(index, length);
 
+                //get current action
+                Func<UInt16, UInt16, UInt32, PackageItemTypes> currentAction = action == null ? PackageHelper.InternalGetPackageItemType : action;
+
                 //initialize package
-                PackageV2 frame = new PackageV2(address, state, temp, action);
+                PackageV2 frame = new PackageV2(address, state, temp, currentAction);
 
                 //remove data
                 array.RemoveRange(0, length + index + 1);
@@ -102,6 +339,32 @@ namespace Project858.Net
                 return frame;
             }
             return null;
+        }
+        /// <summary>
+        /// This methods gets item type for current package and group
+        /// </summary>
+        /// <param name="frameAddress">Package address</param>
+        /// <param name="groupAddress">Grop address</param>
+        /// <param name="itemAddress">Item address</param>
+        /// <returns></returns>
+        private static PackageItemTypes InternalGetPackageItemType(UInt16 frameAddress, UInt16 groupAddress, UInt32 itemAddress)
+        {
+            if (PackageHelper.m_reflectionPropertyCollection != null)
+            {
+                if (PackageHelper.m_reflectionPropertyCollection.ContainsKey(groupAddress))
+                {
+                    ReflectionPackageModelItem modelItem = PackageHelper.m_reflectionPropertyCollection[groupAddress];
+                    if (modelItem != null)
+                    {
+                        if (modelItem.ContainsKey(itemAddress))
+                        {
+                            PackageModelPropertyItem propertyItem = modelItem[itemAddress];
+                            return propertyItem.ItemAttribute.Type;
+                        }
+                    }
+                }
+            }
+            return PackageItemTypes.Unkown;
         }
         /// <summary>
         /// This function serializes object to frame group

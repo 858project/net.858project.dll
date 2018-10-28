@@ -617,7 +617,7 @@ namespace Project858.Diagnostics
                 }
 
                 //doslo k chyb, zalogujeme
-                ConsoleLogger.WriteLine("SQLite chyba pri otvarani SQLite databazy na logovanie [{0}]. {1}",
+                ConsoleLogger.Info("SQLite chyba pri otvarani SQLite databazy na logovanie [{0}]. {1}",
                     ex.ErrorCode, ex.Message);
 #if DEBUG
                 Debug.WriteLine(String.Format("SQLite chyba pri otvarani SQLite databazy na logovanie [{0}]. {1}",
@@ -635,7 +635,7 @@ namespace Project858.Diagnostics
                 }
 
                 //doslo k chyb, zalogujeme
-                ConsoleLogger.WriteLine("Chyba pri otvarani SQLite databazy na logovanie. {0}", ex);
+                ConsoleLogger.Info("Chyba pri otvarani SQLite databazy na logovanie. {0}", ex);
 #if DEBUG
                 Debug.WriteLine(String.Format("Chyba pri otvarani SQLite databazy na logovanie. {0}", ex));
 #endif
