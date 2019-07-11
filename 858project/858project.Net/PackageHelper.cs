@@ -418,7 +418,7 @@ namespace Project858.Net
                 throw new ArgumentNullException("obj");
 
             //intiailize object
-            PackageV2 result = new PackageV2(commandAddress, 0x00);
+            PackageV2 result = new PackageV2(commandAddress, 0x01);
 
             //serialize
             return SerializeV2<T>(obj, result);
